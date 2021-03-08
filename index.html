@@ -1,0 +1,239 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="./CSS/game.css" />
+    <script src="JS/lodash.js"></script>
+    <script src="JS/jquery.js"></script>
+    <script src="JS/decimal.js"></script>
+    <script src="JS/phaser.js"></script>
+    <script src="JS/data/spawns.js?123"></script>
+    <script src="JS/data/tokens.js?123"></script>
+    <script src="JS/game.js?123"></script>
+  </head>
+  <body>
+    <div id="wrapperContainer">
+      <div id="wrapper"></div>
+    </div>
+
+    <div id="menuContainer" style="display: none;">
+      <div id="offlineProgress" style="display: none;">
+        <div id='offlineText'></div>
+        <div id='offlineClose'>Ok!</div>
+      </div>
+      <div id="scrollUp" class='scroll'></div>
+      <div id="scrollDown" class='scroll'></div>
+      <div id="currencyPanel">
+        <div class="currencyContainer" style="background-color: #ce9c4f; margin-right: 12px;">
+          <div id="goldLogo"></div>
+          <div id="goldValue">0</div>
+        </div>
+        <div class="currencyContainer" style="background-color: #50979c;">
+          <div id="tokenLogo"></div>
+          <div id="tokenValue">0</div>
+        </div>
+        <div id='mainMenuContainer'>
+          <div id="optsContainer">
+            <div id="optsBall" class='optBtn selected'></div>
+            <div id="optsZone" class='optBtn'></div>
+            <div id="optsToken" class='optBtn'></div>
+            <div id="optsHelp" class='optBtn'></div>
+          </div>
+          <div id="ballShop" class='shop'>
+            <p>Tip: Upgrading balls not only increases their value, but also the frequency in which they spawn.</p>
+            <div class="ballUpgrade" value='0'>
+              <div class="ballIcon"></div>
+              Value: <span id='ball0Value'></span><br>Cooldown: <span id='ball0Cooldown'></span><br>Cost: <span id='ball0Cost' style="color:black"></span>
+              <div id='ball0Lock' class="locked"></div>
+            </div>
+            <div class="ballUpgrade" value='1'>
+              <div class="ballIcon" style="background-position-x:-17px"></div>
+              Value: <span id='ball1Value'></span><br>Cooldown: <span id='ball1Cooldown'></span><br>Cost: <span id='ball1Cost' style="color:black"></span>
+              <div id='ball1Lock' class="locked"></div>
+            </div>
+            <div class="ballUpgrade" value='2'>
+              <div class="ballIcon" style="background-position-x:-34px"></div>
+              Value: <span id='ball2Value'></span><br>Cooldown: <span id='ball2Cooldown'></span><br>Cost: <span id='ball2Cost' style="color:black"></span>
+              <div id='ball2Lock' class="locked"></div>
+            </div>
+            <div class="ballUpgrade" value='3'>
+              <div class="ballIcon" style="background-position-x:-51px"></div>
+              Value: <span id='ball3Value'></span><br>Cooldown: <span id='ball3Cooldown'></span><br>Cost: <span id='ball3Cost' style="color:black"></span>
+              <div id='ball3Lock' class="locked"></div>
+            </div>
+            <div class="ballUpgrade" value='4'>
+              <div class="ballIcon" style="background-position-x:-68px"></div>
+              Value: <span id='ball4Value'></span><br>Cooldown: <span id='ball4Cooldown'></span><br>Cost: <span id='ball4Cost' style="color:black"></span>
+              <div id='ball4Lock' class="locked"></div>
+            </div>
+            <div class="ballUpgrade" value='5'>
+              <div class="ballIcon" style="background-position-x:-85px"></div>
+              Value: <span id='ball5Value'></span><br>Cooldown: <span id='ball5Cooldown'></span><br>Cost: <span id='ball5Cost' style="color:black"></span>
+              <div id='ball5Lock' class="locked"></div>
+            </div>
+            <div class="ballUpgrade" value='6'>
+              <div class="ballIcon" style="background-position-x:-102px"></div>
+              Value: <span id='ball6Value'></span><br>Cooldown: <span id='ball6Cooldown'></span><br>Cost: <span id='ball6Cost' style="color:black"></span>
+              <div id='ball6Lock' class="locked"></div>
+            </div>
+            <div class="ballUpgrade" value='7'>
+              <div class="ballIcon" style="background-position-x:-119px"></div>
+              Value: <span id='ball7Value'></span><br>Cooldown: <span id='ball7Cooldown'></span><br>Cost: <span id='ball7Cost' style="color:black"></span>
+              <div id='ball7Lock' class="locked"></div>
+            </div>
+            <div class="ballUpgrade" value='8'>
+              <div class="ballIcon" style="background-position-x:-136px"></div>
+              Value: <span id='ball8Value'></span><br>Cooldown: <span id='ball8Cooldown'></span><br>Cost: <span id='ball8Cost' style="color:black"></span>
+              <div id='ball8Lock' class="locked"></div>
+            </div>
+            <div class="ballUpgrade" value='9'>
+              <div class="ballIcon" style="background-position-x:-153px"></div>
+              Value: <span id='ball9Value'></span><br>Cooldown: <span id='ball9Cooldown'></span><br>Cost: <span id='ball9Cost' style="color:black"></span>
+              <div id='ball9Lock' class="locked"></div>
+            </div>
+            <div id='ball0Level' class='ballLevel' style="right:219px; top:194px"></div>
+            <div id='ball1Level' class='ballLevel' style="right:37px; top:194px"></div>
+            <div id='ball2Level' class='ballLevel' style="right:219px; top:266px"></div>
+            <div id='ball3Level' class='ballLevel' style="right:37px; top:266px"></div>
+            <div id='ball4Level' class='ballLevel' style="right:219px; top:339px"></div>
+            <div id='ball5Level' class='ballLevel' style="right:37px; top:339px"></div>
+            <div id='ball6Level' class='ballLevel' style="right:219px; top:412px"></div>
+            <div id='ball7Level' class='ballLevel' style="right:37px; top:412px"></div>
+            <div id='ball8Level' class='ballLevel' style="right:219px; top:485px"></div>
+            <div id='ball9Level' class='ballLevel' style="right:37px; top:485px"></div>
+          </div>
+          <div id="zoneShop" class='shop' style="display:none;">
+            <p>Tip: Upgrading zones not only increases ball payouts that make it to the end of that zone, but also has another benifit unique to each zone.</p>
+            <div class="zoneUpgrade" value='0'>
+              <div class="zoneEffect" id='zone0Effect'></div>
+              <div class="zoneCost">Cost: <span id='zone0cost' style="color:black"></span></div>
+              <div class="zoneMod">Modifier: <span id='zone0mod'></span></div>
+              <div id='zone0Lock' class="locked"></div>
+            </div>
+            <div class="zoneUpgrade" value='1'>
+              <div class="zoneEffect" id='zone1Effect'></div>
+              <div class="zoneCost">Cost: <span id='zone1cost' style="color:black"></span></div>
+              <div class="zoneMod">Modifier: <span id='zone1mod'></span></div>
+              <div id='zone1Lock' class="locked"></div>
+            </div>
+            <div class="zoneUpgrade" value='2'>
+              <div class="zoneEffect" id='zone2Effect'></div>
+              <div class="zoneCost">Cost: <span id='zone2cost' style="color:black"></span></div>
+              <div class="zoneMod">Modifier: <span id='zone2mod'></span></div>
+              <div id='zone2Lock' class="locked"></div>
+            </div>
+            <div class="zoneUpgrade" value='3'>
+              <div class="zoneEffect" id='zone3Effect'></div>
+              <div class="zoneCost">Cost: <span id='zone3cost' style="color:black"></span></div>
+              <div class="zoneMod">Modifier: <span id='zone3mod'></span></div>
+              <div id='zone3Lock' class="locked"></div>
+            </div>
+            <div class="zoneUpgrade" value='4'>
+              <div class="zoneEffect" id='zone4Effect'></div>
+              <div class="zoneCost">Cost: <span id='zone4cost' style="color:black"></span></div>
+              <div class="zoneMod">Modifier: <span id='zone4mod'></span></div>
+              <div id='zone4Lock' class="locked"></div>
+            </div>
+            <div class="zoneUpgrade" value='5'>
+              <div class="zoneEffect" id='zone5Effect'></div>
+              <div class="zoneCost">Cost: <span id='zone5cost' style="color:black"></span></div>
+              <div class="zoneMod">Modifier: <span id='zone5mod'></span></div>
+              <div id='zone5Lock' class="locked"></div>
+            </div>
+            <div class="zoneUpgrade" value='6'>
+              <div class="zoneEffect" id='zone6Effect'></div>
+              <div class="zoneCost">Cost: <span id='zone6cost' style="color:black"></span></div>
+              <div class="zoneMod">Modifier: <span id='zone6mod'></span></div>
+              <div id='zone6Lock' class="locked"></div>
+            </div>
+            <div class="zoneUpgrade" value='7'>
+              <div class="zoneEffect" id='zone7Effect'></div>
+              <div class="zoneCost">Cost: <span id='zone7cost' style="color:black"></span></div>
+              <div class="zoneMod">Modifier: <span id='zone7mod'></span></div>
+              <div id='zone7Lock' class="locked"></div>
+            </div>
+            <div id='zone0Level' class='zoneLevel' style="right:38px; top:214px"></div>
+            <div id='zone1Level' class='zoneLevel' style="right:38px; top:256px"></div>
+            <div id='zone2Level' class='zoneLevel' style="right:38px; top:299px"></div>
+            <div id='zone3Level' class='zoneLevel' style="right:38px; top:342px"></div>
+            <div id='zone4Level' class='zoneLevel' style="right:38px; top:385px"></div>
+            <div id='zone5Level' class='zoneLevel' style="right:38px; top:428px"></div>
+            <div id='zone6Level' class='zoneLevel' style="right:38px; top:471px"></div>
+            <div id='zone7Level' class='zoneLevel' style="right:38px; top:514px"></div>
+          </div>
+          <div id="tokenShop" class='shop' style="display:none;">
+            <p>Tip: Starting from the beginning sounds like a lot of work, but it's worth it in the long run.</p>
+            <div id='tokenHolder' style="margin-bottom: 49px;">
+              <div id='prestigeToken'>123</div><div id='prestige'>Prestige</div>
+              
+            </div>
+            <div class="tokenUpgrade" value='0'>
+              <div class="tokenIcon">Ball Modifier</div>
+              Effect: <span id='token0Value'></span><br>Cost: <span id='token0Cost' style="color:black"></span>
+              <div id='token0Lock' class="locked"></div>
+            </div>
+            <div class="tokenUpgrade" value='1'>
+              <div class="tokenIcon">Ball Survival</div>
+              Effect: <span id='token1Value'></span><br>Cost: <span id='token1Cost' style="color:black"></span>
+              <div id='token1Lock' class="locked"></div>
+            </div>
+            <div class="tokenUpgrade" value='2'>
+              <div class="tokenIcon">Double Ball Value</div>
+              Effect: <span id='token2Value'></span><br>Cost: <span id='token2Cost' style="color:black"></span>
+              <div id='token2Lock' class="locked"></div>
+            </div>
+            <div class="tokenUpgrade" value='3'>
+              <div class="tokenIcon">Click Area</div>
+              Effect: <span id='token3Value'></span><br>Cost: <span id='token3Cost' style="color:black"></span>
+              <div id='token3Lock' class="locked"></div>
+            </div>
+            <div class="tokenUpgrade" value='4'>
+              <div class="tokenIcon">Click Modifier</div>
+              Effect: <span id='token4Value'></span><br>Cost: <span id='token4Cost' style="color:black"></span>
+              <div id='token4Lock' class="locked"></div>
+            </div>
+            <div class="tokenUpgrade" value='5'>
+              <div class="tokenIcon">Zone Unlock Discount</div>
+              Effect: <span id='token5Value'></span><br>Cost: <span id='token5Cost' style="color:black"></span>
+              <div id='token5Lock' class="locked"></div>
+            </div>
+            <div class="tokenUpgrade" value='6'>
+              <div class="tokenIcon">Zone Modifier Increase</div>
+              Effect: <span id='token6Value'></span><br>Cost: <span id='token6Cost' style="color:black"></span>
+              <div id='token6Lock' class="locked"></div>
+            </div>
+            <div class="tokenUpgrade" value='7'>
+              <div class="tokenIcon">Token Gain</div>
+              Effect: <span id='token7Value'></span><br>Cost: <span id='token7Cost' style="color:black"></span>
+              <div id='token7Lock' class="locked"></div>
+            </div>
+            <div id='token0Level' class='tokenLevel' style="right:219px; top:266px"></div>
+            <div id='token1Level' class='tokenLevel' style="right:37px; top:266px"></div>
+            <div id='token2Level' class='tokenLevel' style="right:219px; top:339px"></div>
+            <div id='token3Level' class='tokenLevel' style="right:37px; top:339px"></div>
+            <div id='token4Level' class='tokenLevel' style="right:219px; top:412px"></div>
+            <div id='token5Level' class='tokenLevel' style="right:37px; top:412px"></div>
+            <div id='token6Level' class='tokenLevel' style="right:219px; top:485px"></div>
+            <div id='token7Level' class='tokenLevel' style="right:37px; top:485px"></div>
+          </div>
+          <div id="helpShop" class='shop' style="display:none; text-align: left;">
+            <p style="font-style: inherit;">Earn 125% the value of a ball by clicking it before it hits the bottom of the zone. <br/> <br/>
+            If the ball makes it to the bottom of the zone, it will earn its value modified by the zone's modifier.<br/> <br/>
+            There is a chance the ball will survive and make it into the next zone, where it can earn there as well.</p>
+            <h3 style='text-align: center; margin-top: -10px; margin-bottom: 4px;'>Number Notation</h3>
+            <div id="numOpts" style='text-align: center;'>
+              <div class="numOpt selected" value="eng">Engineering</div>
+              <div class="numOpt" value="sci">Scientific</div>
+              <div class="numOpt" value="bad">Traditional</div>
+            </div>
+            <h3 style='text-align: center; margin-top: 10px; margin-bottom: 4px;'>Game State</h3>
+            <div id="saveOpts" style='text-align: center;'>
+              <div id="saveGame" class="saveOpt" value="eng">Save Game</div>
+              <div id="resetGame" class="saveOpt" value="eng">Hard Reset</div>
+            </div>
+            <a href='https://www.patreon.com/nightscapes' target="_blank"  id="patreon"></a>
+            <a href='https://discord.gg/k3kn93J7w4' target="_blank"  id="discord"></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
