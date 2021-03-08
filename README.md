@@ -1,0 +1,2 @@
+# plinko
+Plinko Idle game
