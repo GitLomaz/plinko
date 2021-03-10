@@ -370,7 +370,7 @@ var titleScene = new Phaser.Class({
   },
 
   create: function() {
-    console.log('verison 0.1.4')
+    console.log('verison 0.1.5')
     var Body = Phaser.Physics.Matter.Matter.Body;
     var Composite = Phaser.Physics.Matter.Matter.Composite;
 
