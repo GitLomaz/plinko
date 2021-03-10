@@ -22,7 +22,6 @@ var menuContainer; //menu container
 var graphics; //graphics object
 var currentScore = new Decimal(0); //total score
 var totalScore = new Decimal(0); //total score
-var trackScore = new Decimal(0); // score for offline progress
 var tokens = new Decimal(0); //total score
 var fric = 0;
 var selectedPanel = 0 //selected store panel
@@ -32,8 +31,6 @@ var scrollDown = false
 var scrollUp = false
 var prestigeConfirm = false
 var currentTime;
-
-var scoreArray = []
 
 $(document).ready(function () {
 
@@ -287,11 +284,6 @@ var gameScene = new Phaser.Class({
     
     if (counter % 600 === 0) {
       currentTime = Date.now();
-      scoreArray.push(totalScore.minus(trackScore))
-      trackScore = new Decimal(totalScore)
-      if(scoreArray.length > 10) {
-        scoreArray.shift();
-      }
     }
 
     if(scrollDown) {
@@ -309,7 +301,6 @@ var gameScene = new Phaser.Class({
     }
 
     for (var i = 0; i < spawns.length; i++) {
-
       if (spawns[i].level > 0 && zones[spawns[i].stage - 1]) {
         let delayFrame = spawns[i].cooldown - spawns[i].speedModifier * (spawns[i].level - 1)
         if (spawns[i].level > 10) {
@@ -1375,7 +1366,6 @@ function load() {
       }
       if (save.time) {
         currentTime = save.time;
-        scoreArray = [save.sps, save.sps, save.sps, save.sps, save.sps, save.sps, save.sps, save.sps, save.sps, save.sps]
         updateProgress();
         currentTime = Date.now();
       }
@@ -1426,7 +1416,6 @@ function updateProgress() {
     addedScore = scorePerSecond.mul(millis)
     currentScore = currentScore.plus(addedScore)
     totalScore = totalScore.plus(addedScore)
-    trackScore = new Decimal(totalScore)
     $('#offlineText').html('Inactive for ' + Math.floor(millis) + ' seconds<br/>Total Earned: ' + displayNumber(addedScore))
     $('#offlineProgress').show();
     drawShopPanel();
@@ -1434,10 +1423,19 @@ function updateProgress() {
 }
 
 function calculateScorePerSecond() {
-  let scorePerMinute = new Decimal(0)
-  _.each(scoreArray, function(s) {
-    scorePerMinute = scorePerMinute.plus(s)
-  })
-  scorePerSecond = scorePerMinute.div(100)
-  return scorePerSecond
+  let scorePerSecond = new Decimal(0)
+  for (var i = 0; i < spawns.length; i++) {
+    if (spawns[i].level > 0 && zones[spawns[i].stage - 1]) {
+      let cooldown = spawns[i].cooldown - spawns[i].speedModifier * (spawns[i].level - 1)
+      if (spawns[i].level > 10) {
+        cooldown = spawns[i].cooldown - spawns[i].speedModifier * 10
+      }
+      const mod = tokenUpgrades[0].value.mul(tokenUpgrades[0].valueModifier.pow(tokenUpgrades[0].level - 1)).div(100)
+      const value = mod.mul(spawns[i].value.mul(spawns[i].valueModifier.pow(spawns[i].level - 1)))
+      cooldown = cooldown / 100
+      let sps = value / cooldown
+      scorePerSecond = scorePerSecond.plus(sps)
+    }
+  }
+  return scorePerSecond.gt(0) ? scorePerSecond : new Decimal(0);
 }
