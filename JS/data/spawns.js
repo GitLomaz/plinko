@@ -120,4 +120,4 @@ spawns.push(spawn8);
 spawns.push(spawn9);
 spawns.push(spawn0);
 
-var spawnTemplate = JSON.parse(JSON.stringify(spawns))
+var spawnTemplate = JSON.parse(JSON.stringify(spawns));
