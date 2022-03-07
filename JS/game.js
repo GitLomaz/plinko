@@ -1781,6 +1781,7 @@ function load() {
 }
 
 function prestige() {
+  GAObject.submitEvent("prestige", 1);
   tokens = tokens.add(calcuateTokens());
   currentScore = new Decimal(0); //total score
   totalScore = new Decimal(0); //total score
