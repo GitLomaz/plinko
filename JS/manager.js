@@ -115,7 +115,7 @@ class adManager extends Phaser.GameObjects.Container {
   }
 
   completeAd() {
-    GAObject.submitEvent("ad", 1);
+    // GAObject.submitEvent("ad", 1);
     this.playingAd = false;
     this.activateBonus();
   }

@@ -454,7 +454,7 @@ var titleScene = new Phaser.Class({
   },
 
   create: function () {
-    console.log("verison 0.1.6");
+    console.log("verison 0.1.7");
     var Body = Phaser.Physics.Matter.Matter.Body;
     var Composite = Phaser.Physics.Matter.Matter.Composite;
 
@@ -1781,7 +1781,7 @@ function load() {
 }
 
 function prestige() {
-  GAObject.submitEvent("prestige", 1);
+  // GAObject.submitEvent("prestige", 1);
   tokens = tokens.add(calcuateTokens());
   currentScore = new Decimal(0); //total score
   totalScore = new Decimal(0); //total score
