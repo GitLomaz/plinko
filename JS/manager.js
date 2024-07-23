@@ -125,6 +125,7 @@ class adManager extends Phaser.GameObjects.Container {
     this.bonusActive = true;
     this.end = Math.floor(new Date().getTime() / 1000) + 180;
     this.bottomText.setText(180 + "s Remaining");
+    SUBMIT_STATISTIC(GAME, "AD_" + this.bonus, 1);
     switch (this.bonus) {
       case 0:
         this.doublePoints = true;
