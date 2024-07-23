@@ -338,6 +338,7 @@ var gameScene = new Phaser.Class({
       pointerdown = true;
       dirY = 0;
     });
+    SUBMIT_STATISTIC(GAME, "GAME_LOADED", 1);
   },
 
   update: function () {
