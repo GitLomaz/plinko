@@ -1,0 +1,38 @@
+/**
+ * test.html - Simple test page to check for module loading errors
+ */
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Plinko Test</title>
+</head>
+<body>
+    <h1>Plinko Module Test</h1>
+    <div id="status">Loading...</div>
+    <div id="errors" style="color: red;"></div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/decimal.js/9.0.0/decimal.min.js"></script>
+    
+    <script type="module">
+        const errors = [];
+        
+        try {
+            // Test basic module import
+            const module = await import('./JS/config/GameConfig.js');
+            document.getElementById('status').innerHTML = 'GameConfig loaded successfully!';
+            console.log('GameConfig:', module.GAME_CONFIG);
+            
+            // Try loading the main entry
+            await import('./JS/main.js');
+            document.getElementById('status').innerHTML += '<br>Main module loaded!';
+            
+        } catch (error) {
+            document.getElementById('errors').innerHTML = 'ERROR: ' + error.message + '<br>' + error.stack;
+            console.error('Loading error:', error);
+        }
+    </script>
+</body>
+</html>

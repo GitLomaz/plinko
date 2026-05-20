@@ -1,55 +1,62 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plinko Game - Rewritten</title>
     <link rel="stylesheet" href="./CSS/game.css" />
-    <script>
-      const GAME = 'plinko';
-    </script>
-    <script src="JS/cpmstar.js"></script>
+    
+    <!-- External Dependencies -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/decimal.js/9.0.0/decimal.min.js"></script>
-    <script src="JS/GameAnalytics.js"></script>
-    <script src="JS/data/spawns.js?1235"></script>
-    <script src="JS/data/tokens.js?1235"></script>
-    <script src="JS/analytics.js"></script>
-    <script src="JS/manager.js?1235"></script>
-    <script src="JS/game.js?1235"></script>
+    
+    <!-- Ad System (optional) -->
+    <script src="JS/cpmstar.js"></script>
+    
+    <!-- Main Game (ES6 Module) -->
+    <script type="module" src="JS/main.js"></script>
   </head>
   <body>
     <div id="wrapperContainer">
       <div id="wrapper"></div>
     </div>
+    
+    <!-- Ad Integration Script -->
     <script>
       /* Interstitial auto-preloading */
       var rAd;
-      cpmstarAPI(function(api) {  
-        api.game.setContentID('7534S7F98E846');    
-        // api.game.setTarget(document.getElementById("wrapperContainer"));                      
-        rAd = new api.game.RewardedVideoView("rewardedvideo");
-        rAd.load();
-        if(rAd) {
-          rAd.addEventListener("ad_opened", function(e) {        
-            if (scene.adManager) {
-              scene.adManager.playingAd = true
-            }        
-          });
-          rAd.addEventListener("ad_closed", function(e) {              
-            setTimeout(function() {
-              if (scene.adManager) {
-                scene.adManager.completeAd()
-              }  
-            },700);
-            rAd.load();
-          });
-        }
-      });
+      if (typeof cpmstarAPI !== 'undefined') {
+        cpmstarAPI(function(api) {  
+          api.game.setContentID('7534S7F98E846');                      
+          rAd = new api.game.RewardedVideoView("rewardedvideo");
+          rAd.load();
+          if(rAd) {
+            rAd.addEventListener("ad_opened", function(e) {        
+              if (window.scene && window.scene.adManager) {
+                window.scene.adManager.playingAd = true;
+              }        
+            });
+            rAd.addEventListener("ad_closed", function(e) {              
+              setTimeout(function() {
+                if (window.scene && window.scene.adManager) {
+                  window.scene.adManager.completeAd();
+                }  
+              }, 700);
+              rAd.load();
+            });
+          }
+        });
+      }
 
       function displayRewardedVideo() {      
-        if(rAd && rAd.isLoaded()) rAd.show(); //Show loaded ad
-        else if(rAd) rAd.load(); //If no ad available, load another
+        if(rAd && rAd.isLoaded()) rAd.show();
+        else if(rAd) rAd.load();
       }
     </script>
+    
+    <!-- Menu UI Container -->
     <div id="menuContainer" style="display: none;">
       <div id="offlineProgress" style="display: none;">
         <div id='offlineText'></div>
@@ -74,7 +81,7 @@
             <div id="optsHelp" class='optBtn'></div>
           </div>
           <div id="ballShop" class='shop'>
-            <p>Tip: Upgrading balls not only increases their value, but also the frequency in which they spawn.</p>
+            <p>Tip!!!: Upgrading balls not only increases their value, but also the frequency in which they spawn.</p>
             <div class="ballUpgrade" value='0'>
               <div class="ballIcon"></div>
               Value: <span id='ball0Value'></span><br>Cooldown: <span id='ball0Cooldown'></span><br>Cost: <span id='ball0Cost' style="color:black"></span>
@@ -271,8 +278,5 @@
         </div>
       </div>
     </div>
-    <script>
-      // GAObject = new analytics("af28f597c7f84ad6ac8a431ee13d37ad", "151697647efd03883cfa42f9d9257ebb22611abf")
-    </script>
   </body>
 </html>
