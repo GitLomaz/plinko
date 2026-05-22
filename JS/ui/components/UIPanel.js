@@ -20,7 +20,7 @@ export class UIPanel extends Phaser.GameObjects.Container {
     this.scrollOffset = 0;
     this.contentHeight = 0;
     
-    this.createBackground();
+    // this.createBackground();
     // Note: createContent() must be called by child class after initialization
     
     scene.add.existing(this);

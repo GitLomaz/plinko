@@ -106,6 +106,55 @@ export class ZoneManager {
     }
   }
 
+  /**
+   * Creates a shape with a shadow effect
+   * @param {string} texture - The texture key
+   * @param {number} x - X position
+   * @param {number} y - Y position
+   * @param {object} options - Matter.js options
+   * @param {number} scaleX - X scale
+   * @param {number} scaleY - Y scale (defaults to scaleX if not provided)
+   * @param {number} angle - Rotation angle in degrees
+   * @param {boolean} isCircle - Whether to use circle body
+   * @param {number} circleRadius - Radius for circle body
+   * @returns {object} - Object containing {shape, shadow}
+   */
+  createShapeWithShadow(texture, x, y, options, scaleX = 1, scaleY = null, angle = 0, isCircle = false, circleRadius = null) {
+    // Add fixed amount to scale for uniform 2-3px border on all sides
+    // This prevents disproportionate shadows on thin objects
+    const shadowOffset = 0.4; // Fixed scale offset for uniform border
+    
+    const finalScaleY = scaleY === null ? scaleX : scaleY;
+    
+    // Add fixed offset to each dimension independently
+    const shadowScaleX = scaleX + shadowOffset;
+    const shadowScaleY = finalScaleY + shadowOffset;
+    
+    // Create shadow first (renders behind) - centered at same position
+    const shadow = this.scene.matter.add.image(x, y, texture, null, { ...options, isSensor: true })
+      .setScale(shadowScaleX, shadowScaleY)
+      .setAngle(angle)
+      .setTint(0x000000)
+      .setAlpha(0.9) // Very solid black shadow
+      .setDepth(-1); // Ensure shadow renders behind
+    
+    if (isCircle && circleRadius) {
+      shadow.setCircle(circleRadius + (shadowOffset * 250), { ...options, isSensor: true });
+    }
+    
+    // Create main shape on top
+    const shape = this.scene.matter.add.image(x, y, texture, null, options)
+      .setScale(scaleX, finalScaleY)
+      .setAngle(angle)
+      .setDepth(0); // Main shape renders on top
+    
+    if (isCircle && circleRadius) {
+      shape.setCircle(circleRadius, options);
+    }
+    
+    return { shape, shadow };
+  }
+
   createZoneObstacles(zone, level) {
     switch (zone.type) {
       case 0:
@@ -141,23 +190,27 @@ export class ZoneManager {
 
     for (let i = 0; i < 10; i++) {
       for (let j = 0; j < 8; j++) {
-        const shape1 = this.scene.matter.add.image(
+        const obj1 = this.createShapeWithShadow(
+          'rectangle',
           i * 68.5,
           baseY + 200 + j * 150,
-          'rectangle',
+          { isStatic: true },
+          zone.levels[level],
           null,
-          { isStatic: true }
-        ).setScale(zone.levels[level]).setAngle(45);
+          45
+        );
 
-        const shape2 = this.scene.matter.add.image(
+        const obj2 = this.createShapeWithShadow(
+          'rectangle',
           34 + i * 68.5,
           baseY + 275 + j * 150,
-          'rectangle',
+          { isStatic: true },
+          zone.levels[level],
           null,
-          { isStatic: true }
-        ).setScale(zone.levels[level]).setAngle(45);
+          45
+        );
 
-        zone.shapes.push(shape1, shape2);
+        zone.shapes.push(obj1.shadow, obj1.shape, obj2.shadow, obj2.shape);
       }
     }
   }
@@ -167,18 +220,15 @@ export class ZoneManager {
     const baseY = zone.type * 1500;
 
     for (let i = 0; i < 3; i++) {
-      this.scene.matter.add.image(125, baseY + 200 + i * 400, 'rectangle', null, { isStatic: true })
-        .setScale(30, 1).setAngle(10);
-      this.scene.matter.add.image(550, baseY + 200 + i * 400, 'rectangle', null, { isStatic: true })
-        .setScale(30, 1).setAngle(-10);
+      const static1 = this.createShapeWithShadow('rectangle', 125, baseY + 200 + i * 400, { isStatic: true }, 30, 1, 10);
+      const static2 = this.createShapeWithShadow('rectangle', 550, baseY + 200 + i * 400, { isStatic: true }, 30, 1, -10);
+      zone.shapes.push(static1.shadow, static1.shape, static2.shadow, static2.shape);
 
-      const ramp1 = this.scene.matter.add.image(340, baseY + 400 + i * 400, 'rectangle', null, { isStatic: true })
-        .setScale(40, 1).setAngle(0);
-      const ramp2 = this.scene.matter.add.image(340, baseY + 400 + i * 400, 'rectangle', null, { isStatic: true })
-        .setScale(40, 1).setAngle(90);
+      const obj1 = this.createShapeWithShadow('rectangle', 340, baseY + 400 + i * 400, { isStatic: true }, 40, 1, 0);
+      const obj2 = this.createShapeWithShadow('rectangle', 340, baseY + 400 + i * 400, { isStatic: true }, 40, 1, 90);
 
       this.scene.tweens.add({
-        targets: ramp1,
+        targets: [obj1.shape, obj1.shadow],
         rotation: Phaser.Math.DegToRad(360),
         duration: zone.levels[level] * 800,
         ease: 'Linear',
@@ -186,14 +236,14 @@ export class ZoneManager {
       });
 
       this.scene.tweens.add({
-        targets: ramp2,
+        targets: [obj2.shape, obj2.shadow],
         rotation: Phaser.Math.DegToRad(450),
         duration: zone.levels[level] * 800,
         ease: 'Linear',
         repeat: -1
       });
 
-      zone.shapes.push(ramp1, ramp2);
+      zone.shapes.push(obj1.shadow, obj1.shape, obj2.shadow, obj2.shape);
     }
   }
 
@@ -202,23 +252,27 @@ export class ZoneManager {
     const baseY = zone.type * 1500;
 
     for (let i = 0; i < 6; i++) {
-      const shape1 = this.scene.matter.add.image(
+      const obj1 = this.createShapeWithShadow(
+        'rectangle',
         240 - zone.levels[level],
         baseY + 200 + i * 200,
-        'rectangle',
-        null,
-        { isStatic: true }
-      ).setScale(50, 1).setAngle(10);
+        { isStatic: true },
+        50,
+        1,
+        10
+      );
 
-      const shape2 = this.scene.matter.add.image(
+      const obj2 = this.createShapeWithShadow(
+        'rectangle',
         440 + zone.levels[level],
         baseY + 300 + i * 200,
-        'rectangle',
-        null,
-        { isStatic: true }
-      ).setScale(50, 1).setAngle(-10);
+        { isStatic: true },
+        50,
+        1,
+        -10
+      );
 
-      zone.shapes.push(shape1, shape2);
+      zone.shapes.push(obj1.shadow, obj1.shape, obj2.shadow, obj2.shape);
     }
   }
 
@@ -235,10 +289,18 @@ export class ZoneManager {
       ];
 
       positions.forEach(pos => {
-        const shape = this.scene.matter.add.image(pos.x, baseY + pos.y + i * 400, 'circle')
-          .setScale(zone.levels[level])
-          .setCircle(zone.levels[level] * 250, { isStatic: true });
-        zone.shapes.push(shape);
+        const obj = this.createShapeWithShadow(
+          'circle',
+          pos.x,
+          baseY + pos.y + i * 400,
+          { isStatic: true },
+          zone.levels[level],
+          null,
+          0,
+          true,
+          zone.levels[level] * 250
+        );
+        zone.shapes.push(obj.shadow, obj.shape);
       });
     }
   }
@@ -252,23 +314,27 @@ export class ZoneManager {
 
     for (let i = 0; i < 12; i++) {
       for (let j = 0; j < 8; j++) {
-        const shape1 = this.scene.matter.add.image(
+        const obj1 = this.createShapeWithShadow(
+          'rectangle',
           10 + i * 60,
           baseY + 200 + j * 150,
-          'rectangle',
-          null,
-          { isStatic: true }
-        ).setScale(7, 1).setAngle(zone.levels[level][0]);
+          { isStatic: true },
+          7,
+          1,
+          zone.levels[level][0]
+        );
 
-        const shape2 = this.scene.matter.add.image(
+        const obj2 = this.createShapeWithShadow(
+          'rectangle',
           40 + i * 60,
           baseY + 275 + j * 150,
-          'rectangle',
-          null,
-          { isStatic: true }
-        ).setScale(7, 1).setAngle(zone.levels[level][1]);
+          { isStatic: true },
+          7,
+          1,
+          zone.levels[level][1]
+        );
 
-        zone.shapes.push(shape1, shape2);
+        zone.shapes.push(obj1.shadow, obj1.shape, obj2.shadow, obj2.shape);
       }
     }
   }
@@ -279,21 +345,17 @@ export class ZoneManager {
 
     for (let i = 0; i < 3; i++) {
       // Static obstacles
-      this.scene.matter.add.image(200, baseY + 400 + i * 400, 'rectangle', null, { isStatic: true })
-        .setScale(8).setAngle(45);
-      this.scene.matter.add.image(480, baseY + 400 + i * 400, 'rectangle', null, { isStatic: true })
-        .setScale(8).setAngle(45);
-      this.scene.matter.add.image(340, baseY + 400 + i * 400, 'rectangle', null, { isStatic: true })
-        .setScale(20, 1);
+      const static1 = this.createShapeWithShadow('rectangle', 200, baseY + 400 + i * 400, { isStatic: true }, 8, null, 45);
+      const static2 = this.createShapeWithShadow('rectangle', 480, baseY + 400 + i * 400, { isStatic: true }, 8, null, 45);
+      const static3 = this.createShapeWithShadow('rectangle', 340, baseY + 400 + i * 400, { isStatic: true }, 20, 1, 0);
+      zone.shapes.push(static1.shadow, static1.shape, static2.shadow, static2.shape, static3.shadow, static3.shape);
       
       // Moving pushers
-      const pusher1 = this.scene.matter.add.image(200, baseY + 400 + i * 400, 'rectangle', null, { isStatic: true })
-        .setScale(1, 12);
-      const pusher2 = this.scene.matter.add.image(480, baseY + 400 + i * 400, 'rectangle', null, { isStatic: true })
-        .setScale(1, 12);
+      const obj1 = this.createShapeWithShadow('rectangle', 200, baseY + 400 + i * 400, { isStatic: true }, 1, 12, 0);
+      const obj2 = this.createShapeWithShadow('rectangle', 480, baseY + 400 + i * 400, { isStatic: true }, 1, 12, 0);
 
       this.scene.tweens.add({
-        targets: pusher1,
+        targets: [obj1.shape, obj1.shadow],
         x: 480,
         duration: zone.levels[level] * 300,
         ease: 'Linear',
@@ -301,14 +363,14 @@ export class ZoneManager {
       });
 
       this.scene.tweens.add({
-        targets: pusher2,
+        targets: [obj2.shape, obj2.shadow],
         x: 200,
         duration: zone.levels[level] * 300,
         ease: 'Linear',
         repeat: -1
       });
 
-      zone.shapes.push(pusher1, pusher2);
+      zone.shapes.push(obj1.shadow, obj1.shape, obj2.shadow, obj2.shape);
     }
   }
 
@@ -319,16 +381,18 @@ export class ZoneManager {
     for (let i = 0; i < 3; i++) {
       // Right-moving conveyor
       for (let j = -50; j < 600; j += 50) {
-        const shape = this.scene.matter.add.image(
+        const obj = this.createShapeWithShadow(
+          'rectangle',
           j,
           baseY + 290 + i * 400 - j / 5,
-          'rectangle',
-          null,
-          { isStatic: true }
-        ).setScale(4, 2).setAngle(10);
+          { isStatic: true },
+          4,
+          2,
+          10
+        );
 
         this.scene.tweens.add({
-          targets: shape,
+          targets: [obj.shape, obj.shadow],
           x: '+=50',
           y: '-=10',
           duration: zone.levels[level] * 100,
@@ -336,21 +400,23 @@ export class ZoneManager {
           repeat: -1
         });
 
-        zone.shapes.push(shape);
+        zone.shapes.push(obj.shadow, obj.shape);
       }
 
       // Left-moving conveyor
       for (let j = 700; j > 100; j -= 50) {
-        const shape = this.scene.matter.add.image(
+        const obj = this.createShapeWithShadow(
+          'rectangle',
           j,
           baseY + 340 + i * 400 + j / 5,
-          'rectangle',
-          null,
-          { isStatic: true }
-        ).setScale(4, 2).setAngle(-10);
+          { isStatic: true },
+          4,
+          2,
+          -10
+        );
 
         this.scene.tweens.add({
-          targets: shape,
+          targets: [obj.shape, obj.shadow],
           x: '-=50',
           y: '-=10',
           duration: zone.levels[level] * 100,
@@ -358,7 +424,7 @@ export class ZoneManager {
           repeat: -1
         });
 
-        zone.shapes.push(shape);
+        zone.shapes.push(obj.shadow, obj.shape);
       }
     }
   }
@@ -369,44 +435,52 @@ export class ZoneManager {
 
     // Left channel
     for (let i = 0; i < 6; i++) {
-      const shape1 = this.scene.matter.add.image(
+      const obj1 = this.createShapeWithShadow(
+        'rectangle',
         200 - zone.levels[level],
         baseY + 200 + i * 200,
-        'rectangle',
-        null,
-        { isStatic: true }
-      ).setScale(70, 1).setAngle(10);
+        { isStatic: true },
+        70,
+        1,
+        10
+      );
 
-      const shape2 = this.scene.matter.add.image(
+      const obj2 = this.createShapeWithShadow(
+        'rectangle',
         200 - zone.levels[level],
         baseY + 330 + i * 200,
-        'rectangle',
-        null,
-        { isStatic: true }
-      ).setScale(70, 1).setAngle(-10);
+        { isStatic: true },
+        70,
+        1,
+        -10
+      );
 
-      zone.shapes.push(shape1, shape2);
+      zone.shapes.push(obj1.shadow, obj1.shape, obj2.shadow, obj2.shape);
     }
 
     // Right channel
     for (let i = 0; i < 5; i++) {
-      const shape1 = this.scene.matter.add.image(
+      const obj1 = this.createShapeWithShadow(
+        'rectangle',
         550 + zone.levels[level],
         baseY + 300 + i * 200,
-        'rectangle',
-        null,
-        { isStatic: true }
-      ).setScale(70, 1).setAngle(-10);
+        { isStatic: true },
+        70,
+        1,
+        -10
+      );
 
-      const shape2 = this.scene.matter.add.image(
+      const obj2 = this.createShapeWithShadow(
+        'rectangle',
         550 + zone.levels[level],
         baseY + 430 + i * 200,
-        'rectangle',
-        null,
-        { isStatic: true }
-      ).setScale(70, 1).setAngle(10);
+        { isStatic: true },
+        70,
+        1,
+        10
+      );
 
-      zone.shapes.push(shape1, shape2);
+      zone.shapes.push(obj1.shadow, obj1.shape, obj2.shadow, obj2.shape);
     }
   }
 

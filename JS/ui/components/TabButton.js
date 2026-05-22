@@ -4,7 +4,7 @@
  */
 
 export class TabButton extends Phaser.GameObjects.Container {
-  constructor(scene, x, y, iconTexture, onClick) {
+  constructor(scene, x, y, iconTexture, label, onClick) {
     super(scene, x, y);
     
     this.isSelected = false;
@@ -12,50 +12,40 @@ export class TabButton extends Phaser.GameObjects.Container {
     
     this.createButton();
     this.createIcon(iconTexture);
-    this.setupInteractivity();
+    this.createLabel(label);
     
     scene.add.existing(this);
   }
 
   createButton() {
-    this.bg = this.scene.add.rectangle(0, 0, 50, 50, 0xc9a874);
-    this.bg.setStrokeStyle(1, 0x000000);
+    this.shadow = this.scene.add.image(0, 0, 'tabBorder').setOrigin(0.5).setScrollFactor(0);
+    this.bg = this.scene.add.image(0, 0, 'tabBG').setOrigin(0.5).setScrollFactor(0).setInteractive({ cursor: 'pointer' });
+    this.bg.on('pointerover', () => this.bg.setTexture('tabBGOver'));
+    this.bg.on('pointerout', () => this.bg.setTexture('tabBG'));
+    this.bg.on('pointerdown', () => this.onClick());
+
+    this.add(this.shadow);
     this.add(this.bg);
   }
 
   createIcon(texture) {
-    this.icon = this.scene.add.image(0, 0, texture);
+    this.icon = this.scene.add.image(0, -8, texture);
     this.icon.setScale(0.8);
     this.add(this.icon);
   }
 
-  setupInteractivity() {
-    this.setSize(50, 50);
-    this.setInteractive();
-
-    this.on('pointerover', () => {
-      if (!this.isSelected) {
-        this.bg.setFillStyle(0xb39667);
-      }
-      this.scene.input.setDefaultCursor('pointer');
+  createLabel(text) {
+    this.labelText = this.scene.add.text(0, 6, text, {
+      fontFamily: 'Arial',
+      fontSize: '12px',
+      color: '#ffffff'
     });
-
-    this.on('pointerout', () => {
-      if (!this.isSelected) {
-        this.bg.setFillStyle(0xc9a874);
-      }
-      this.scene.input.setDefaultCursor('default');
-    });
-
-    this.on('pointerdown', () => {
-      if (this.onClick) {
-        this.onClick();
-      }
-    });
+    this.labelText.setOrigin(0.5, 0);
+    this.add(this.labelText);
   }
 
   setSelected(selected) {
     this.isSelected = selected;
-    this.bg.setFillStyle(selected ? 0xb39667 : 0xc9a874);
+    this.shadow.setTexture(selected ? 'tabBorderSelected' : 'tabBorder');
   }
 }

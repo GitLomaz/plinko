@@ -11,7 +11,7 @@ import { TOKEN_CONFIGS } from '../../config/TokenConfig.js';
 export class TokenShopPanel extends UIPanel {
   constructor(scene, x, y, width, height, gameState, formatter, onUpgrade, onPrestige) {
     super(scene, x, y, width, height, {
-      backgroundColor: 0xb39667,
+      backgroundColor: 0x3a3a3a,
       scrollable: true
     });
     
@@ -34,7 +34,7 @@ export class TokenShopPanel extends UIPanel {
       {
         fontFamily: 'Arial',
         fontSize: '12px',
-        color: '#000000',
+        color: '#ffffff',
         wordWrap: { width: this.panelWidth - this.config.padding * 2 }
       }
     );
@@ -51,7 +51,7 @@ export class TokenShopPanel extends UIPanel {
       {
         fontFamily: 'Arial',
         fontSize: '16px',
-        color: '#000000'
+        color: '#ffffff'
       }
     );
     this.prestigeTokenText.setOrigin(0, 0);

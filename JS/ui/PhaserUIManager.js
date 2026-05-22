@@ -27,27 +27,6 @@ export class PhaserUIManager {
   }
 
   createUI() {
-    // Currency displays at top
-    const goldX = this.scene.cameras.main.width - 360;
-    const goldY = 10;
-    
-    this.goldDisplay = new CurrencyDisplay(
-      this.scene,
-      goldX,
-      goldY,
-      'coin',
-      0xce9c4f,
-      '0'
-    );
-
-    this.tokenDisplay = new CurrencyDisplay(
-      this.scene,
-      goldX + 185,
-      goldY,
-      'token',
-      0x50979c,
-      '0'
-    );
 
     // Main menu panel background
     const menuX = this.scene.cameras.main.width - 428;
@@ -60,22 +39,42 @@ export class PhaserUIManager {
       menuY,
       menuWidth,
       menuHeight,
-      0x8a8a88
+      0x171e26
     );
     this.menuBackground.setOrigin(0, 0);
     this.menuBackground.setScrollFactor(0);
-    this.menuBackground.setDepth(90);
+
+    this.menuShadow = this.scene.add.image(696, 18, 'menuBorder').setOrigin(0);
+    this.menuShadow.setOrigin(0, 0);
+    this.menuShadow.setScrollFactor(0);    
+    this.menuBackground = this.scene.add.image(696 + 3, 18 + 3, 'menuBG').setOrigin(0);
+    this.menuBackground.setOrigin(0, 0);
+    this.menuBackground.setScrollFactor(0);
+    
+    this.goldDisplay = new CurrencyDisplay(
+      this.scene,
+      710,
+      35,
+      'currency',
+    );
+
+    this.tokenDisplay = new CurrencyDisplay(
+      this.scene,
+      910,
+      35,
+      'token',
+    );
 
     // Tab buttons
-    const tabY = 70;
-    const tabSpacing = 62;
-    const tabStartX = menuX + 60;
+    const tabY = 100;
+    const tabSpacing = 90;
+    const tabStartX = menuX + 80;
 
     const tabs = [
-      { key: 'ball', texture: 'ball' },
-      { key: 'zone', texture: 'zone' },
-      { key: 'token', texture: 'pres' },
-      { key: 'help', texture: 'help' }
+      { key: 'ball', texture: 'ball', label: 'Balls' },
+      { key: 'zone', texture: 'zone', label: 'Upgrades' },
+      { key: 'token', texture: 'pres', label: 'Rarity' },
+      { key: 'help', texture: 'help', label: 'Settings' }
     ];
 
     tabs.forEach((tab, index) => {
@@ -84,6 +83,7 @@ export class PhaserUIManager {
         tabStartX + index * tabSpacing,
         tabY,
         tab.texture,
+        tab.label,
         () => this.switchPanel(tab.key)
       );
       tabButton.setScrollFactor(0);
@@ -154,48 +154,39 @@ export class PhaserUIManager {
     });
 
     // Scroll buttons (far left)
-    this.createScrollButtons(menuX + 10, menuHeight);
+    this.createScrollButtons(menuX - 40, menuHeight);
 
     // Offline progress popup
     this.createOfflinePopup();
   }
 
   createScrollButtons(x, menuHeight) {
-    const buttonWidth = 40;
-    const buttonHeight = 25;
+    const shadow1 = this.scene.add.image(625, 12, 'scrollBorder').setOrigin(0).setScrollFactor(0);
+    const bg1 = this.scene.add.image(627, 14, 'scrollBG').setOrigin(0).setScrollFactor(0).setInteractive({ cursor: 'pointer' });
+    bg1.on('pointerover', () => bg1.setTexture('scrollBGOver'));
+    bg1.on('pointerout', () => bg1.setTexture('scrollBG'));
+    bg1.on('pointerdown', () => { this.scrollUp = true; });
+    const icon1 = this.scene.add.text(645, 32, '▲', {
+      fontFamily: 'Arial',
+      fontSize: '16px',
+      color: '#c3c3c1'
+    }).setOrigin(0.5).setScrollFactor(0).setScale(1, .75);
 
-    this.scrollUpButton = new Button(
-      this.scene,
-      x,
-      20,
-      buttonWidth,
-      buttonHeight,
-      '▲',
-      () => { this.scrollUp = true; },
-      { fontSize: '16px', backgroundColor: 0x7f7f70, hoverColor: 0x9f9f90 }
-    );
-    this.scrollUpButton.setScrollFactor(0);
-    this.scrollUpButton.setDepth(110);
+    const shadow2 = this.scene.add.image(625, 595 - 12 - 40, 'scrollBorder').setOrigin(0).setScrollFactor(0);
+    const bg2 = this.scene.add.image(627, 595 - 12 - 38, 'scrollBG').setOrigin(0).setScrollFactor(0).setInteractive({ cursor: 'pointer' });
+    bg2.on('pointerover', () => bg2.setTexture('scrollBGOver'));
+    bg2.on('pointerout', () => bg2.setTexture('scrollBG'));
+    bg2.on('pointerdown', () => { this.scrollDown = true; });
+    const icon2 = this.scene.add.text(645, 595 - 12 - 20, '▼', {
+      fontFamily: 'Arial',
+      fontSize: '16px',
+      color: '#c3c3c1'
+    }).setOrigin(0.5).setScrollFactor(0).setScale(1, .75);
 
-    this.scrollDownButton = new Button(
-      this.scene,
-      x,
-      menuHeight - 35,
-      buttonWidth,
-      buttonHeight,
-      '▼',
-      () => { this.scrollDown = true; },
-      { fontSize: '16px', backgroundColor: 0x7f7f70, hoverColor: 0x9f9f90 }
-    );
-    this.scrollDownButton.setScrollFactor(0);
-    this.scrollDownButton.setDepth(110);
-
-    // Handle mouse up to stop scrolling
     this.scene.input.on('pointerup', () => {
       this.scrollUp = false;
       this.scrollDown = false;
     });
-
     this.scrollUp = false;
     this.scrollDown = false;
   }

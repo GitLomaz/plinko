@@ -37,6 +37,7 @@ export class GameScene extends Phaser.Scene {
     this.load.image('coin', 'assets/images/coin.png');
     this.load.image('token', 'assets/images/token.png');
     this.load.image('help', 'assets/images/help.png');
+    this.load.image('idea', 'assets/images/idea.png');
     this.load.spritesheet('balls', 'assets/images/balls.png', {
       frameWidth: 17,
       frameHeight: 17
@@ -44,6 +45,23 @@ export class GameScene extends Phaser.Scene {
   }
 
   create() {
+    this.generateGradientTexture(168, 32, 8, '#ce9c4f', '#6d6038', 'currencyBorder');
+    this.generateGradientTexture(168, 32, 8, '#238d9a', '#0f4b56', 'prestigeBorder');
+    this.generateGradientTexture(398, 559, 12, '#37424e', '#222c34', 'menuBorder');
+    this.generateGradientTexture(398 - 6, 559 - 6, 12, '#232c34', '#1f262c', 'menuBG');
+    this.generateGradientTexture(40, 40, 8, '#97a3b4', '#121316', 'scrollBorder');
+
+    this.generateGradientTexture(40 - 4, 40 - 4, 8, '#2d3742', '#27323a', 'scrollBG');
+    this.generateGradientTexture(40 - 4, 40 - 4, 8, '#3c4a58', '#35444f', 'scrollBGOver');
+
+    this.generateGradientTexture(64, 48, 8, '#37424e', '#36444f', 'tabBorder');
+    this.generateGradientTexture(64, 48, 8, '#e8b16f', '#e8b16f', 'tabBorderSelected');
+    this.generateGradientTexture(64 - 2, 48 - 2, 8, '#2d3742', '#27323a', 'tabBG');
+    this.generateGradientTexture(64 - 2, 48 - 2, 8, '#3c4a58', '#35444f', 'tabBGOver');
+
+    this.generateGradientTexture(330, 40, 8, '#37424e', '#36444f', 'tipBorder');
+    this.generateGradientTexture(330 - 4, 40 - 4, 8,'#2d3742', '#27323a', 'tipBG');
+
     // Initialize camera and physics
     this.cameras.main.setBackgroundColor('rgba(255, 255, 225, 0.5)');
     this.matter.world.setGravity(0, GAME_CONFIG.gravity.y, GAME_CONFIG.gravity.scale);
@@ -369,5 +387,72 @@ export class GameScene extends Phaser.Scene {
   hardReset() {
     this.saveManager.deleteSave();
     location.reload();
+  }
+
+  generateGradientTexture(width, height, radius, colorTop, colorBottom, key) {
+    const rt = this.textures.createCanvas(key, width, height);
+    const ctx = rt.getContext();
+
+    // gradient
+    const gradient = ctx.createLinearGradient(0, 0, 0, height);
+    gradient.addColorStop(0, colorTop);
+    gradient.addColorStop(1, colorBottom);
+
+    // rounded rect path
+    ctx.clearRect(0, 0, width, height);
+    ctx.beginPath();
+    ctx.moveTo(radius, 0);
+    ctx.lineTo(width - radius, 0);
+    ctx.quadraticCurveTo(width, 0, width, radius);
+    ctx.lineTo(width, height - radius);
+    ctx.quadraticCurveTo(width, height, width - radius, height);
+    ctx.lineTo(radius, height);
+    ctx.quadraticCurveTo(0, height, 0, height - radius);
+    ctx.lineTo(0, radius);
+    ctx.quadraticCurveTo(0, 0, radius, 0);
+    ctx.closePath();
+    ctx.fillStyle = gradient;
+    ctx.fill();
+    rt.refresh();
+    return rt;
+  }
+
+  drawBorders() {
+    const left = this.add.graphics().setScrollFactor(0);
+    left.fillGradientStyle(
+        0x000000,
+        0x000000,
+        0x000000,
+        0x000000,
+        0.3,
+        0,
+        0.3,
+        0
+    );
+
+    left.fillRect(
+        0,
+        0,
+        60,
+        700
+    );
+    const right = this.add.graphics().setScrollFactor(0);
+    right.fillGradientStyle(
+        0x000000,
+        0x000000,
+        0x000000,
+        0x000000,
+        0,
+        0.3,
+        0,
+        0.3
+    );
+
+    right.fillRect(
+        620,
+        0,
+        60,
+        700
+    );
   }
 }

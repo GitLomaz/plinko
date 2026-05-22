@@ -9,7 +9,7 @@ import { Button } from '../components/Button.js';
 export class HelpPanel extends UIPanel {
   constructor(scene, x, y, width, height, formatter, onSave, onReset, onFormatChange) {
     super(scene, x, y, width, height, {
-      backgroundColor: 0xb39667
+      backgroundColor: 0x3a3a3a
     });
     
     this.formatter = formatter;
@@ -30,7 +30,7 @@ export class HelpPanel extends UIPanel {
       {
         fontFamily: 'Arial',
         fontSize: '12px',
-        color: '#000000',
+        color: '#ffffff',
         wordWrap: { width: this.panelWidth - this.config.padding * 2 },
         lineSpacing: 4
       }
@@ -48,7 +48,7 @@ export class HelpPanel extends UIPanel {
       {
         fontFamily: 'Arial',
         fontSize: '14px',
-        color: '#000000'
+        color: '#ffffff'
       }
     );
     formatTitle.setOrigin(0.5, 0);
@@ -95,7 +95,7 @@ export class HelpPanel extends UIPanel {
       {
         fontFamily: 'Arial',
         fontSize: '14px',
-        color: '#000000'
+        color: '#ffffff'
       }
     );
     saveTitle.setOrigin(0.5, 0);

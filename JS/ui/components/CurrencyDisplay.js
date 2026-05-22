@@ -4,15 +4,14 @@
  */
 
 export class CurrencyDisplay extends Phaser.GameObjects.Container {
-  constructor(scene, x, y, iconTexture, backgroundColor, value = '0') {
+  constructor(scene, x, y, type) {
     super(scene, x, y);
-    
-    this.iconTexture = iconTexture;
-    this.backgroundColor = backgroundColor;
-    
+    this.type = type;
+    this.iconTexture = type === 'currency' ? 'coin' : 'token';
+    this.backgroundColor = type === 'currency' ? 0x433d2c : 0x0f454f;
     this.createBackground();
     this.createIcon();
-    this.createValue(value);
+    this.createValue('0');
     
     scene.add.existing(this);
     this.setScrollFactor(0);
@@ -20,23 +19,26 @@ export class CurrencyDisplay extends Phaser.GameObjects.Container {
   }
 
   createBackground() {
-    this.bg = this.scene.add.rectangle(0, 0, 170, 34, this.backgroundColor);
-    this.bg.setOrigin(0, 0);
-    this.bg.setStrokeStyle(1, 0x000000);
-    this.add(this.bg);
+    const graphics = this.scene.add.graphics();
+    const shadow = this.scene.add.image(0, 0, this.type === 'currency' ? 'currencyBorder' : 'prestigeBorder').setOrigin(0);
+    this.add(shadow);
+    graphics.fillStyle(this.backgroundColor, 1);
+    graphics.fillRoundedRect(2, 2, 164, 28, 8);
+    this.add(graphics);
+    this.bg = graphics;
   }
 
   createIcon() {
-    this.icon = this.scene.add.image(15, 17, this.iconTexture);
-    this.icon.setScale(0.8);
+    this.icon = this.scene.add.image(15, 16, this.iconTexture);
+    this.icon.setScale(this.type === 'currency' ? 0.6 : 1);
     this.add(this.icon);
   }
 
   createValue(text) {
-    this.valueText = this.scene.add.text(40, 17, text, {
+    this.valueText = this.scene.add.text(40, 18, text, {
       fontFamily: 'Arial',
-      fontSize: '18px',
-      color: '#000000'
+      fontSize: '20px',
+      color: '#ffffff',
     });
     this.valueText.setOrigin(0, 0.5);
     this.add(this.valueText);

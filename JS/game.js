@@ -1,3 +1,4 @@
+let scene = false;
 let block;
 let zoneStrings = [
   "Shrinks Zone Diamonds",
