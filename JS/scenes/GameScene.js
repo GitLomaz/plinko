@@ -37,6 +37,7 @@ export class GameScene extends Phaser.Scene {
     this.load.image('coin', 'assets/images/coin.png');
     this.load.image('token', 'assets/images/token.png');
     this.load.image('help', 'assets/images/help.png');
+    this.load.image('lock', 'assets/images/lock.png');
     this.load.image('idea', 'assets/images/idea.png');
     this.load.image('testBg', 'assets/images/testBg.png');
     this.load.spritesheet('balls', 'assets/images/balls.png', {
@@ -72,6 +73,12 @@ export class GameScene extends Phaser.Scene {
     this.generateGradientTexture(172, 70, 8, '#496249', '#3a4e3a', 'ballButtonBorder');
     this.generateGradientTexture(172 - 4, 70 - 4, 8, '#36463a', '#36463a', 'ballButtonBG');
     this.generateGradientTexture(172 - 4, 70 - 4, 8, '#3c5041', '#3c5041', 'ballButtonBGOver');
+
+    this.generateGradientTexture(350, 36, 8, '#37424e', '#36444f', 'zoneButtonDisabledBorder');
+    this.generateGradientTexture(350 - 4, 36 - 4, 8,'#2d3742', '#27323a', 'zoneButtonDisabledBG');
+    this.generateGradientTexture(350, 36, 8, '#496249', '#3a4e3a', 'zoneButtonBorder');
+    this.generateGradientTexture(350 - 4, 36 - 4, 8, '#36463a', '#36463a', 'zoneButtonBG');
+    this.generateGradientTexture(350 - 4, 36 - 4, 8, '#3c5041', '#3c5041', 'zoneButtonBGOver');
 
     // Initialize camera and physics
     this.cameras.main.setBackgroundColor('rgba(255, 255, 225, 0.5)');

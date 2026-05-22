@@ -19,10 +19,10 @@ export class BallShopPanel extends UIPanel {
     this.cards = [];
     
     this.createContent();
+    this.update();
   }
 
   createContent() {
-
     this.tipShadow = this.scene.add.image(18, 6, 'tipBorder').setOrigin(0);
     this.tipBackground = this.scene.add.image(20, 8, 'tipBG').setOrigin(0);
 
@@ -74,11 +74,6 @@ export class BallShopPanel extends UIPanel {
       this.add(card);
       this.cards.push(card);
     }
-    
-    // Calculate content height for scrolling
-    this.calculateContentHeight();
-    // Ensure all children ignore camera scroll
-    this.setChildrenScrollFactor();
   }
 
   update() {
@@ -87,15 +82,9 @@ export class BallShopPanel extends UIPanel {
       const zone = this.gameState.zones[spawn.stage - 1];
 
       if (!zone) {
-        // Locked
         card.setLocked(true);
-        card.setSelected(false);
-        card.updateInfo(['Locked', 'Unlock zone first']);
       } else {
         card.setLocked(false);
-        
-        // Set selected state based on level (level > 0 means purchased)
-        card.setSelected(spawn.level > 0);
         
         const value = this.gameState.getSpawnValue(index);
         const cost = this.gameState.getSpawnUpgradeCost(index);

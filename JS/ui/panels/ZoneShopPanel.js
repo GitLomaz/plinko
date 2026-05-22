@@ -4,7 +4,7 @@
  */
 
 import { UIPanel } from '../components/UIPanel.js';
-import { UpgradeCard } from '../components/UpgradeCard.js';
+import { ZoneUpgradeCard } from '../components/ZoneUpgradeCard.js';
 import { ZONE_PRICES, ZONE_EFFECTS } from '../../config/GameConfig.js';
 
 export class ZoneShopPanel extends UIPanel {
@@ -23,16 +23,27 @@ export class ZoneShopPanel extends UIPanel {
   }
 
   createContent() {
+    this.tipShadow = this.scene.add.image(18, 6, 'tipBorder').setOrigin(0);
+    this.tipBackground = this.scene.add.image(20, 8, 'tipBG').setOrigin(0);
+
+    this.add(this.tipShadow);
+    this.add(this.tipBackground);
+
+    // Lightbulb icon (using a simple circle with yellow color as placeholder)
+
+    this.icon = this.scene.add.image(40, 28, "idea")
+    this.add(this.icon);
+
     // Tip text
     const tipText = this.scene.add.text(
-      this.config.padding,
-      this.config.padding,
-      'Tip: Upgrading zones increases payouts\nand has unique benefits.',
+      this.config.padding + 56,
+      this.config.padding + 1,
+      'Tip: Upgrading zones increases payout modifiers and alters zone behaviors.',
       {
         fontFamily: 'Arial',
-        fontSize: '12px',
+        fontSize: '14px',
         color: '#ffffff',
-        wordWrap: { width: this.panelWidth - this.config.padding * 2 }
+        wordWrap: { width: this.panelWidth - this.config.padding * 2 - 50 }
       }
     );
     tipText.setOrigin(0, 0);
@@ -41,16 +52,16 @@ export class ZoneShopPanel extends UIPanel {
     // Create upgrade cards
     let yPos = tipText.y + tipText.height + 15;
     const cardWidth = this.panelWidth - this.config.padding * 2;
-    const cardHeight = 45;
+    const cardHeight = 38;
     const spacing = 8;
 
     for (let i = 0; i < 8; i++) {
       const x = this.config.padding;
       const y = yPos + i * (cardHeight + spacing);
 
-      const card = new UpgradeCard(
+      const card = new ZoneUpgradeCard(
         this.scene,
-        x + cardWidth / 2,
+        x + cardWidth / 2 - 10,
         y + cardHeight / 2,
         cardWidth,
         cardHeight,
@@ -86,8 +97,8 @@ export class ZoneShopPanel extends UIPanel {
         const modifier = new Decimal(zone.modifier).mul(mod);
 
         const lines = [
-          `${ZONE_EFFECTS[index]}`,
-          `Modifier: ${this.formatter.formatPercent(modifier.toNumber())} | Level: ${zone.level}`,
+          `${ZONE_EFFECTS[index]} - ${this.formatter.formatPercent(modifier.toNumber())}`,
+          `Level: ${zone.level}`,
           `Cost: ${this.formatter.format(cost)}`
         ];
 

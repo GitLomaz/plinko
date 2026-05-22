@@ -1,8 +1,8 @@
 /**
- * UpgradeCard.js
- * Card component for displaying upgrades
+ * TokenUpgradeCard.js
+ * Card component for displaying token upgrades
  */
-export class UpgradeCard extends Phaser.GameObjects.Container {
+export class TokenUpgradeCard extends Phaser.GameObjects.Container {
   constructor(scene, x, y, width, height, upgradeData, onClick) {
     super(scene, Math.floor(x), Math.floor(y));
 

@@ -26,27 +26,48 @@ export class TokenShopPanel extends UIPanel {
   }
 
   createContent() {
+    this.tipShadow = this.scene.add.image(18, 6, 'tipBorder').setOrigin(0);
+    this.tipBackground = this.scene.add.image(20, 8, 'tipBG').setOrigin(0);
+
+    this.add(this.tipShadow);
+    this.add(this.tipBackground);
+
+    // Lightbulb icon (using a simple circle with yellow color as placeholder)
+
+    this.icon = this.scene.add.image(40, 28, "idea")
+    this.add(this.icon);
+
     // Tip text
     const tipText = this.scene.add.text(
-      this.config.padding,
-      this.config.padding,
-      'Tip: Prestiging resets progress but\ngrants permanent bonuses.',
+      this.config.padding + 56,
+      this.config.padding + 1,
+      'Tip: Starting over again sounds like a lot of work, but it\'s worth it',
       {
         fontFamily: 'Arial',
-        fontSize: '12px',
+        fontSize: '14px',
         color: '#ffffff',
-        wordWrap: { width: this.panelWidth - this.config.padding * 2 }
+        wordWrap: { width: this.panelWidth - this.config.padding * 2 - 50 }
       }
     );
     tipText.setOrigin(0, 0);
     this.add(tipText);
 
-    // Prestige section
-    let yPos = tipText.y + tipText.height + 10;
+    this.prestigeBtnBorder = this.scene.add.image(192, 416, 'zoneButtonBorder');
+    this.prestigeBtnBg = this.scene.add.image(192, 416, 'zoneButtonBG');
+    this.prestigeBtnBg.setInteractive({ cursor: 'pointer' });
+    this.prestigeBtnBg.on('pointerover', () => this.prestigeBtnBg.setTexture('zoneButtonBGOver'));
+    this.prestigeBtnBg.on('pointerout', () => this.prestigeBtnBg.setTexture('zoneButtonBG'));
+    this.prestigeBtnBg.on('pointerdown', () => this.handlePrestige());
+    this.add(this.prestigeBtnBorder);
+    this.add(this.prestigeBtnBg);
+
+    this.iconLeft = this.scene.add.image(40, 415, 'pres');
+    this.add(this.iconLeft);
+    this.iconRight = this.scene.add.image(342, 415, 'pres');
+    this.add(this.iconRight);
     
     this.prestigeTokenText = this.scene.add.text(
-      this.config.padding + 10,
-      yPos,
+      191, 407,
       'Tokens: 0',
       {
         fontFamily: 'Arial',
@@ -54,22 +75,22 @@ export class TokenShopPanel extends UIPanel {
         color: '#ffffff'
       }
     );
-    this.prestigeTokenText.setOrigin(0, 0);
+    this.prestigeTokenText.setOrigin(0.5, 0);
     this.add(this.prestigeTokenText);
 
-    this.prestigeButton = new Button(
-      this.scene,
-      this.panelWidth - 80,
-      yPos + 10,
-      120,
-      30,
-      'Prestige',
-      () => this.handlePrestige()
-    );
-    this.add(this.prestigeButton);
+    // this.prestigeButton = new Button(
+    //   this.scene,
+    //   this.panelWidth - 80,
+    //   yPos + 10,
+    //   120,
+    //   30,
+    //   'Prestige',
+    //   () => this.handlePrestige()
+    // );
+    // this.add(this.prestigeButton);
 
     // Create upgrade cards
-    yPos += 50;
+    const yPos = 50;
     const cardWidth = (this.panelWidth - this.config.padding * 3) / 2;
     const cardHeight = 65;
     const spacing = 8;
@@ -103,15 +124,15 @@ export class TokenShopPanel extends UIPanel {
   handlePrestige() {
     if (!this.prestigeConfirm) {
       this.prestigeConfirm = true;
-      this.prestigeButton.setText('Confirm?');
+      this.prestigeTokenText.setText('Confirm?');
       setTimeout(() => {
         this.prestigeConfirm = false;
-        this.prestigeButton.setText('Prestige');
+        this.prestigeTokenText.setText('Prestige');
       }, 3000);
     } else {
       this.onPrestige();
       this.prestigeConfirm = false;
-      this.prestigeButton.setText('Prestige');
+      this.prestigeTokenText.setText('Prestige');
     }
   }
 
