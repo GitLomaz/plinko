@@ -5,19 +5,20 @@
 
 import { Button } from './Button.js';
 
-export class UpgradeCard extends Button {
+export class UpgradeCard extends Phaser.GameObjects.Container {
   constructor(scene, x, y, width, height, upgradeData, onClick) {
-    super(scene, x, y, width, height, '', onClick);
+    super(scene, x, y);
+
+    this.shadow = this.scene.add.image(10, 0, 'ballButtonDisabledBorder')
+    this.background = this.scene.add.image(10, 0, 'ballButtonDisabledBG')
+
+    this.add(this.shadow);
+    this.add(this.background);
+
     
     this.upgradeData = upgradeData;
     this.locked = false;
     this.selected = false;
-    
-    // Remove default button background and label
-    this.bg.destroy();
-    this.remove(this.bg);
-    this.label.destroy();
-    this.remove(this.label);
     
     this.createCardContent();
   }
@@ -58,91 +59,91 @@ export class UpgradeCard extends Button {
   }
 
   updateBackground() {
-    this.bgGraphics.clear();
+    // this.bgGraphics.clear();
     
-    // Fill
-    this.bgGraphics.fillStyle(0x2a2a2a, 1);
-    this.bgGraphics.fillRoundedRect(
-      -this.buttonWidth / 2,
-      -this.buttonHeight / 2,
-      this.buttonWidth,
-      this.buttonHeight,
-      8
-    );
+    // // Fill
+    // this.bgGraphics.fillStyle(0x2a2a2a, 1);
+    // this.bgGraphics.fillRoundedRect(
+    //   -this.buttonWidth / 2,
+    //   -this.buttonHeight / 2,
+    //   this.buttonWidth,
+    //   this.buttonHeight,
+    //   8
+    // );
     
-    // Border (if selected)
-    if (this.selected) {
-      this.bgGraphics.lineStyle(2, 0xce9c4f, 1);
-      this.bgGraphics.strokeRoundedRect(
-        -this.buttonWidth / 2,
-        -this.buttonHeight / 2,
-        this.buttonWidth,
-        this.buttonHeight,
-        8
-      );
-    }
+    // // Border (if selected)
+    // if (this.selected) {
+    //   this.bgGraphics.lineStyle(2, 0xce9c4f, 1);
+    //   this.bgGraphics.strokeRoundedRect(
+    //     -this.buttonWidth / 2,
+    //     -this.buttonHeight / 2,
+    //     this.buttonWidth,
+    //     this.buttonHeight,
+    //     8
+    //   );
+    // }
   }
 
   createInfoText(x, y, text) {
-    const textObj = this.scene.add.text(x, y, text, {
-      fontFamily: 'Arial',
-      fontSize: '11px',
-      color: '#ffffff'
-    });
-    textObj.setOrigin(0, 0);
-    this.add(textObj);
-    this.infoTexts.push(textObj);
-    return textObj;
+    // const textObj = this.scene.add.text(x, y, text, {
+    //   fontFamily: 'Arial',
+    //   fontSize: '11px',
+    //   color: '#ffffff'
+    // });
+    // textObj.setOrigin(0, 0);
+    // this.add(textObj);
+    // this.infoTexts.push(textObj);
+    // return textObj;
   }
 
   updateInfo(lines) {
-    // Ensure we have enough text objects
-    while (this.infoTexts.length < lines.length) {
-      const lastText = this.infoTexts[this.infoTexts.length - 1];
-      const newY = lastText.y + 16;
-      this.createInfoText(lastText.x, newY, '');
-    }
+    // // Ensure we have enough text objects
+    // while (this.infoTexts.length < lines.length) {
+    //   const lastText = this.infoTexts[this.infoTexts.length - 1];
+    //   const newY = lastText.y + 16;
+    //   this.createInfoText(lastText.x, newY, '');
+    // }
 
-    // Update text content
-    lines.forEach((line, index) => {
-      if (this.infoTexts[index]) {
-        this.infoTexts[index].setText(line);
-      }
-    });
+    // // Update text content
+    // lines.forEach((line, index) => {
+    //   if (this.infoTexts[index]) {
+    //     this.infoTexts[index].setText(line);
+    //   }
+    // });
   }
 
   setLocked(locked) {
-    this.locked = locked;
+    // this.locked = locked;
     
-    if (locked) {
-      this.lockOverlay.setVisible(true);
-      this.lockOverlay.clear();
-      this.lockOverlay.fillStyle(0x000000, 0.7);
-      this.lockOverlay.fillRoundedRect(
-        -this.buttonWidth / 2,
-        -this.buttonHeight / 2,
-        this.buttonWidth,
-        this.buttonHeight,
-        8
-      );
-    } else {
-      this.lockOverlay.setVisible(false);
-    }
+    // if (locked) {
+    //   this.lockOverlay.setVisible(true);
+    //   this.lockOverlay.clear();
+    //   this.lockOverlay.fillStyle(0x000000, 0.7);
+    //   this.lockOverlay.fillRoundedRect(
+    //     -this.buttonWidth / 2,
+    //     -this.buttonHeight / 2,
+    //     this.buttonWidth,
+    //     this.buttonHeight,
+    //     8
+    //   );
+    // } else {
+    //   this.lockOverlay.setVisible(false);
+    // }
     
-    this.lockIcon.setVisible(locked);
-    this.setEnabled(!locked);
+    // this.lockIcon.setVisible(locked);
+    // this.setEnabled(!locked);
   }
 
   setSelected(selected) {
-    this.selected = selected;
-    this.updateBackground();
+    // this.selected = selected;
+    // this.updateBackground();
   }
 
   setCostColor(canAfford) {
-    // Update last text color (cost) based on affordability
-    if (this.infoTexts.length > 0) {
-      const costText = this.infoTexts[this.infoTexts.length - 1];
-      costText.setColor(canAfford ? '#ce9c4f' : '#ff6b6b');
-    }
+    // // Update last text color (cost) based on affordability
+    // if (this.infoTexts.length > 0) {
+    //   const costText = this.infoTexts[this.infoTexts.length - 1];
+    //   costText.setColor(canAfford ? '#ce9c4f' : '#ff6b6b');
+    // }
   }
 }

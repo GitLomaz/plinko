@@ -38,6 +38,7 @@ export class GameScene extends Phaser.Scene {
     this.load.image('token', 'assets/images/token.png');
     this.load.image('help', 'assets/images/help.png');
     this.load.image('idea', 'assets/images/idea.png');
+    this.load.image('testBg', 'assets/images/testBg.png');
     this.load.spritesheet('balls', 'assets/images/balls.png', {
       frameWidth: 17,
       frameHeight: 17
@@ -49,8 +50,8 @@ export class GameScene extends Phaser.Scene {
     this.generateGradientTexture(168, 32, 8, '#238d9a', '#0f4b56', 'prestigeBorder');
     this.generateGradientTexture(398, 559, 12, '#37424e', '#222c34', 'menuBorder');
     this.generateGradientTexture(398 - 6, 559 - 6, 12, '#232c34', '#1f262c', 'menuBG');
-    this.generateGradientTexture(40, 40, 8, '#97a3b4', '#121316', 'scrollBorder');
 
+    this.generateGradientTexture(40, 40, 8, '#97a3b4', '#121316', 'scrollBorder');
     this.generateGradientTexture(40 - 4, 40 - 4, 8, '#2d3742', '#27323a', 'scrollBG');
     this.generateGradientTexture(40 - 4, 40 - 4, 8, '#3c4a58', '#35444f', 'scrollBGOver');
 
@@ -62,9 +63,24 @@ export class GameScene extends Phaser.Scene {
     this.generateGradientTexture(330, 40, 8, '#37424e', '#36444f', 'tipBorder');
     this.generateGradientTexture(330 - 4, 40 - 4, 8,'#2d3742', '#27323a', 'tipBG');
 
+    this.generateGradientTexture(128, 48, 8, '#97a3b4', '#121316', 'adBorder');
+    this.generateGradientTexture(128 - 4, 48 - 4, 8, '#2d3742', '#27323a', 'adBG');
+    this.generateGradientTexture(128 - 4, 48 - 4, 8, '#3c4a58', '#35444f', 'adBGOver');
+
+    this.generateGradientTexture(172, 70, 8, '#37424e', '#36444f', 'ballButtonDisabledBorder');
+    this.generateGradientTexture(172 - 4, 70 - 4, 8,'#2d3742', '#27323a', 'ballButtonDisabledBG');
+    this.generateGradientTexture(172, 70, 8, '#496249', '#3a4e3a', 'ballButtonBorder');
+    this.generateGradientTexture(172 - 4, 70 - 4, 8, '#36463a', '#36463a', 'ballButtonBG');
+    this.generateGradientTexture(172 - 4, 70 - 4, 8, '#3c5041', '#3c5041', 'ballButtonBGOver');
+
     // Initialize camera and physics
     this.cameras.main.setBackgroundColor('rgba(255, 255, 225, 0.5)');
     this.matter.world.setGravity(0, GAME_CONFIG.gravity.y, GAME_CONFIG.gravity.scale);
+
+    // Create tiled background that scrolls with the game
+    // Position at center (340) with default centering, and make extra wide for full coverage
+    this.tiledBackground = this.add.tileSprite(340, 5250, 1000, 10500, 'testBg')
+      .setDepth(-100); // Behind everything
 
     // Initialize managers
     this.gameState = new GameState();
@@ -84,6 +100,8 @@ export class GameScene extends Phaser.Scene {
 
     // Setup event handlers
     this.setupEventHandlers();
+
+    this.drawBorders();
 
     // Expose scene globally for ad callbacks
     window.scene = this;

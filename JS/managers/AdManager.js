@@ -11,7 +11,6 @@ export class AdManager extends Phaser.GameObjects.Container {
     
     this.scene = scene;
     this.setSize(196, 48);
-    this.setInteractive();
     this.setScrollFactor(0);
     
     this.bonuses = ['Double Points', 'Double Spawn', 'No Despawn'];
@@ -30,39 +29,48 @@ export class AdManager extends Phaser.GameObjects.Container {
     this.playingAd = false;
     
     this.createUI();
-    this.setupEvents();
     
     scene.add.existing(this);
     this.setDepth(10);
   }
 
   createUI() {
-    const background = this.scene.add.rectangle(0, 0, this.width, this.height, 0xaed7fc);
-    background.alpha = 0.8;
-    
-    this.topText = this.scene.add.text(0, -10, 'Top Text', {
-      color: '#000',
-      fontSize: '14px'
-    }).setOrigin(0.5);
 
-    this.bottomText = this.scene.add.text(0, 10, 'bottom Text', {
-      color: '#000',
-      fontSize: '14px'
-    }).setOrigin(0.5);
-    
-    this.add(background);
-    this.add(this.topText);
-    this.add(this.bottomText);
-  }
-
-  setupEvents() {
-    this.on('pointerup', () => {
+    this.shadow = this.scene.add.image(0, 0, 'adBorder')
+    this.background = this.scene.add.image(0, 0, 'adBG').setInteractive({ useHandCursor: true });
+    this.background.on('pointerover', () => {
+      if (!this.bonusActive && !this.transition) {
+        this.background.setTexture('adBGOver');
+      }
+    });
+    this.background.on('pointerout', () => {
+      this.background.setTexture('adBG');
+    });
+    this.background.on('pointerdown', () => {
       if (!this.bonusActive && !this.transition) {
         if (typeof displayRewardedVideo === 'function') {
           displayRewardedVideo();
         }
       }
     });
+    
+    this.add(this.shadow);
+    this.add(this.background);
+    
+    this.topText = this.scene.add.text(0, -10, 'Top Text', {
+      fontFamily: 'Arial',
+      color: '#c3c3c1',
+      fontSize: '14px'
+    }).setOrigin(0.5);
+
+    this.bottomText = this.scene.add.text(0, 10, 'bottom Text', {
+      fontFamily: 'Arial',
+      color: '#c3c3c1',
+      fontSize: '14px'
+    }).setOrigin(0.5);
+    
+    this.add(this.topText);
+    this.add(this.bottomText);
   }
 
   tick() {

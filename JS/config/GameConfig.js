@@ -76,5 +76,9 @@ export const PHASER_CONFIG = {
   height: GAME_CONFIG.height,
   parent: 'wrapper',
   physics: GAME_CONFIG.physics,
-  pixelArt: false
+  render: {
+    pixelArt: false,
+    antialias: true,
+    // roundPixels: true
+  }
 };

@@ -50,15 +50,15 @@ export class BallShopPanel extends UIPanel {
     this.add(tipText);
 
     // Create upgrade cards
-    let yPos = this.config.padding + 55;
+    let yPos = this.config.padding + 45;
     const cardWidth = (this.panelWidth - this.config.padding * 3) / 2;
-    const cardHeight = 85;
+    const cardHeight = 70;
     const spacing = 8;
 
     for (let i = 0; i < this.gameState.spawns.length; i++) {
       const col = i % 2;
       const row = Math.floor(i / 2);
-      const x = this.config.padding + col * (cardWidth + spacing);
+      const x = this.config.padding + col * (cardWidth + spacing) - 10;
       const y = yPos + row * (cardHeight + spacing);
 
       const card = new UpgradeCard(

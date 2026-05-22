@@ -590,28 +590,6 @@ var titleScene = new Phaser.Class({
   },
 });
 
-var config = {
-  type: Phaser.AUTO,
-  width: 1108,
-  height: 595,
-  parent: "Game",
-  physics: {
-    default: "matter",
-    matter: {
-      enableSleeping: false,
-      gravityY: 0.0005,
-      setBounds: {
-        x: 0,
-        y: 0,
-        width: 1108,
-        height: 2000,
-      },
-    },
-  },
-  pixelArt: false,
-  scene: [titleScene, gameScene],
-};
-
 function score(ball) {
   const mod = new Decimal(
     tokenUpgrades[6].value.mul(
