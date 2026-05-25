@@ -92,9 +92,9 @@ export class UIPanel extends Phaser.GameObjects.Container {
   }
 
   updateScroll() {
-    // Move all children except background by scroll offset
+    // Move all children except background and fixed elements
     this.list.forEach((child, index) => {
-      if (index > 0 && child !== this.background) {
+      if (index > 0 && child !== this.background && !child.fixedPosition) {
         // Store original Y if not already stored
         if (child.originalY === undefined) {
           child.originalY = child.y;

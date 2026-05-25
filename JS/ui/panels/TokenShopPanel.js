@@ -28,7 +28,9 @@ export class TokenShopPanel extends UIPanel {
 
   createContent() {
     this.tipShadow = this.scene.add.image(18, 6, 'tipBorder').setOrigin(0);
+    this.tipShadow.fixedPosition = true;
     this.tipBackground = this.scene.add.image(20, 8, 'tipBG').setOrigin(0);
+    this.tipBackground.fixedPosition = true;
 
     this.add(this.tipShadow);
     this.add(this.tipBackground);
@@ -36,6 +38,7 @@ export class TokenShopPanel extends UIPanel {
     // Lightbulb icon (using a simple circle with yellow color as placeholder)
 
     this.icon = this.scene.add.image(40, 28, "idea")
+    this.icon.fixedPosition = true;
     this.add(this.icon);
 
     // Tip text
@@ -50,11 +53,14 @@ export class TokenShopPanel extends UIPanel {
         wordWrap: { width: this.panelWidth - this.config.padding * 2 - 50 }
       }
     );
+    tipText.fixedPosition = true;
     tipText.setOrigin(0, 0);
     this.add(tipText);
 
     this.prestigeBtnBorder = this.scene.add.image(182, 416, 'zoneButtonBorder');
+    this.prestigeBtnBorder.fixedPosition = true;
     this.prestigeBtnBg = this.scene.add.image(182, 416, 'zoneButtonBG');
+    this.prestigeBtnBg.fixedPosition = true;
     this.prestigeBtnBg.setInteractive({ cursor: 'pointer' });
     this.prestigeBtnBg.on('pointerover', () => this.prestigeBtnBg.setTexture('zoneButtonBGOver'));
     this.prestigeBtnBg.on('pointerout', () => this.prestigeBtnBg.setTexture('zoneButtonBG'));
@@ -63,8 +69,10 @@ export class TokenShopPanel extends UIPanel {
     this.add(this.prestigeBtnBg);
 
     this.iconLeft = this.scene.add.image(30, 415, 'pres');
+    this.iconLeft.fixedPosition = true;
     this.add(this.iconLeft);
     this.iconRight = this.scene.add.image(332, 415, 'pres');
+    this.iconRight.fixedPosition = true;
     this.add(this.iconRight);
     
     this.prestigeTokenText = this.scene.add.text(
@@ -76,6 +84,7 @@ export class TokenShopPanel extends UIPanel {
         color: '#ffffff'
       }
     );
+    this.prestigeTokenText.fixedPosition = true;
     this.prestigeTokenText.setOrigin(0.5, 0);
     this.add(this.prestigeTokenText);
 

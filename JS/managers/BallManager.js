@@ -62,7 +62,7 @@ export class BallManager {
           .toNumber();
         const shouldDespawn = adManager.noDespawn ? 
           false : 
-          (Phaser.Math.Between(0, 100) > despawnChance && ball.stage < maxStage);
+          (Phaser.Math.Between(0, 100) < despawnChance && ball.stage < maxStage);
         if (shouldDespawn || this.balls.length > 700) {
           ball.cleanup();
           this.balls.splice(i, 1);

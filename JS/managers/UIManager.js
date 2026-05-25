@@ -3,7 +3,7 @@
  * Manages all UI elements and updates
  */
 
-import { ZONE_PRICES, ZONE_EFFECTS } from '../config/GameConfig.js';
+import { ZONE_PRICES, ZONE_EFFECTS, GAME_CONFIG } from '../config/GameConfig.js';
 import { NumberFormatter } from '../utils/NumberFormatter.js';
 
 export class UIManager {
@@ -263,11 +263,21 @@ export class UIManager {
   }
 
   showOfflineProgress(seconds, earned) {
-    $('#offlineText').html(
-      `Inactive for ${this.formatter.addCommas(Math.floor(seconds))} seconds<br/>` +
-      `Total Earned: ${this.formatter.format(earned)}`
-    );
-    $('#offlineProgress').show();
+    console.log('showing offline progress?!')
+    this.idleBorder = this.scene.add.image(GAME_CONFIG.width / 2, GAME_CONFIG.height / 2, 'idleBorder');
+    this.idleBorder.fixedPosition = true;
+    this.idleBorder.setInteractive({ cursor: 'pointer' });
+    this.idleBG = this.scene.add.image(GAME_CONFIG.width / 2, GAME_CONFIG.height / 2, 'idleBG');
+    this.idleBG.fixedPosition = true;
+    this.idleText = this.scene.add.text(GAME_CONFIG.width / 2, GAME_CONFIG.height / 2,       `Inactive for ${this.formatter.addCommas(Math.floor(seconds))} seconds\r\n` +
+      `Total Earned: ${this.formatter.format(earned)}`, {
+      fontFamily: 'Arial',
+      fontSize: '16px',
+      color: '#ffffff',
+      align: 'center',
+      wordWrap: { width: 300 }
+    });
+    this.idleText.setOrigin(0.5);
   }
 
   getScrollState() {

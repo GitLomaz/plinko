@@ -24,6 +24,9 @@ export class GameScene extends Phaser.Scene {
     
     // Target 100 FPS (10ms per frame)
     this.TARGET_DELTA = 10;
+    
+    // Store offline progress data to show after UI is ready
+    this.pendingOfflineProgress = null;
   }
 
   preload() {
@@ -93,6 +96,10 @@ export class GameScene extends Phaser.Scene {
     this.generateGradientTexture(112 - 4, 40 - 4, 8, '#422d2d', '#3a2727', 'buttonDangerBG');
     this.generateGradientTexture(112 - 4, 40 - 4, 8, '#583c3c', '#4f3535', 'buttonDangerBGOver');
 
+    this.generateGradientTexture(200, 125, 8, '#97a3b4', '#121316', 'idleBorder');
+    this.generateGradientTexture(200 - 4, 125 - 4, 8, '#2d3742', '#27323a', 'idleBG');
+    this.generateGradientTexture(200 - 4, 125 - 4, 8, '#3c4a58', '#35444f', 'idleBGOver');
+
 
     // Initialize camera and physics
     this.cameras.main.setBackgroundColor('rgba(255, 255, 225, 0.5)');
@@ -115,6 +122,16 @@ export class GameScene extends Phaser.Scene {
 
     // Initialize Phaser UI (must be after loadGame)
     this.uiManager = new PhaserUIManager(this, this.gameState);
+
+    // Show offline progress if there was any
+    if (this.pendingOfflineProgress) {
+      this.uiManager.showOfflineProgress(
+        this.pendingOfflineProgress.secondsElapsed,
+        this.pendingOfflineProgress.addedScore
+      );
+      this.uiManager.updateShopPanel();
+      this.pendingOfflineProgress = null;
+    }
 
     // Setup input handlers
     this.setupInputHandlers();
@@ -384,6 +401,7 @@ export class GameScene extends Phaser.Scene {
       }
 
       // Calculate offline progress
+      console.log(saveData.time, this.gameState.currentTime)
       if (saveData.time) {
         this.gameState.currentTime = saveData.time;
         this.updateOfflineProgress();
@@ -398,17 +416,17 @@ export class GameScene extends Phaser.Scene {
     const now = Date.now();
     const secondsElapsed = (now - this.gameState.currentTime) / 1000;
     
-    if (secondsElapsed > 30) {
+    if (secondsElapsed > 0) {
       const scorePerSecond = this.gameState.calculateScorePerSecond();
       const addedScore = scorePerSecond.mul(secondsElapsed);
       
       this.gameState.addGold(addedScore);
       
-      // Only show UI if uiManager is initialized
-      if (this.uiManager) {
-        this.uiManager.showOfflineProgress(secondsElapsed, addedScore);
-        this.uiManager.updateShopPanel();
-      }
+      // Store offline progress to show after UI manager is ready
+      this.pendingOfflineProgress = {
+        secondsElapsed,
+        addedScore
+      };
     }
     
     this.gameState.currentTime = now;

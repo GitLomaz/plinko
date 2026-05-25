@@ -5,7 +5,7 @@
 export class TokenUpgradeCard extends Phaser.GameObjects.Container {
   constructor(scene, x, y, width, height, upgradeData, onClick) {
     super(scene, Math.floor(x), Math.floor(y));
-
+    this.fixedPosition = true;
     this.shadow = this.scene.add.image(10, 0, 'ballButtonBorder')
     this.background = this.scene.add.image(10, 0, 'ballButtonBG').setInteractive({ cursor: 'pointer' });
     this.background.on('pointerover', () => this.background.setTexture('ballButtonBGOver'));

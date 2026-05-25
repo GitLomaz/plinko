@@ -194,21 +194,23 @@ export class PhaserUIManager {
 
   createOfflinePopup() {
     // Offline progress panel (hidden by default)
-    this.offlinePanel = this.scene.add.container(200, 230);
+    this.offlinePanel = this.scene.add.container(330, 330);
     this.offlinePanel.setScrollFactor(0);
     this.offlinePanel.setDepth(300);
     this.offlinePanel.setVisible(false);
 
-    const bg = this.scene.add.rectangle(0, 0, 250, 120, 0xb39667);
-    bg.setStrokeStyle(2, 0x000000);
+    const shadow = this.scene.add.image(0, 0, 'idleBorder').setOrigin(0.5);
+    this.offlinePanel.add(shadow);
+
+    const bg = this.scene.add.image(0, 0, 'idleBG').setOrigin(0.5);
     this.offlinePanel.add(bg);
 
-    this.offlineText = this.scene.add.text(0, -30, '', {
+    this.offlineText = this.scene.add.text(0, -20, '', {
       fontFamily: 'Arial',
-      fontSize: '14px',
-      color: '#000000',
+      fontSize: '16px',
+      color: '#ffffff',
       align: 'center',
-      wordWrap: { width: 230 }
+      wordWrap: { width: 180 }
     });
     this.offlineText.setOrigin(0.5);
     this.offlinePanel.add(this.offlineText);
@@ -216,12 +218,12 @@ export class PhaserUIManager {
     const closeBtn = new Button(
       this.scene,
       0,
-      35,
+      40,
       80,
       30,
       'Ok!',
       () => this.offlinePanel.setVisible(false),
-      { fontSize: '14px' }
+      { fontSize: '16px' }
     );
     this.offlinePanel.add(closeBtn);
   }
