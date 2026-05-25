@@ -30,6 +30,7 @@ export class GameScene extends Phaser.Scene {
     this.load.image('ball', 'assets/images/ball.png');
     this.load.image('pres', 'assets/images/pres.png');
     this.load.image('zone', 'assets/images/zone.png');
+    this.load.image('cursor', 'assets/images/cursor.png');
     this.load.image('locked', 'assets/images/locked.png');
     this.load.image('unlocked', 'assets/images/unlocked.png');
     this.load.image('lockedUpgrade', 'assets/images/lockedUpgrade.png');
@@ -79,6 +80,16 @@ export class GameScene extends Phaser.Scene {
     this.generateGradientTexture(350, 36, 8, '#496249', '#3a4e3a', 'zoneButtonBorder');
     this.generateGradientTexture(350 - 4, 36 - 4, 8, '#36463a', '#36463a', 'zoneButtonBG');
     this.generateGradientTexture(350 - 4, 36 - 4, 8, '#3c5041', '#3c5041', 'zoneButtonBGOver');
+
+    this.generateGradientTexture(112, 40, 8, '#97a3b4', '#121316', 'buttonBorder');
+    this.generateGradientTexture(112 - 4, 40 - 4, 8, '#2d3742', '#27323a', 'buttonBG');
+    this.generateGradientTexture(112 - 4, 40 - 4, 8, '#3c4a58', '#35444f', 'buttonBGOver');
+    this.generateGradientTexture(112 - 4, 40 - 4, 8, '#41586f', '#3e5b6f', 'buttonBGSelected');
+
+    this.generateGradientTexture(112, 40, 8, '#97a3b4', '#121316', 'buttonDangerBorder');
+    this.generateGradientTexture(112 - 4, 40 - 4, 8, '#2d3742', '#27323a', 'buttonDangerBG');
+    this.generateGradientTexture(112 - 4, 40 - 4, 8, '#3c4a58', '#35444f', 'buttonDangerBGOver');
+
 
     // Initialize camera and physics
     this.cameras.main.setBackgroundColor('rgba(255, 255, 225, 0.5)');
@@ -415,6 +426,10 @@ export class GameScene extends Phaser.Scene {
   }
 
   generateGradientTexture(width, height, radius, colorTop, colorBottom, key) {
+    if (this.textures.exists(key)) {
+      return this.textures.get(key);
+    }
+    
     const rt = this.textures.createCanvas(key, width, height);
     const ctx = rt.getContext();
 

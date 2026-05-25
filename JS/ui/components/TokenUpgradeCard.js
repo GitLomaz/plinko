@@ -18,6 +18,8 @@ export class TokenUpgradeCard extends Phaser.GameObjects.Container {
     this.locked = false;
     this.selected = false;
 
+    console.log(upgradeData);
+
     this.words = this.scene.add.text(-40, -28, "Value: 123\r\nCooldown: 123\r\nLevel: 1", {
       fontFamily: 'Arial',
       fontSize: '12px',
@@ -34,31 +36,18 @@ export class TokenUpgradeCard extends Phaser.GameObjects.Container {
     this.costText.setColor(true ? '#ffb547' : '#f81515');
     this.add(this.costText);
 
-    this.lockText = this.scene.add.text(-20, -20, "Locked", {
-      fontFamily: 'Arial',
-      fontSize: '16px',
-      color: '#ffffff',
-    }).setAlpha(0);
-    this.add(this.lockText);
-
-
-    this.lockSubtext = this.scene.add.text(-20, 0, "Unlock zone first", {
-      fontFamily: 'Arial',
-      fontSize: '14px',
-      color: '#dcdcdc',
-    }).setAlpha(0);
-    this.add(this.lockSubtext);
-    
-    this.icon = this.scene.add.sprite(-70, -20, 'balls', this.upgradeData.spriteFrame);
+    if (upgradeData < 3) {
+      this.icon = this.scene.add.sprite(-70, -20, 'balls', this.upgradeData.spriteFrame);
+    } else if (upgradeData < 5) {
+      this.icon = this.scene.add.image(-70, -20, 'cursor');
+    } else if (upgradeData < 7) {
+      this.icon = this.scene.add.image(-89, -35, 'zone');
+    } else {
+      this.icon = this.scene.add.image(-89, -35, 'pres');
+    }
     this.icon.setOrigin(0, 0);
     this.icon.setScale(1.2);
     this.add(this.icon);
-    
-    this.lockIcon = this.scene.add.image(-60, -15, 'lock');
-    this.lockIcon.setOrigin(0, 0);
-    this.lockIcon.setScale(.1);
-    this.lockIcon.setAlpha(0);
-    this.add(this.lockIcon);
   }
 
   updateInfo(lines) {
@@ -74,9 +63,6 @@ export class TokenUpgradeCard extends Phaser.GameObjects.Container {
     this.words.setAlpha(locked ? 0 : 1);
     this.costText.setAlpha(locked ? 0 : 1);
     this.icon.setAlpha(locked ? 0 : 1);
-    this.lockText.setAlpha(locked ? 1 : 0);
-    this.lockSubtext.setAlpha(locked ? 1 : 0);
-    this.lockIcon.setAlpha(locked ? 1 : 0);
     this.shadow.setTexture(locked ? 'ballButtonDisabledBorder' : 'ballButtonBorder');
     this.background.setTexture(locked ? 'ballButtonDisabledBG' : 'ballButtonBG');
 

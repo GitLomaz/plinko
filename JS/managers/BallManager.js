@@ -152,7 +152,7 @@ export class BallManager {
   clearAll() {
     for (let i = this.balls.length - 1; i >= 0; i--) {
       this.balls[i].destroy();
-    }cleanup
+    }
     this.balls = [];
   }
 }

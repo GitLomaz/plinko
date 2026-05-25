@@ -22,6 +22,32 @@ export class HelpPanel extends UIPanel {
   }
 
   createContent() {
+
+    this.tipShadow = this.scene.add.image(18, 6, 'tipBorder').setOrigin(0);
+    this.tipBackground = this.scene.add.image(20, 8, 'tipBG').setOrigin(0);
+
+    this.add(this.tipShadow);
+    this.add(this.tipBackground);
+
+    // Lightbulb icon (using a simple circle with yellow color as placeholder)
+
+    this.icon = this.scene.add.image(40, 28, "idea")
+    this.add(this.icon);
+
+    // Tip text
+    const tipText = this.scene.add.text(
+      this.config.padding + 56,
+      this.config.padding + 1,
+      'Tip: If you\'re lucky, I will update this game at LEAST once a decade!',
+      {
+        fontFamily: 'Arial',
+        fontSize: '14px',
+        color: '#ffffff',
+        wordWrap: { width: this.panelWidth - this.config.padding * 2 - 50 }
+      }
+    );
+    tipText.setOrigin(0, 0);
+    this.add(tipText);
     // Help text
     const helpText = this.scene.add.text(
       this.config.padding,
@@ -35,7 +61,7 @@ export class HelpPanel extends UIPanel {
         lineSpacing: 4
       }
     );
-    helpText.setOrigin(0, 0);
+    helpText.setOrigin(0, 0).setAlpha(0);
     this.add(helpText);
 
     let yPos = helpText.y + helpText.height + 20;
@@ -54,7 +80,7 @@ export class HelpPanel extends UIPanel {
     formatTitle.setOrigin(0.5, 0);
     this.add(formatTitle);
 
-    yPos += 25;
+    yPos += 40;
 
     // Format buttons
     const formats = [
@@ -85,7 +111,7 @@ export class HelpPanel extends UIPanel {
       this.formatButtons.push({ button: btn, value: format.value });
     });
 
-    yPos += 50;
+    yPos += 40;
 
     // Save/Reset section
     const saveTitle = this.scene.add.text(
@@ -101,7 +127,7 @@ export class HelpPanel extends UIPanel {
     saveTitle.setOrigin(0.5, 0);
     this.add(saveTitle);
 
-    yPos += 30;
+    yPos += 50;
 
     // Save button
     this.saveButton = new Button(

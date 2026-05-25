@@ -6,7 +6,7 @@
 export const TOKEN_CONFIGS = [
   {
     id: 0,
-    name: "Ball Value Multiplier",
+    name: "Ball Value",
     level: 1,
     valueModifier: 1.1,
     value: 100,
@@ -16,7 +16,7 @@ export const TOKEN_CONFIGS = [
   },
   {
     id: 1,
-    name: "Despawn Chance Reduction",
+    name: "Despawn Chance",
     level: 1,
     value: 30,
     costModifier: 1.8,
@@ -25,7 +25,7 @@ export const TOKEN_CONFIGS = [
   },
   {
     id: 2,
-    name: "2x Ball Spawn Chance",
+    name: "2x Ball Spawn",
     level: 1,
     value: 0,
     costModifier: 1.8,
@@ -34,7 +34,7 @@ export const TOKEN_CONFIGS = [
   },
   {
     id: 3,
-    name: "Click Explosion Size",
+    name: "Click Size",
     level: 1,
     value: 100,
     costModifier: 1.8,
@@ -43,7 +43,7 @@ export const TOKEN_CONFIGS = [
   },
   {
     id: 4,
-    name: "Click Explosion Multiplier",
+    name: "Click Multiplier",
     level: 1,
     valueModifier: 1.1,
     value: 125,
@@ -62,7 +62,7 @@ export const TOKEN_CONFIGS = [
   },
   {
     id: 6,
-    name: "Zone Modifier Increase",
+    name: "Zone Modifier",
     level: 1,
     valueModifier: 1.1,
     value: 100,
@@ -72,7 +72,7 @@ export const TOKEN_CONFIGS = [
   },
   {
     id: 7,
-    name: "Token Gain Multiplier",
+    name: "Token Gain",
     level: 1,
     valueModifier: 1.1,
     value: 100,

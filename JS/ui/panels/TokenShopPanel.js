@@ -4,7 +4,7 @@
  */
 
 import { UIPanel } from '../components/UIPanel.js';
-import { UpgradeCard } from '../components/UpgradeCard.js';
+import { TokenUpgradeCard } from '../components/TokenUpgradeCard.js';
 import { Button } from '../components/Button.js';
 import { TOKEN_CONFIGS } from '../../config/TokenConfig.js';
 
@@ -52,8 +52,8 @@ export class TokenShopPanel extends UIPanel {
     tipText.setOrigin(0, 0);
     this.add(tipText);
 
-    this.prestigeBtnBorder = this.scene.add.image(192, 416, 'zoneButtonBorder');
-    this.prestigeBtnBg = this.scene.add.image(192, 416, 'zoneButtonBG');
+    this.prestigeBtnBorder = this.scene.add.image(182, 416, 'zoneButtonBorder');
+    this.prestigeBtnBg = this.scene.add.image(182, 416, 'zoneButtonBG');
     this.prestigeBtnBg.setInteractive({ cursor: 'pointer' });
     this.prestigeBtnBg.on('pointerover', () => this.prestigeBtnBg.setTexture('zoneButtonBGOver'));
     this.prestigeBtnBg.on('pointerout', () => this.prestigeBtnBg.setTexture('zoneButtonBG'));
@@ -61,13 +61,13 @@ export class TokenShopPanel extends UIPanel {
     this.add(this.prestigeBtnBorder);
     this.add(this.prestigeBtnBg);
 
-    this.iconLeft = this.scene.add.image(40, 415, 'pres');
+    this.iconLeft = this.scene.add.image(30, 415, 'pres');
     this.add(this.iconLeft);
-    this.iconRight = this.scene.add.image(342, 415, 'pres');
+    this.iconRight = this.scene.add.image(332, 415, 'pres');
     this.add(this.iconRight);
     
     this.prestigeTokenText = this.scene.add.text(
-      191, 407,
+      181, 407,
       'Tokens: 0',
       {
         fontFamily: 'Arial',
@@ -90,24 +90,24 @@ export class TokenShopPanel extends UIPanel {
     // this.add(this.prestigeButton);
 
     // Create upgrade cards
-    const yPos = 50;
+    const yPos = this.config.padding + 45;
     const cardWidth = (this.panelWidth - this.config.padding * 3) / 2;
-    const cardHeight = 65;
+    const cardHeight = 70;
     const spacing = 8;
 
     for (let i = 0; i < TOKEN_CONFIGS.length; i++) {
       const col = i % 2;
       const row = Math.floor(i / 2);
-      const x = this.config.padding + col * (cardWidth + spacing);
+      const x = this.config.padding + col * (cardWidth + spacing) - 10;
       const y = yPos + row * (cardHeight + spacing);
 
-      const card = new UpgradeCard(
+      const card = new TokenUpgradeCard(
         this.scene,
         x + cardWidth / 2,
         y + cardHeight / 2,
         cardWidth,
         cardHeight,
-        {},
+        i,
         () => this.onUpgrade(i)
       );
       

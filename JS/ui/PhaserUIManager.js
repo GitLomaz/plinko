@@ -72,8 +72,8 @@ export class PhaserUIManager {
 
     const tabs = [
       { key: 'ball', texture: 'ball', label: 'Balls' },
-      { key: 'zone', texture: 'zone', label: 'Upgrades' },
-      { key: 'token', texture: 'pres', label: 'Rarity' },
+      { key: 'zone', texture: 'zone', label: 'Zones' },
+      { key: 'token', texture: 'pres', label: 'Tokens' },
       { key: 'help', texture: 'help', label: 'Settings' }
     ];
 
