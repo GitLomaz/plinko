@@ -7,7 +7,9 @@ export class TitleScene extends Phaser.Scene {
   constructor() {
     super({ key: 'TitleScene' });
     this.balls = [];
-    this.counter = 0;
+    this.elapsedTime = 0;
+    // Target 100 FPS (10ms per frame)
+    this.TARGET_DELTA = 10;
   }
 
   preload() {
@@ -126,15 +128,18 @@ export class TitleScene extends Phaser.Scene {
     return parts;
   }
 
-  update() {
-    // Spawn balls at different intervals
-    if (this.counter % 20 === 0) {
+  update(time, delta) {
+    // Track elapsed time
+    this.elapsedTime += delta;
+    
+    // Spawn balls at different intervals (using time instead of frames)
+    if (this.elapsedTime % (20 * this.TARGET_DELTA) < delta) {
       this.spawnBall(Phaser.Math.Between(10, 1090), 50, 0, 20);
     }
-    if (this.counter % 30 === 0) {
+    if (this.elapsedTime % (30 * this.TARGET_DELTA) < delta) {
       this.spawnBall(Phaser.Math.Between(10, 1090), 70, 1, 30);
     }
-    if (this.counter % 40 === 0) {
+    if (this.elapsedTime % (40 * this.TARGET_DELTA) < delta) {
       this.spawnBall(Phaser.Math.Between(10, 1090), 30, 2, 40);
     }
 
@@ -145,8 +150,6 @@ export class TitleScene extends Phaser.Scene {
         this.balls.splice(i, 1);
       }
     }
-
-    this.counter++;
   }
 
   spawnBall(x, y, frame, duration) {
@@ -154,18 +157,22 @@ export class TitleScene extends Phaser.Scene {
     ball.setStatic(true);
     ball.setScale(0.05);
     
+    // Convert frames to milliseconds (100 FPS = 10ms per frame)
+    const durationMs = duration * 10;
+    
     this.tweens.add({
-      useFrames: true,
       targets: ball,
       scaleX: 1,
       scaleY: 1,
-      duration: duration,
+      duration: durationMs,
       ease: 'Linear',
       onComplete: () => {
         ball.setStatic(false);
         ball.setCircle();
-        ball.setFriction(0.01);
-        ball.setBounce(0.5);
+        ball.setFriction(0.001, 0.01, 0.001);
+        ball.setFrictionAir(0.01);
+        ball.setBounce(0.35);
+        ball.setDensity(0.001);
         this.balls.push(ball);
       }
     });

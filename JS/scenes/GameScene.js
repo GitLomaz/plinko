@@ -15,12 +15,15 @@ export class GameScene extends Phaser.Scene {
   constructor() {
     super({ key: 'GameScene' });
     
-    this.counter = 0;
+    this.elapsedTime = 0; // Time in milliseconds
     this.pointerdown = false;
     this.isDragging = false;
     this.startY = 0;
     this.lastY = 0;
     this.dirY = 0;
+    
+    // Target 100 FPS (10ms per frame)
+    this.TARGET_DELTA = 10;
   }
 
   preload() {
@@ -86,9 +89,9 @@ export class GameScene extends Phaser.Scene {
     this.generateGradientTexture(112 - 4, 40 - 4, 8, '#3c4a58', '#35444f', 'buttonBGOver');
     this.generateGradientTexture(112 - 4, 40 - 4, 8, '#41586f', '#3e5b6f', 'buttonBGSelected');
 
-    this.generateGradientTexture(112, 40, 8, '#97a3b4', '#121316', 'buttonDangerBorder');
-    this.generateGradientTexture(112 - 4, 40 - 4, 8, '#2d3742', '#27323a', 'buttonDangerBG');
-    this.generateGradientTexture(112 - 4, 40 - 4, 8, '#3c4a58', '#35444f', 'buttonDangerBGOver');
+    this.generateGradientTexture(112, 40, 8, '#b49797', '#161212', 'buttonDangerBorder');
+    this.generateGradientTexture(112 - 4, 40 - 4, 8, '#422d2d', '#3a2727', 'buttonDangerBG');
+    this.generateGradientTexture(112 - 4, 40 - 4, 8, '#583c3c', '#4f3535', 'buttonDangerBGOver');
 
 
     // Initialize camera and physics
@@ -205,12 +208,18 @@ export class GameScene extends Phaser.Scene {
     });
   }
 
-  update() {
+  update(time, delta) {
+    // Normalize delta to 100 FPS (10ms per frame)
+    const deltaMultiplier = delta / this.TARGET_DELTA;
+    
+    // Track elapsed time
+    this.elapsedTime += delta;
+    
     // Update UI manager (handles panel scrolling)
-    this.uiManager.update();
+    this.uiManager.update(deltaMultiplier);
     
     // Update ad manager
-    this.adManager.tick();
+    this.adManager.tick(delta);
 
     // Handle scrolling
     const scrollState = this.uiManager.getScrollState();
@@ -221,9 +230,9 @@ export class GameScene extends Phaser.Scene {
       this.dirY = 75;
     }
 
-    // Apply camera scroll
-    this.cameras.main.scrollY -= this.dirY / 0.15 / 100;
-    this.dirY -= this.dirY / 0.6 / 100;
+    // Apply camera scroll with delta correction
+    this.cameras.main.scrollY -= (this.dirY / 0.15 / 100) * deltaMultiplier;
+    this.dirY -= (this.dirY / 0.6 / 100) * deltaMultiplier;
     if (this.dirY < 3 && this.dirY > -3) {
       this.dirY = 0;
     }
@@ -238,8 +247,8 @@ export class GameScene extends Phaser.Scene {
       this.adManager
     );
 
-    // Auto-save periodically
-    if (this.counter % GAME_CONFIG.save.autoSaveInterval === 0) {
+    // Auto-save periodically (every 20 seconds)
+    if (this.elapsedTime % GAME_CONFIG.save.autoSaveInterval < delta) {
       this.saveGame();
     }
 
@@ -251,8 +260,6 @@ export class GameScene extends Phaser.Scene {
       this.pointerdown = false;
       this.isDragging = false;
     }
-
-    this.counter++;
   }
 
   spawnBalls() {
@@ -260,6 +267,7 @@ export class GameScene extends Phaser.Scene {
       const spawn = this.gameState.spawns[i];
       
       if (spawn.level > 0 && this.gameState.zones[spawn.stage - 1]) {
+        // Calculate delay in milliseconds (at 100 FPS, delayFrame * 10ms)
         let delayFrame = spawn.cooldown - spawn.speedModifier * (spawn.level - 1);
         if (spawn.level > 10) {
           delayFrame = spawn.cooldown - spawn.speedModifier * 10;
@@ -268,8 +276,11 @@ export class GameScene extends Phaser.Scene {
         if (this.adManager.doubleSpawn) {
           delayFrame = Math.floor(delayFrame / 2);
         }
+        
+        const delayMs = delayFrame * this.TARGET_DELTA;
 
-        if (this.counter % delayFrame === 0) {
+        // Use modulo with elapsed time instead of frame counter
+        if (this.elapsedTime % delayMs < this.TARGET_DELTA) {
           const value = this.gameState.getSpawnValue(i);
           this.ballManager.createBall(
             -1, // random x

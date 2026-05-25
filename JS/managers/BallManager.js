@@ -60,12 +60,10 @@ export class BallManager {
         const despawnChance = 100 - this.gameState.tokenUpgrades[1].value
           .plus(this.gameState.tokenUpgrades[1].level - 1)
           .toNumber();
-        
         const shouldDespawn = adManager.noDespawn ? 
           false : 
           (Phaser.Math.Between(0, 100) > despawnChance && ball.stage < maxStage);
-        
-        if (!shouldDespawn || this.balls.length > 700) {
+        if (shouldDespawn || this.balls.length > 700) {
           ball.cleanup();
           this.balls.splice(i, 1);
         } else {
@@ -85,6 +83,7 @@ export class BallManager {
     const scale = 0.08 * ((this.gameState.tokenUpgrades[3].level - 1) * 0.5 + 1);
     const radius = 40 + scale * 250;
     let ballCount = 0;
+    let total = new Decimal(0);
 
     for (let i = this.balls.length - 1; i >= 0; i--) {
       const ball = this.balls[i];
@@ -106,33 +105,36 @@ export class BallManager {
         
         // Add score
         this.gameState.addGold(ball.value);
+
+        total = total.plus(ball.value);
         
         // Show floating text
-        if (showFloatingText) {
-          const text = this.scene.add.text(
-            ball.x, 
-            ball.y, 
-            this.scene.uiManager.formatter.format(ball.value),
-            {
-              fontFamily: 'neue',
-              fontSize: '12px',
-              color: '#ffff00'
-            }
-          );
-          
-          this.scene.tweens.add({
-            targets: text,
-            y: ball.y - 50,
-            duration: 700,
-            ease: 'Linear',
-            onComplete: () => text.destroy()
-          });
-        }
         
         // Destroy ball and remove from array
         ball.cleanup();
         this.balls.splice(i, 1);
       }
+    }
+
+    if (showFloatingText && ballCount > 0) {
+      const text = this.scene.add.text(
+        x, 
+        y, 
+        this.scene.uiManager.formatter.format(total),
+        {
+          fontFamily: 'Arial',
+          fontSize: '14px',
+          color: '#ffff00'
+        }
+      );
+      
+      this.scene.tweens.add({
+        targets: text,
+        y: y - 50,
+        duration: 700,
+        ease: 'Linear',
+        onComplete: () => text.destroy()
+      });
     }
 
     return ballCount;

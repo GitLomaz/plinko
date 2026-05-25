@@ -7,7 +7,7 @@ export class UpgradeCard extends Phaser.GameObjects.Container {
     super(scene, Math.floor(x), Math.floor(y));
 
     this.shadow = this.scene.add.image(10, 0, 'ballButtonBorder')
-    this.background = this.scene.add.image(10, 0, 'ballButtonBG').setInteractive({ cursor: 'pointer' });
+    this.background = this.scene.add.image(10, 0, 'ballButtonBG').setScrollFactor(0).setInteractive({ cursor: 'pointer' });
     this.background.on('pointerover', () => this.background.setTexture('ballButtonBGOver'));
     this.background.on('pointerout', () => this.background.setTexture('ballButtonBG'));
     this.background.on('pointerdown', () => onClick());

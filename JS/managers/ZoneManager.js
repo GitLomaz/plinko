@@ -122,16 +122,35 @@ export class ZoneManager {
   createShapeWithShadow(texture, x, y, options, scaleX = 1, scaleY = null, angle = 0, isCircle = false, circleRadius = null) {
     // Add fixed amount to scale for uniform 2-3px border on all sides
     // This prevents disproportionate shadows on thin objects
-    const shadowOffset = 0.4; // Fixed scale offset for uniform border
+    const shadowOffset = 0.4; // Fixed scale offset for uniform border on rectangles
+    const circleShadowOffset = 3; // Fixed pixel offset for circles
     
     const finalScaleY = scaleY === null ? scaleX : scaleY;
     
-    // Add fixed offset to each dimension independently
-    const shadowScaleX = scaleX + shadowOffset;
-    const shadowScaleY = finalScaleY + shadowOffset;
+    // For circles, calculate the scale offset based on the radius to get consistent pixel border
+    let shadowScaleX, shadowScaleY;
+    
+    if (isCircle && circleRadius) {
+      // For circles, we need to scale proportionally to add fixed pixels
+      // If radius is 100 and we want 3px bigger, scale should be 103/100 = 1.03x
+      const circleScaleFactor = (circleRadius + circleShadowOffset) / circleRadius;
+      shadowScaleX = scaleX * circleScaleFactor;
+      shadowScaleY = finalScaleY * circleScaleFactor;
+    } else {
+      // For rectangles, add fixed offset to each dimension independently
+      shadowScaleX = scaleX + shadowOffset;
+      shadowScaleY = finalScaleY + shadowOffset;
+    }
+    
+    // Merge obstacle physics properties with provided options
+    const physicsOptions = {
+      ...options,
+      friction: 1.0,
+      frictionStatic: 0.8
+    };
     
     // Create shadow first (renders behind) - centered at same position
-    const shadow = this.scene.matter.add.image(x, y, texture, null, { ...options, isSensor: true })
+    const shadow = this.scene.matter.add.image(x, y, texture, null, { ...physicsOptions, isSensor: true })
       .setScale(shadowScaleX, shadowScaleY)
       .setAngle(angle)
       .setTint(0x000000)
@@ -139,17 +158,17 @@ export class ZoneManager {
       .setDepth(-1); // Ensure shadow renders behind
     
     if (isCircle && circleRadius) {
-      shadow.setCircle(circleRadius + (shadowOffset * 250), { ...options, isSensor: true });
+      shadow.setCircle(circleRadius + circleShadowOffset, { ...physicsOptions, isSensor: true });
     }
     
     // Create main shape on top
-    const shape = this.scene.matter.add.image(x, y, texture, null, options)
+    const shape = this.scene.matter.add.image(x, y, texture, null, physicsOptions)
       .setScale(scaleX, finalScaleY)
       .setAngle(angle)
       .setDepth(0); // Main shape renders on top
     
     if (isCircle && circleRadius) {
-      shape.setCircle(circleRadius, options);
+      shape.setCircle(circleRadius, physicsOptions);
     }
     
     return { shape, shadow };
@@ -525,8 +544,40 @@ export class ZoneManager {
     const lockPrice = new Decimal(ZONE_PRICES[this.zoneCount] * mod);
     
     this.lockedContainer.price = lockPrice;
-    this.lockedContainer.list[1].setText(lockPrice.toFixed(0));
+    this.lockedContainer.list[1].setText(this.displayNumber(lockPrice));
     this.updateLockedState();
+  }
+
+  displayNumber(y) {
+    try {
+      if (y.e < 9) {
+        return y
+          .toFixed(0)
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      } else {
+        let ret = "";
+        let str = y.toPrecision(y.e + 1).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        let s0 = str.split(",")[0];
+        let s1 = str.split(",")[1].substring(0, 4 - s0.length);
+        let e = (str.split(",").length - 1) * 3;
+        switch (numberFormat) {
+          case "eng":
+            ret = s0 + "." + s1 + "e+" + e;
+            break;
+          case "bad":
+            ret = s0 + "." + s1 + " " + suffixes[str.split(",").length - 1 - 2];
+            break;
+          case "sci":
+            ret = y.toPrecision(4);
+          default:
+            break;
+        }
+        return ret;
+      }
+    } catch (err) {
+      return y;
+    }
   }
 
   updateLockedState() {

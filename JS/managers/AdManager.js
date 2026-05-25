@@ -17,7 +17,7 @@ export class AdManager extends Phaser.GameObjects.Container {
     this.bonus = Phaser.Math.Between(0, 2);
     this.transition = false;
     this.bonusActive = false;
-    this.cooldown = GAME_CONFIG.ad.initialCooldown;
+    this.cooldownRemaining = GAME_CONFIG.ad.initialCooldown;
     this.cooldownType = 'noad';
     
     // Active bonus flags
@@ -37,7 +37,7 @@ export class AdManager extends Phaser.GameObjects.Container {
   createUI() {
 
     this.shadow = this.scene.add.image(0, 0, 'adBorder')
-    this.background = this.scene.add.image(0, 0, 'adBG').setInteractive({ useHandCursor: true });
+    this.background = this.scene.add.image(0, 0, 'adBG').setScrollFactor(0).setInteractive({ useHandCursor: true });
     this.background.on('pointerover', () => {
       if (!this.bonusActive && !this.transition) {
         this.background.setTexture('adBGOver');
@@ -73,24 +73,24 @@ export class AdManager extends Phaser.GameObjects.Container {
     this.add(this.bottomText);
   }
 
-  tick() {
+  tick(delta) {
     if (this.playingAd) {
       return;
     }
     
-    if (this.cooldown === 0 && !this.bonusActive) {
+    if (this.cooldownRemaining <= 0 && !this.bonusActive) {
       switch (this.cooldownType) {
         case 'noad':
           this.prompt();
-          this.cooldown = GAME_CONFIG.ad.noadCooldown;
+          this.cooldownRemaining = GAME_CONFIG.ad.noadCooldown;
           break;
         case 'ad':
           this.hide();
-          this.cooldown = GAME_CONFIG.ad.adCooldown;
+          this.cooldownRemaining = GAME_CONFIG.ad.adCooldown;
           break;
       }
     } else if (!this.bonusActive) {
-      this.cooldown--;
+      this.cooldownRemaining -= delta;
     } else {
       const now = Math.floor(new Date().getTime() / 1000);
       const remaining = this.end - now;
@@ -129,7 +129,7 @@ export class AdManager extends Phaser.GameObjects.Container {
       duration: 800,
       onComplete: () => {
         this.cooldownType = 'noad';
-        this.cooldown = GAME_CONFIG.ad.adCooldown;
+        this.cooldownRemaining = GAME_CONFIG.ad.adCooldown;
         this.transition = false;
       }
     });
@@ -172,7 +172,7 @@ export class AdManager extends Phaser.GameObjects.Container {
     this.noDespawn = false;
     this.bonusActive = false;
     this.cooldownType = 'noad';
-    this.cooldown = GAME_CONFIG.ad.adCooldown;
+    this.cooldownRemaining = GAME_CONFIG.ad.adCooldown;
     this.hide();
   }
 }

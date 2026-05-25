@@ -158,11 +158,12 @@ export class PhaserUIManager {
 
     // Offline progress popup
     this.createOfflinePopup();
+    this.updateCurrency();
   }
 
   createScrollButtons(x, menuHeight) {
-    const shadow1 = this.scene.add.image(625, 12, 'scrollBorder').setOrigin(0).setScrollFactor(0);
-    const bg1 = this.scene.add.image(627, 14, 'scrollBG').setOrigin(0).setScrollFactor(0).setInteractive({ cursor: 'pointer' });
+    const shadow1 = this.scene.add.image(625, 12, 'scrollBorder').setOrigin(0).setScrollFactor(0).setDepth(1000);
+    const bg1 = this.scene.add.image(627, 14, 'scrollBG').setOrigin(0).setScrollFactor(0).setInteractive({ cursor: 'pointer' }).setDepth(1001);
     bg1.on('pointerover', () => bg1.setTexture('scrollBGOver'));
     bg1.on('pointerout', () => bg1.setTexture('scrollBG'));
     bg1.on('pointerdown', () => { this.scrollUp = true; });
@@ -170,10 +171,10 @@ export class PhaserUIManager {
       fontFamily: 'Arial',
       fontSize: '16px',
       color: '#c3c3c1'
-    }).setOrigin(0.5).setScrollFactor(0).setScale(1, .75);
+    }).setOrigin(0.5).setScrollFactor(0).setScale(1, .75).setDepth(1002);
 
-    const shadow2 = this.scene.add.image(625, 595 - 12 - 40, 'scrollBorder').setOrigin(0).setScrollFactor(0);
-    const bg2 = this.scene.add.image(627, 595 - 12 - 38, 'scrollBG').setOrigin(0).setScrollFactor(0).setInteractive({ cursor: 'pointer' });
+    const shadow2 = this.scene.add.image(625, 595 - 12 - 40, 'scrollBorder').setOrigin(0).setScrollFactor(0).setDepth(1000);
+    const bg2 = this.scene.add.image(627, 595 - 12 - 38, 'scrollBG').setOrigin(0).setScrollFactor(0).setInteractive({ cursor: 'pointer' }).setDepth(1001);
     bg2.on('pointerover', () => bg2.setTexture('scrollBGOver'));
     bg2.on('pointerout', () => bg2.setTexture('scrollBG'));
     bg2.on('pointerdown', () => { this.scrollDown = true; });
@@ -181,7 +182,7 @@ export class PhaserUIManager {
       fontFamily: 'Arial',
       fontSize: '16px',
       color: '#c3c3c1'
-    }).setOrigin(0.5).setScrollFactor(0).setScale(1, .75);
+    }).setOrigin(0.5).setScrollFactor(0).setScale(1, .75).setDepth(1002);
 
     this.scene.input.on('pointerup', () => {
       this.scrollUp = false;
@@ -321,11 +322,11 @@ export class PhaserUIManager {
     this.offlinePanel.setVisible(true);
   }
 
-  update() {
-    // Handle panel scrolling
+  update(deltaMultiplier = 1) {
+    // Handle panel scrolling with delta correction
     const currentPanel = this.panels[this.currentPanel];
     if (currentPanel && currentPanel.config.scrollable) {
-      const scrollSpeed = 15;
+      const scrollSpeed = 15 * deltaMultiplier;
       
       if (this.scrollUp) {
         currentPanel.setScrollOffset(currentPanel.scrollOffset - scrollSpeed);

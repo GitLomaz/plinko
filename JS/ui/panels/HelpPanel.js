@@ -89,7 +89,7 @@ export class HelpPanel extends UIPanel {
       { label: 'Traditional', value: 'bad' }
     ];
 
-    const buttonWidth = 100;
+    const buttonWidth = 110;
     const spacing = 10;
     const totalWidth = formats.length * buttonWidth + (formats.length - 1) * spacing;
     const startX = (this.panelWidth - totalWidth) / 2;
@@ -97,18 +97,27 @@ export class HelpPanel extends UIPanel {
     this.formatButtons = [];
     formats.forEach((format, index) => {
       const x = startX + index * (buttonWidth + spacing) + buttonWidth / 2;
-      const btn = new Button(
-        this.scene,
-        x,
-        yPos,
-        buttonWidth,
-        30,
-        format.label,
-        () => this.selectFormat(format.value),
-        { fontSize: '12px' }
-      );
-      this.add(btn);
-      this.formatButtons.push({ button: btn, value: format.value });
+      const border = this.scene.add.image(x, yPos, 'buttonBorder').setOrigin(0.5);
+      const background = this.scene.add.image(x, yPos, 'buttonBG').setScrollFactor(0).setInteractive({ cursor: 'pointer' });
+      background.on('pointerover', () => background.setTexture('buttonBGOver'));
+      background.on('pointerout', () => {
+        if (background.isSelected) {
+          background.setTexture('buttonBGSelected');
+        } else {
+          background.setTexture('buttonBG');
+        }
+      });
+      background.on('pointerdown', () => this.selectFormat(format.value));
+      const label = this.scene.add.text(x, yPos, format.label, {
+        fontFamily: 'Arial',
+        fontSize: '12px',
+        color: '#ffffff'
+      });
+      label.setOrigin(0.5);
+      this.add(border);
+      this.add(background);
+      this.add(label);
+      this.formatButtons.push({ button: background, value: format.value });
     });
 
     yPos += 40;
@@ -127,33 +136,41 @@ export class HelpPanel extends UIPanel {
     saveTitle.setOrigin(0.5, 0);
     this.add(saveTitle);
 
-    yPos += 50;
+    yPos += 40;
 
     // Save button
-    this.saveButton = new Button(
-      this.scene,
-      this.panelWidth / 2 - 60,
-      yPos,
-      100,
-      35,
-      'Save Game',
-      () => this.handleSave(),
-      { fontSize: '12px' }
-    );
-    this.add(this.saveButton);
+    const saveX = this.panelWidth / 2 - 60;
+    const saveBorder = this.scene.add.image(saveX, yPos, 'buttonBorder').setOrigin(0.5);
+    const saveBackground = this.scene.add.image(saveX, yPos, 'buttonBG').setScrollFactor(0).setInteractive({ cursor: 'pointer' });
+    saveBackground.on('pointerover', () => saveBackground.setTexture('buttonBGOver'));
+    saveBackground.on('pointerout', () => saveBackground.setTexture('buttonBG'));
+    saveBackground.on('pointerdown', () => this.handleSave());
+    this.saveLabel = this.scene.add.text(saveX, yPos, 'Save Game', {
+      fontFamily: 'Arial',
+      fontSize: '12px',
+      color: '#ffffff'
+    });
+    this.saveLabel.setOrigin(0.5);
+    this.add(saveBorder);
+    this.add(saveBackground);
+    this.add(this.saveLabel);
 
     // Reset button
-    this.resetButton = new Button(
-      this.scene,
-      this.panelWidth / 2 + 60,
-      yPos,
-      100,
-      35,
-      'Hard Reset',
-      () => this.handleReset(),
-      { fontSize: '12px', backgroundColor: 0xcd5c5c, hoverColor: 0xe07070 }
-    );
-    this.add(this.resetButton);
+    const resetX = this.panelWidth / 2 + 60;
+    const resetBorder = this.scene.add.image(resetX, yPos, 'buttonDangerBorder').setOrigin(0.5);
+    this.resetBackground = this.scene.add.image(resetX, yPos, 'buttonDangerBG').setScrollFactor(0).setInteractive({ cursor: 'pointer' });
+    this.resetBackground.on('pointerover', () => this.resetBackground.setTexture('buttonDangerBGOver'));
+    this.resetBackground.on('pointerout', () => this.resetBackground.setTexture('buttonDangerBG'));
+    this.resetBackground.on('pointerdown', () => this.handleReset());
+    this.resetLabel = this.scene.add.text(resetX, yPos, 'Hard Reset', {
+      fontFamily: 'Arial',
+      fontSize: '12px',
+      color: '#ffffff'
+    });
+    this.resetLabel.setOrigin(0.5);
+    this.add(resetBorder);
+    this.add(this.resetBackground);
+    this.add(this.resetLabel);
   }
 
   selectFormat(format) {
@@ -165,19 +182,21 @@ export class HelpPanel extends UIPanel {
   updateFormatButtons() {
     this.formatButtons.forEach(({ button, value }) => {
       if (value === this.formatter.formatType) {
-        button.setBackgroundColor(0x7375ff);
+        button.setTexture('buttonBGSelected');
+        button.isSelected = true;
       } else {
-        button.setBackgroundColor(0x82b194);
+        button.setTexture('buttonBG');
+        button.isSelected = false;
       }
     });
   }
 
   handleSave() {
-    if (this.saveButton.label.text !== 'Saved!') {
-      this.saveButton.setText('Saved!');
+    if (this.saveLabel.text !== 'Saved!') {
+      this.saveLabel.setText('Saved!');
       this.onSave();
       setTimeout(() => {
-        this.saveButton.setText('Save Game');
+        this.saveLabel.setText('Save Game');
       }, 2000);
     }
     
@@ -190,7 +209,7 @@ export class HelpPanel extends UIPanel {
     const labels = ['Confirm', 'Ya Sure?', '100%?', 'RESET!'];
     
     if (this.resetCounter < 4) {
-      this.resetButton.setText(labels[this.resetCounter - 1]);
+      this.resetLabel.setText(labels[this.resetCounter - 1]);
     } else {
       this.onReset();
     }
@@ -198,7 +217,7 @@ export class HelpPanel extends UIPanel {
     // Reset counter after timeout
     setTimeout(() => {
       this.resetCounter = 0;
-      this.resetButton.setText('Hard Reset');
+      this.resetLabel.setText('Hard Reset');
     }, 3000);
   }
 

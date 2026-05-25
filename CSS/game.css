@@ -53,34 +53,6 @@ p {
   position: absolute;
 }
 
-#offlineProgress {
-  background-color: var(--menuActive);
-  width: 200px;
-  height: 120px;
-  position: absolute;
-  left: -430px;
-  top: 241px;
-}
-
-#offlineClose {
-  background-color: var(--button);
-  width: 50px;
-  height: 30px;
-  text-align: center;
-  line-height: 25px;
-  position: relative;
-  left: 75px;
-  top: 83px;
-  cursor: pointer;
-}
-
-#offlineText {
-  position: absolute;
-  text-align: center;
-  margin-top: 10px;
-  width: 200px;
-}
-
 #optsContainer {
   text-align: center;
   width: 100%;
@@ -218,8 +190,7 @@ p {
 .tokenUpgrade:hover,
 .numOpt:hover,
 .saveOpt:hover,
-.zoneUpgrade:hover,
-#offlineClose:hover {
+.zoneUpgrade:hover {
   background-color: var(--buttonHover);
 }
 

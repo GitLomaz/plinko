@@ -23,16 +23,18 @@ export class Ball extends Phaser.Physics.Matter.Sprite {
 
   /**
    * Animate the ball spawning
-   * @param {number} delayFrames - Animation duration in frames
+   * @param {number} delayFrames - Animation duration in frames (at 100 FPS)
    * @param {Function} onComplete - Callback when animation completes
    */
   animateSpawn(delayFrames, onComplete) {
+    // Convert frames to milliseconds (100 FPS = 10ms per frame)
+    const durationMs = delayFrames * 10;
+    
     this.scene.tweens.add({
-      useFrames: true,
       targets: this,
       scaleX: 1,
       scaleY: 1,
-      duration: delayFrames,
+      duration: durationMs,
       ease: 'Linear',
       onComplete: () => {
         this.activatePhysics();
@@ -47,8 +49,10 @@ export class Ball extends Phaser.Physics.Matter.Sprite {
   activatePhysics() {
     this.setStatic(false);
     this.setCircle();
-    this.setFriction(0.01);
-    this.setBounce(0.5);
+    this.setFriction(0.001, 0.01, 0.001);
+    this.setFrictionAir(0.01);
+    this.setBounce(0.35);
+    this.setDensity(0.001);
   }
 
   /**

@@ -52,9 +52,6 @@ export class UIManager {
       this.prestigeConfirm = false;
     });
 
-    // Offline progress close
-    $('#offlineClose').on('click', () => $('#offlineProgress').hide());
-
     // Scroll buttons
     this.setupScrollButtons();
   }

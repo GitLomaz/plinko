@@ -19,6 +19,7 @@ export class TokenShopPanel extends UIPanel {
     this.formatter = formatter;
     this.onUpgrade = onUpgrade;
     this.onPrestige = onPrestige;
+    this.scene = scene;
     this.cards = [];
     this.prestigeConfirm = false;
     
@@ -139,7 +140,7 @@ export class TokenShopPanel extends UIPanel {
   update() {
     // Update prestige token count
     const tokensEarned = this.gameState.calculatePrestigeTokens();
-    this.prestigeTokenText.setText(`Earn: ${this.formatter.format(tokensEarned)} tokens`);
+    this.prestigeTokenText.setText(`Earn: ${this.formatter.format(tokensEarned)} token(s)`);
 
     // Update cards
     this.cards.forEach((card, index) => {
@@ -148,7 +149,13 @@ export class TokenShopPanel extends UIPanel {
       const atMaxLevel = token.maxLevel && token.level >= token.maxLevel;
 
       let valueStr = '';
-      if ([1, 2, 5].includes(index)) {
+      if (index === 1) {
+        // 100% - 
+        const current = token.value.plus(token.level - 1);
+        valueStr = atMaxLevel ? 
+          `${this.formatter.format(100 - current)}% (MAX)` :
+          `${this.formatter.format(100 - current)}% → ${this.formatter.format(100 - current.plus(1))}%`;
+      } else if ([1, 2, 5].includes(index)) {
         // Linear increase
         const current = token.value.plus(token.level - 1);
         valueStr = atMaxLevel ? 

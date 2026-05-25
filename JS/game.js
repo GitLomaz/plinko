@@ -712,7 +712,7 @@ function generateZone(level = 0) {
     const mod = (100 - tokenUpgrades[5].level + 1) / 100;
     const lockPrice = new Decimal(zonePrices[zoneCount] * mod);
     lockedContainer.price = new Decimal(lockPrice);
-    lockedContainer.list[1].text = displayNumber(lockPrice);
+    lockedContainer.list[1].text = displayNumber(lockPrice) + ' argh!';
     checkLock();
   } else {
     lockedButton.destroy();
@@ -1371,7 +1371,7 @@ function upgradeToken(token) {
   const mod = (100 - tokenUpgrades[5].level + 1) / 100;
   const lockPrice = new Decimal(zonePrices[zoneCount] * mod);
   lockedContainer.price = new Decimal(lockPrice);
-  lockedContainer.list[1].text = displayNumber(lockPrice);
+  lockedContainer.list[1].text = displayNumber(lockPrice) + ' poop?!';
   drawShopPanel();
 }
 

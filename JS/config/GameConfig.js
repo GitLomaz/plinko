@@ -21,9 +21,15 @@ export const GAME_CONFIG = {
     }
   },
   ball: {
-    friction: 0.01,
-    bounce: 0.5,
+    friction: 0.001,
+    frictionAir: 0.01,
+    bounce: 0.35,
+    density: 0.001,
     maxBalls: 700
+  },
+  obstacle: {
+    friction: 1.0,
+    frictionStatic: 0.8
   },
   zone: {
     height: 1500,
@@ -33,13 +39,13 @@ export const GAME_CONFIG = {
     levelModifierIncrement: 0.05
   },
   ad: {
-    initialCooldown: 60 * 30,  // 30 seconds in frames
-    noadCooldown: 60 * 30,
-    adCooldown: 60 * 90,
-    bonusDuration: 180  // seconds
+    initialCooldown: 30000,  // 30 seconds in milliseconds
+    noadCooldown: 30000,     // 30 seconds in milliseconds
+    adCooldown: 90000,       // 90 seconds in milliseconds
+    bonusDuration: 180       // seconds
   },
   save: {
-    autoSaveInterval: 2000  // frames
+    autoSaveInterval: 20000  // 20 seconds in milliseconds
   }
 };
 
