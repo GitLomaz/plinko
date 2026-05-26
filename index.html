@@ -11,8 +11,8 @@
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/decimal.js/9.0.0/decimal.min.js"></script>
     
-    <!-- Ad System -->
-    <script src="JS/cpmstar.js"></script>
+    <!-- Ad System (optional - game works without it) -->
+    <script src="JS/cpmstar.js" async onerror="console.log('Ad system not available')"></script>
     
     <!-- Main Game -->
     <script type="module" src="JS/main.js"></script>
@@ -25,32 +25,44 @@
     <!-- Ad Integration Script -->
     <script>
       var rAd;
-      if (typeof cpmstarAPI !== 'undefined') {
-        cpmstarAPI(function(api) {  
-          api.game.setContentID('7534S7F98E846');                      
-          rAd = new api.game.RewardedVideoView("rewardedvideo");
-          rAd.load();
-          if(rAd) {
-            rAd.addEventListener("ad_opened", function(e) {        
-              if (window.scene && window.scene.adManager) {
-                window.scene.adManager.playingAd = true;
-              }        
-            });
-            rAd.addEventListener("ad_closed", function(e) {              
-              setTimeout(function() {
-                if (window.scene && window.scene.adManager) {
-                  window.scene.adManager.completeAd();
-                }  
-              }, 700);
+      try {
+        if (typeof cpmstarAPI !== 'undefined') {
+          cpmstarAPI(function(api) {  
+            try {
+              api.game.setContentID('7534S7F98E846');                      
+              rAd = new api.game.RewardedVideoView("rewardedvideo");
               rAd.load();
-            });
-          }
-        });
+              if(rAd) {
+                rAd.addEventListener("ad_opened", function(e) {        
+                  if (window.scene && window.scene.adManager) {
+                    window.scene.adManager.playingAd = true;
+                  }        
+                });
+                rAd.addEventListener("ad_closed", function(e) {              
+                  setTimeout(function() {
+                    if (window.scene && window.scene.adManager) {
+                      window.scene.adManager.completeAd();
+                    }  
+                  }, 700);
+                  rAd.load();
+                });
+              }
+            } catch (e) {
+              console.log('Ad initialization failed:', e.message);
+            }
+          });
+        }
+      } catch (e) {
+        console.log('Ad system unavailable - continuing without ads');
       }
 
-      function displayRewardedVideo() {      
-        if(rAd && rAd.isLoaded()) rAd.show();
-        else if(rAd) rAd.load();
+      function displayRewardedVideo() {
+        try {
+          if(rAd && rAd.isLoaded()) rAd.show();
+          else if(rAd) rAd.load();
+        } catch (e) {
+          console.log('Cannot display ad:', e.message);
+        }
       }
     </script>
   </body>
