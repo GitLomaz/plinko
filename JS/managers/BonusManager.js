@@ -1,11 +1,11 @@
 /**
- * AdManager.js
- * Manages ad system and bonuses
+ * BonusManager.js
+ * Manages video reward bonuses
  */
 
 import { GAME_CONFIG } from '../config/GameConfig.js';
 
-export class AdManager extends Phaser.GameObjects.Container {
+export class BonusManager extends Phaser.GameObjects.Container {
   constructor(scene) {
     super(scene, -100, 100);
     

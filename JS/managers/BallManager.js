@@ -48,7 +48,7 @@ export class BallManager {
    * Update all balls - check for stage completion
    * @param {Function} onBallScore - Callback when ball scores
    * @param {number} maxStage - Maximum stage number
-   * @param {AdManager} adManager - Reference to ad manager
+   * @param {BonusManager} adManager - Reference to bonus manager
    */
   update(onBallScore, maxStage, adManager) {
     for (let i = this.balls.length - 1; i >= 0; i--) {

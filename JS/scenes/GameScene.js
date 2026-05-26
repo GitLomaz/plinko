@@ -8,7 +8,7 @@ import { SaveManager } from '../managers/SaveManager.js';
 import { PhaserUIManager } from '../ui/PhaserUIManager.js';
 import { BallManager } from '../managers/BallManager.js';
 import { ZoneManager } from '../managers/ZoneManager.js';
-import { AdManager } from '../managers/AdManager.js';
+import { BonusManager } from '../managers/BonusManager.js';
 import { GAME_CONFIG } from '../config/GameConfig.js';
 
 export class GameScene extends Phaser.Scene {
@@ -115,7 +115,7 @@ export class GameScene extends Phaser.Scene {
     this.saveManager = new SaveManager();
     this.ballManager = new BallManager(this, this.gameState);
     this.zoneManager = new ZoneManager(this, this.gameState);
-    this.adManager = new AdManager(this);
+    this.adManager = new BonusManager(this);
 
     // Load saved game or start new
     this.loadGame();
