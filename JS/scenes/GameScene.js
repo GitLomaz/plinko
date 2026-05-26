@@ -423,7 +423,6 @@ export class GameScene extends Phaser.Scene {
       } else {
         this.zoneManager.createZone();
       }
-
       // Calculate offline progress
       if (saveData.time) {
         this.gameState.currentTime = saveData.time;
@@ -510,7 +509,7 @@ export class GameScene extends Phaser.Scene {
       body: JSON.stringify({ game: 'plinko', data: data })
     }).then(response => {
       if (response.ok) {
-        console.log('Statistics submitted successfully');
+        // Statistics submitted successfully
       }
     }).catch(error => {
       console.error('Error submitting statistics:', error);

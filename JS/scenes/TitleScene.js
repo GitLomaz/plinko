@@ -23,8 +23,6 @@ export class TitleScene extends Phaser.Scene {
   }
 
   create() {
-    console.log('Plinko Game v2.0 - Rewritten');
-    
     this.cameras.main.setBackgroundColor('rgba(255, 255, 225, 0.5)');
     this.matter.world.setGravity(0, 0.0005, 1);
 

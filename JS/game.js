@@ -371,7 +371,6 @@ var gameScene = new Phaser.Class({
         if (scene.adManager.doubleSpawn) {
           delayFrame = Math.floor(delayFrame / 2);
         }
-        // console.log(delayFrame)
         if (counter % delayFrame == 0) {
           const mod = tokenUpgrades[0].value
             .mul(tokenUpgrades[0].valueModifier.pow(tokenUpgrades[0].level - 1))
@@ -455,7 +454,6 @@ var titleScene = new Phaser.Class({
   },
 
   create: function () {
-    console.log("verison 0.1.7");
     var Body = Phaser.Physics.Matter.Matter.Body;
     var Composite = Phaser.Physics.Matter.Matter.Composite;
 

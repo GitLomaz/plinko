@@ -263,7 +263,6 @@ export class UIManager {
   }
 
   showOfflineProgress(seconds, earned) {
-    console.log('showing offline progress?!')
     this.idleBorder = this.scene.add.image(GAME_CONFIG.width / 2, GAME_CONFIG.height / 2, 'idleBorder');
     this.idleBorder.fixedPosition = true;
     this.idleBorder.setInteractive({ cursor: 'pointer' });
