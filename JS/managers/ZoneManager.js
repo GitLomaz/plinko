@@ -31,6 +31,11 @@ export class ZoneManager {
     this.gameState.zones.push(zone);
     this.zoneCount++;
 
+    // Track highest zone reached
+    if (this.zoneCount > this.gameState.stats.highestZone) {
+      this.gameState.stats.highestZone = this.zoneCount;
+    }
+
     // Update world bounds
     this.scene.matter.world.setBounds(
       0, 0, 680, this.zoneCount * 1500,

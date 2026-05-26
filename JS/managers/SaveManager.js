@@ -31,6 +31,7 @@ export class SaveManager {
           type: zone.type
         })),
         numberFormat: gameState.numberFormat,
+        stats: gameState.stats,
         time: Date.now()
       };
 

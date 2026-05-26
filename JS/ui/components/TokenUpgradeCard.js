@@ -18,8 +18,6 @@ export class TokenUpgradeCard extends Phaser.GameObjects.Container {
     this.locked = false;
     this.selected = false;
 
-    console.log(upgradeData);
-
     this.words = this.scene.add.text(-40, -28, "Value: 123\r\nCooldown: 123\r\nLevel: 1", {
       fontFamily: 'Arial',
       fontSize: '12px',

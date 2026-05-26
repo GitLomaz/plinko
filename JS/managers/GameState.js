@@ -13,6 +13,17 @@ export class GameState {
     this.tokens = new Decimal(0);
     this.numberFormat = 'eng';
     
+    // Statistics tracking
+    this.stats = {
+      totalTokensEarned: 0,
+      totalAdsWatched: 0,
+      totalPrestiges: 0,
+      highestZone: 0,
+      totalBallsSpawned: 0,
+      totalPlayTime: 0, // in seconds
+      lastPlayTime: Date.now()
+    };
+    
     // Initialize spawns from config
     this.spawns = SPAWN_CONFIGS.map((config, index) => ({
       ...config,
@@ -66,6 +77,7 @@ export class GameState {
    */
   addTokens(amount) {
     this.tokens = this.tokens.add(amount);
+    this.stats.totalTokensEarned += parseFloat(amount.toString());
   }
 
   /**
@@ -184,6 +196,7 @@ export class GameState {
     this.currentScore = new Decimal(0);
     this.totalScore = new Decimal(0);
     this.zones = [];
+    this.stats.totalPrestiges++;
     
     // Reset spawns to initial state
     this.spawns = SPAWN_CONFIGS.map((config, index) => ({

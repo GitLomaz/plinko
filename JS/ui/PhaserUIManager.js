@@ -271,12 +271,14 @@ export class PhaserUIManager {
       // Notify scene
       this.scene.events.emit('spawn-upgraded', index);
     }
+    this.scene.saveGame(true);
   }
 
   handleZoneUpgrade(index) {
     // Notify scene to handle zone upgrade
     this.scene.events.emit('zone-upgrade-requested', index);
     this.updateShopPanel();
+    this.scene.saveGame(true);
   }
 
   handleTokenUpgrade(index) {
@@ -297,6 +299,7 @@ export class PhaserUIManager {
       
       this.updateShopPanel();
     }
+    this.scene.saveGame(true);
   }
 
   handlePrestige() {

@@ -138,6 +138,11 @@ export class AdManager extends Phaser.GameObjects.Container {
   completeAd() {
     this.playingAd = false;
     this.activateBonus();
+    
+    // Track ad view in game state
+    if (this.scene.gameState) {
+      this.scene.gameState.stats.totalAdsWatched++;
+    }
   }
 
   activateBonus() {

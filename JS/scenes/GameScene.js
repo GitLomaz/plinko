@@ -308,6 +308,9 @@ export class GameScene extends Phaser.Scene {
             value,
             spawn.level
           );
+          
+          // Track ball spawned
+          this.gameState.stats.totalBallsSpawned++;
         }
       }
     }
@@ -352,7 +355,13 @@ export class GameScene extends Phaser.Scene {
     this.uiManager.updateShopPanel();
   }
 
-  saveGame() {
+  saveGame(uploadStats = false) {
+    // Update playtime before saving
+    const now = Date.now();
+    const sessionTime = (now - this.gameState.stats.lastPlayTime) / 1000;
+    this.gameState.stats.totalPlayTime += sessionTime;
+    this.gameState.stats.lastPlayTime = now;
+    
     this.saveManager.save({
       spawns: this.gameState.spawns,
       tokenUpgrades: this.gameState.tokenUpgrades,
@@ -360,8 +369,14 @@ export class GameScene extends Phaser.Scene {
       totalScore: this.gameState.totalScore,
       tokens: this.gameState.tokens,
       zones: this.gameState.zones,
-      numberFormat: this.gameState.numberFormat
+      numberFormat: this.gameState.numberFormat,
+      stats: this.gameState.stats
     });
+
+    // Auto-submit stats on save
+    if (uploadStats) {
+      this.submitStats();
+    }
   }
 
   loadGame() {
@@ -373,6 +388,15 @@ export class GameScene extends Phaser.Scene {
       this.gameState.totalScore = new Decimal(saveData.totalMoney || 0);
       this.gameState.tokens = new Decimal(saveData.tokens || 0);
       this.gameState.numberFormat = saveData.numberFormat || 'eng';
+
+      // Load statistics
+      if (saveData.stats) {
+        this.gameState.stats = {
+          ...this.gameState.stats,
+          ...saveData.stats,
+          lastPlayTime: Date.now() // Reset session timer
+        };
+      }
 
       // Load spawns
       if (saveData.spawns && saveData.spawns.length > 0) {
@@ -401,7 +425,6 @@ export class GameScene extends Phaser.Scene {
       }
 
       // Calculate offline progress
-      console.log(saveData.time, this.gameState.currentTime)
       if (saveData.time) {
         this.gameState.currentTime = saveData.time;
         this.updateOfflineProgress();
@@ -416,7 +439,7 @@ export class GameScene extends Phaser.Scene {
     const now = Date.now();
     const secondsElapsed = (now - this.gameState.currentTime) / 1000;
     
-    if (secondsElapsed > 0) {
+    if (secondsElapsed > 30) {
       const scorePerSecond = this.gameState.calculateScorePerSecond();
       const addedScore = scorePerSecond.mul(secondsElapsed);
       
@@ -437,6 +460,9 @@ export class GameScene extends Phaser.Scene {
     const tokensEarned = this.gameState.calculatePrestigeTokens();
     this.gameState.addTokens(tokensEarned);
 
+    // Submit stats before resetting
+    this.submitStats();
+
     // Clear game state
     this.ballManager.clearAll();
     this.zoneManager.clearAll();
@@ -445,13 +471,50 @@ export class GameScene extends Phaser.Scene {
     this.gameState.resetForPrestige();
 
     // Save and restart scene
-    this.saveGame();
+    this.saveGame(true);
     this.scene.restart();
   }
 
   hardReset() {
     this.saveManager.deleteSave();
     location.reload();
+  }
+
+  submitStats() {
+    // Calculate total upgrades
+    const totalBallUpgrades = this.gameState.spawns.reduce((sum, spawn) => sum + spawn.level, 0);
+    const totalTokenUpgrades = this.gameState.tokenUpgrades.reduce((sum, token) => sum + token.level, 0);
+    const totalZoneUpgrades = this.gameState.zones.reduce((sum, zone) => sum + zone.level, 0);
+    
+    const data = {
+      totalTokensEarned: Math.floor(this.gameState.stats.totalTokensEarned),
+      totalGoldEarned: this.gameState.totalScore.toString(),
+      totalAdsWatched: Math.floor(this.gameState.stats.totalAdsWatched),
+      totalPrestiges: Math.floor(this.gameState.stats.totalPrestiges),
+      highestZone: Math.floor(this.gameState.stats.highestZone),
+      totalBallsSpawned: Math.floor(this.gameState.stats.totalBallsSpawned),
+      totalPlayTime: Math.floor(this.gameState.stats.totalPlayTime),
+      totalBallUpgrades: Math.floor(totalBallUpgrades),
+      totalTokenUpgrades: Math.floor(totalTokenUpgrades),
+      totalZoneUpgrades: Math.floor(totalZoneUpgrades),
+      currentTokens: this.gameState.tokens.toString(),
+      currentGold: this.gameState.currentScore.toString()
+    };
+
+    // Use fetch API for submission
+    fetch('https://scores.lomazgames.com/statistic', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ game: 'plinko', data: data })
+    }).then(response => {
+      if (response.ok) {
+        console.log('Statistics submitted successfully');
+      }
+    }).catch(error => {
+      console.error('Error submitting statistics:', error);
+    });
   }
 
   generateGradientTexture(width, height, radius, colorTop, colorBottom, key) {
