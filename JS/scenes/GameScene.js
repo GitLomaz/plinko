@@ -46,7 +46,7 @@ export class GameScene extends Phaser.Scene {
     this.load.image('help', 'assets/images/help.png');
     this.load.image('lock', 'assets/images/lock.png');
     this.load.image('idea', 'assets/images/idea.png');
-    this.load.image('testBg', 'assets/images/testBg.png');
+    this.load.image('testBg', 'assets/images/testbg.png');
     this.load.spritesheet('balls', 'assets/images/balls.png', {
       frameWidth: 17,
       frameHeight: 17
