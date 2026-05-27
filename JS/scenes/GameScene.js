@@ -560,6 +560,7 @@ export class GameScene extends Phaser.Scene {
       totalTokenUpgrades: Math.floor(totalTokenUpgrades),
       totalZoneUpgrades: Math.floor(totalZoneUpgrades),
       currentTokens: this.gameState.tokens.toString(),
+      source: 'kongregate'
     };
 
     // Use fetch API for submission
