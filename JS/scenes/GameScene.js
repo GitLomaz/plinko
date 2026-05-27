@@ -586,6 +586,9 @@ export class GameScene extends Phaser.Scene {
   changeTheme(theme) {
     this.gameState.theme = theme;
     
+    // Save current panel state
+    const currentPanel = this.uiManager ? this.uiManager.currentPanel : 'ball';
+    
     // Destroy existing textures
     const textureKeys = [
       'currencyBorder', 'prestigeBorder', 'menuBorder', 'menuBG',
@@ -619,6 +622,8 @@ export class GameScene extends Phaser.Scene {
     if (this.uiManager) {
       this.uiManager.destroy();
       this.uiManager = new PhaserUIManager(this, this.gameState);
+      // Restore the panel that was open
+      this.uiManager.switchPanel(currentPanel);
     }
     
     // Save the theme preference

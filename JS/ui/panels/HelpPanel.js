@@ -237,8 +237,8 @@ export class HelpPanel extends UIPanel {
   }
 
   selectTheme(theme) {
+    // Don't update buttons here - the UI will be recreated with the correct state
     this.onThemeChange(theme);
-    this.updateThemeButtons();
   }
 
   updateFormatButtons() {
