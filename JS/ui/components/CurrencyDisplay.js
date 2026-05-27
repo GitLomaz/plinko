@@ -47,4 +47,17 @@ export class CurrencyDisplay extends Phaser.GameObjects.Container {
   setValue(value) {
     this.valueText.setText(value);
   }
+
+  updateTheme() {
+    const textColor = this.scene.gameState.theme === 'dark' ? '#ffffff' : '#222222';
+    
+    // Update border texture
+    const borderTexture = this.type === 'currency' ? 'currencyBorder' : 'prestigeBorder';
+    if (this.list[0] && this.list[0].setTexture) {
+      this.list[0].setTexture(borderTexture);
+    }
+    
+    // Update text color
+    this.valueText.setColor(textColor);
+  }
 }

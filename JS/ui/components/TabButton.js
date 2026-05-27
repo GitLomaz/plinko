@@ -48,4 +48,15 @@ export class TabButton extends Phaser.GameObjects.Container {
     this.isSelected = selected;
     this.shadow.setTexture(selected ? 'tabBorderSelected' : 'tabBorder');
   }
+
+  updateTheme() {
+    const textColor = this.scene.gameState.theme === 'dark' ? '#ffffff' : '#222222';
+    
+    // Update button textures
+    this.shadow.setTexture(this.isSelected ? 'tabBorderSelected' : 'tabBorder');
+    this.bg.setTexture('tabBG');
+    
+    // Update text color
+    this.labelText.setColor(textColor);
+  }
 }

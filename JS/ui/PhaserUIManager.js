@@ -357,6 +357,38 @@ export class PhaserUIManager {
     return { down: this.scrollDown, up: this.scrollUp };
   }
 
+  updateTheme() {
+    // Update menu textures
+    if (this.menuShadow) {
+      this.menuShadow.setTexture('menuBorder');
+    }
+    if (this.menuBackground) {
+      this.menuBackground.setTexture('menuBG');
+    }
+
+    // Update all panels
+    Object.values(this.panels).forEach(panel => {
+      if (panel.updateTheme) {
+        panel.updateTheme();
+      }
+    });
+
+    // Update all tabs
+    Object.values(this.tabs).forEach(tab => {
+      if (tab.updateTheme) {
+        tab.updateTheme();
+      }
+    });
+
+    // Update currency displays
+    if (this.goldDisplay && this.goldDisplay.updateTheme) {
+      this.goldDisplay.updateTheme();
+    }
+    if (this.tokenDisplay && this.tokenDisplay.updateTheme) {
+      this.tokenDisplay.updateTheme();
+    }
+  }
+
   destroy() {
     // Cleanup all UI elements
     Object.values(this.panels).forEach(panel => panel.destroy());

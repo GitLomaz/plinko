@@ -121,4 +121,35 @@ export class UIPanel extends Phaser.GameObjects.Container {
     this.contentHeight = maxY + this.config.padding;
     return this.contentHeight;
   }
+
+  /**
+   * Update theme - refresh all textures and colors
+   */
+  updateTheme() {
+    const textColor = this.scene.gameState.theme === 'dark' ? '#ffffff' : '#222222';
+    
+    // Recursively update all children
+    const updateChild = (child) => {
+      // Update images that use themed textures
+      if (child.texture && child.setTexture) {
+        const textureName = child.texture.key;
+        // Only update if the texture is one we regenerate
+        if (this.scene.textures.exists(textureName)) {
+          child.setTexture(textureName);
+        }
+      }
+      
+      // Update text colors
+      if (child.type === 'Text' && child.style && (child.style.color === '#ffffff' || child.style.color === '#222222')) {
+        child.setColor(textColor);
+      }
+      
+      // Recursively update children of containers
+      if (child.list) {
+        child.list.forEach(grandchild => updateChild(grandchild));
+      }
+    };
+    
+    this.list.forEach(child => updateChild(child));
+  }
 }
