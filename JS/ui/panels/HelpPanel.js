@@ -25,6 +25,8 @@ export class HelpPanel extends UIPanel {
 
   createContent() {
 
+    const textColor = this.gameState.theme === 'dark' ? '#ffffff' : '#222222';
+
     this.tipShadow = this.scene.add.image(18, 6, 'tipBorder').setOrigin(0);
     this.tipBackground = this.scene.add.image(20, 8, 'tipBG').setOrigin(0);
 
@@ -44,7 +46,7 @@ export class HelpPanel extends UIPanel {
       {
         fontFamily: 'Arial',
         fontSize: '14px',
-        color: '#ffffff',
+        color: textColor,
         wordWrap: { width: this.panelWidth - this.config.padding * 2 - 50 }
       }
     );
@@ -58,7 +60,7 @@ export class HelpPanel extends UIPanel {
       {
         fontFamily: 'Arial',
         fontSize: '12px',
-        color: '#ffffff',
+        color: textColor,
         wordWrap: { width: this.panelWidth - this.config.padding * 2 },
         lineSpacing: 4
       }
@@ -76,7 +78,7 @@ export class HelpPanel extends UIPanel {
       {
         fontFamily: 'Arial',
         fontSize: '14px',
-        color: '#ffffff'
+        color: textColor
       }
     );
     formatTitle.setOrigin(0.5, 0);
@@ -113,7 +115,7 @@ export class HelpPanel extends UIPanel {
       const label = this.scene.add.text(x, yPos, format.label, {
         fontFamily: 'Arial',
         fontSize: '12px',
-        color: '#ffffff'
+        color: textColor
       });
       label.setOrigin(0.5);
       this.add(border);
@@ -168,7 +170,7 @@ export class HelpPanel extends UIPanel {
       const label = this.scene.add.text(x, yPos, theme.label, {
         fontFamily: 'Arial',
         fontSize: '12px',
-        color: '#ffffff'
+        color: textColor
       });
       label.setOrigin(0.5);
       this.add(border);
@@ -187,7 +189,7 @@ export class HelpPanel extends UIPanel {
       {
         fontFamily: 'Arial',
         fontSize: '14px',
-        color: '#ffffff'
+        color: textColor
       }
     );
     saveTitle.setOrigin(0.5, 0);
@@ -205,7 +207,7 @@ export class HelpPanel extends UIPanel {
     this.saveLabel = this.scene.add.text(saveX, yPos, 'Save Game', {
       fontFamily: 'Arial',
       fontSize: '12px',
-      color: '#ffffff'
+      color: textColor
     });
     this.saveLabel.setOrigin(0.5);
     this.add(saveBorder);
@@ -222,7 +224,7 @@ export class HelpPanel extends UIPanel {
     this.resetLabel = this.scene.add.text(resetX, yPos, 'Hard Reset', {
       fontFamily: 'Arial',
       fontSize: '12px',
-      color: '#ffffff'
+      color: textColor
     });
     this.resetLabel.setOrigin(0.5);
     this.add(resetBorder);

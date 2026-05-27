@@ -26,6 +26,10 @@ export class PhaserUIManager {
     this.createUI();
   }
 
+  getTextColor() {
+    return this.gameState.theme === 'dark' ? '#ffffff' : '#222222';
+  }
+
   createUI() {
 
     // Main menu panel background
