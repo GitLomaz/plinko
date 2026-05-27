@@ -23,8 +23,10 @@ export class BallShopPanel extends UIPanel {
   }
 
   createContent() {
-    this.tipShadow = this.scene.add.image(18, 6, 'tipBorder').setOrigin(0);
-    this.tipBackground = this.scene.add.image(20, 8, 'tipBG').setOrigin(0);
+    const getThemed = (name) => name + '_' + this.gameState.theme;
+    
+    this.tipShadow = this.scene.add.image(18, 6, getThemed('tipBorder')).setOrigin(0);
+    this.tipBackground = this.scene.add.image(20, 8, getThemed('tipBG')).setOrigin(0);
 
     this.add(this.tipShadow);
     this.add(this.tipBackground);

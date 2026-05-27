@@ -23,12 +23,16 @@ export class HelpPanel extends UIPanel {
     this.createContent();
   }
 
+  getThemedTexture(baseName) {
+    return baseName + '_' + this.gameState.theme;
+  }
+
   createContent() {
 
     const textColor = this.gameState.theme === 'dark' ? '#ffffff' : '#222222';
 
-    this.tipShadow = this.scene.add.image(18, 6, 'tipBorder').setOrigin(0);
-    this.tipBackground = this.scene.add.image(20, 8, 'tipBG').setOrigin(0);
+    this.tipShadow = this.scene.add.image(18, 6, this.getThemedTexture('tipBorder')).setOrigin(0);
+    this.tipBackground = this.scene.add.image(20, 8, this.getThemedTexture('tipBG')).setOrigin(0);
 
     this.add(this.tipShadow);
     this.add(this.tipBackground);
@@ -101,14 +105,14 @@ export class HelpPanel extends UIPanel {
     this.formatButtons = [];
     formats.forEach((format, index) => {
       const x = startX + index * (buttonWidth + spacing) + buttonWidth / 2;
-      const border = this.scene.add.image(x, yPos, 'buttonBorder').setOrigin(0.5);
-      const background = this.scene.add.image(x, yPos, 'buttonBG').setScrollFactor(0).setInteractive({ cursor: 'pointer' });
-      background.on('pointerover', () => background.setTexture('buttonBGOver'));
+      const border = this.scene.add.image(x, yPos, this.getThemedTexture('buttonBorder')).setOrigin(0.5);
+      const background = this.scene.add.image(x, yPos, this.getThemedTexture('buttonBG')).setScrollFactor(0).setInteractive({ cursor: 'pointer' });
+      background.on('pointerover', () => background.setTexture(this.getThemedTexture('buttonBGOver')));
       background.on('pointerout', () => {
         if (background.isSelected) {
-          background.setTexture('buttonBGSelected');
+          background.setTexture(this.getThemedTexture('buttonBGSelected'));
         } else {
-          background.setTexture('buttonBG');
+          background.setTexture(this.getThemedTexture('buttonBG'));
         }
       });
       background.on('pointerdown', () => this.selectFormat(format.value));
@@ -156,14 +160,14 @@ export class HelpPanel extends UIPanel {
     this.themeButtons = [];
     themes.forEach((theme, index) => {
       const x = themeStartX + index * (themeButtonWidth + themeSpacing) + themeButtonWidth / 2;
-      const border = this.scene.add.image(x, yPos, 'buttonBorder').setOrigin(0.5);
-      const background = this.scene.add.image(x, yPos, 'buttonBG').setScrollFactor(0).setInteractive({ cursor: 'pointer' });
-      background.on('pointerover', () => background.setTexture('buttonBGOver'));
+      const border = this.scene.add.image(x, yPos, this.getThemedTexture('buttonBorder')).setOrigin(0.5);
+      const background = this.scene.add.image(x, yPos, this.getThemedTexture('buttonBG')).setScrollFactor(0).setInteractive({ cursor: 'pointer' });
+      background.on('pointerover', () => background.setTexture(this.getThemedTexture('buttonBGOver')));
       background.on('pointerout', () => {
         if (background.isSelected) {
-          background.setTexture('buttonBGSelected');
+          background.setTexture(this.getThemedTexture('buttonBGSelected'));
         } else {
-          background.setTexture('buttonBG');
+          background.setTexture(this.getThemedTexture('buttonBG'));
         }
       });
       background.on('pointerdown', () => this.selectTheme(theme.value));
@@ -199,10 +203,10 @@ export class HelpPanel extends UIPanel {
 
     // Save button
     const saveX = this.panelWidth / 2 - 60;
-    const saveBorder = this.scene.add.image(saveX, yPos, 'buttonBorder').setOrigin(0.5);
-    const saveBackground = this.scene.add.image(saveX, yPos, 'buttonBG').setScrollFactor(0).setInteractive({ cursor: 'pointer' });
-    saveBackground.on('pointerover', () => saveBackground.setTexture('buttonBGOver'));
-    saveBackground.on('pointerout', () => saveBackground.setTexture('buttonBG'));
+    const saveBorder = this.scene.add.image(saveX, yPos, this.getThemedTexture('buttonBorder')).setOrigin(0.5);
+    const saveBackground = this.scene.add.image(saveX, yPos, this.getThemedTexture('buttonBG')).setScrollFactor(0).setInteractive({ cursor: 'pointer' });
+    saveBackground.on('pointerover', () => saveBackground.setTexture(this.getThemedTexture('buttonBGOver')));
+    saveBackground.on('pointerout', () => saveBackground.setTexture(this.getThemedTexture('buttonBG')));
     saveBackground.on('pointerdown', () => this.handleSave());
     this.saveLabel = this.scene.add.text(saveX, yPos, 'Save Game', {
       fontFamily: 'Arial',
@@ -216,10 +220,10 @@ export class HelpPanel extends UIPanel {
 
     // Reset button
     const resetX = this.panelWidth / 2 + 60;
-    const resetBorder = this.scene.add.image(resetX, yPos, 'buttonDangerBorder').setOrigin(0.5);
-    this.resetBackground = this.scene.add.image(resetX, yPos, 'buttonDangerBG').setScrollFactor(0).setInteractive({ cursor: 'pointer' });
-    this.resetBackground.on('pointerover', () => this.resetBackground.setTexture('buttonDangerBGOver'));
-    this.resetBackground.on('pointerout', () => this.resetBackground.setTexture('buttonDangerBG'));
+    const resetBorder = this.scene.add.image(resetX, yPos, this.getThemedTexture('buttonDangerBorder')).setOrigin(0.5);
+    this.resetBackground = this.scene.add.image(resetX, yPos, this.getThemedTexture('buttonDangerBG')).setScrollFactor(0).setInteractive({ cursor: 'pointer' });
+    this.resetBackground.on('pointerover', () => this.resetBackground.setTexture(this.getThemedTexture('buttonDangerBGOver')));
+    this.resetBackground.on('pointerout', () => this.resetBackground.setTexture(this.getThemedTexture('buttonDangerBG')));
     this.resetBackground.on('pointerdown', () => this.handleReset());
     this.resetLabel = this.scene.add.text(resetX, yPos, 'Hard Reset', {
       fontFamily: 'Arial',
@@ -246,10 +250,10 @@ export class HelpPanel extends UIPanel {
   updateFormatButtons() {
     this.formatButtons.forEach(({ button, value }) => {
       if (value === this.formatter.formatType) {
-        button.setTexture('buttonBGSelected');
+        button.setTexture(this.getThemedTexture('buttonBGSelected'));
         button.isSelected = true;
       } else {
-        button.setTexture('buttonBG');
+        button.setTexture(this.getThemedTexture('buttonBG'));
         button.isSelected = false;
       }
     });
@@ -258,10 +262,10 @@ export class HelpPanel extends UIPanel {
   updateThemeButtons() {
     this.themeButtons.forEach(({ button, value }) => {
       if (value === this.gameState.theme) {
-        button.setTexture('buttonBGSelected');
+        button.setTexture(this.getThemedTexture('buttonBGSelected'));
         button.isSelected = true;
       } else {
-        button.setTexture('buttonBG');
+        button.setTexture(this.getThemedTexture('buttonBG'));
         button.isSelected = false;
       }
     });

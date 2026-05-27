@@ -127,15 +127,20 @@ export class UIPanel extends Phaser.GameObjects.Container {
    */
   updateTheme() {
     const textColor = this.scene.gameState.theme === 'dark' ? '#ffffff' : '#222222';
+    const themeSuffix = '_' + this.scene.gameState.theme;
     
     // Recursively update all children
     const updateChild = (child) => {
       // Update images that use themed textures
       if (child.texture && child.setTexture) {
         const textureName = child.texture.key;
-        // Only update if the texture is one we regenerate
-        if (this.scene.textures.exists(textureName)) {
-          child.setTexture(textureName);
+        // Strip old theme suffix and add new one
+        const baseName = textureName.replace(/_dark$|_light$/, '');
+        const newTextureName = baseName + themeSuffix;
+        
+        // Only update if the new themed texture exists
+        if (this.scene.textures.exists(newTextureName)) {
+          child.setTexture(newTextureName);
         }
       }
       

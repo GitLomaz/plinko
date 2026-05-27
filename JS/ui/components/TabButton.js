@@ -18,10 +18,12 @@ export class TabButton extends Phaser.GameObjects.Container {
   }
 
   createButton() {
-    this.shadow = this.scene.add.image(0, 0, 'tabBorder').setOrigin(0.5).setScrollFactor(0);
-    this.bg = this.scene.add.image(0, 0, 'tabBG').setOrigin(0.5).setScrollFactor(0).setInteractive({ cursor: 'pointer' });
-    this.bg.on('pointerover', () => this.bg.setTexture('tabBGOver'));
-    this.bg.on('pointerout', () => this.bg.setTexture('tabBG'));
+    const getThemed = (name) => name + '_' + this.scene.gameState.theme;
+    
+    this.shadow = this.scene.add.image(0, 0, getThemed('tabBorder')).setOrigin(0.5).setScrollFactor(0);
+    this.bg = this.scene.add.image(0, 0, getThemed('tabBG')).setOrigin(0.5).setScrollFactor(0).setInteractive({ cursor: 'pointer' });
+    this.bg.on('pointerover', () => this.bg.setTexture(getThemed('tabBGOver')));
+    this.bg.on('pointerout', () => this.bg.setTexture(getThemed('tabBG')));
     this.bg.on('pointerdown', () => this.onClick());
 
     this.add(this.shadow);
@@ -46,15 +48,23 @@ export class TabButton extends Phaser.GameObjects.Container {
 
   setSelected(selected) {
     this.isSelected = selected;
-    this.shadow.setTexture(selected ? 'tabBorderSelected' : 'tabBorder');
+    const getThemed = (name) => name + '_' + this.scene.gameState.theme;
+    this.shadow.setTexture(selected ? getThemed('tabBorderSelected') : getThemed('tabBorder'));
   }
 
   updateTheme() {
     const textColor = this.scene.gameState.theme === 'dark' ? '#ffffff' : '#222222';
+    const getThemed = (name) => name + '_' + this.scene.gameState.theme;
     
     // Update button textures
-    this.shadow.setTexture(this.isSelected ? 'tabBorderSelected' : 'tabBorder');
-    this.bg.setTexture('tabBG');
+    this.shadow.setTexture(this.isSelected ? getThemed('tabBorderSelected') : getThemed('tabBorder'));
+    this.bg.setTexture(getThemed('tabBG'));
+    
+    // Re-setup hover handlers with new theme
+    this.bg.removeAllListeners();
+    this.bg.on('pointerover', () => this.bg.setTexture(getThemed('tabBGOver')));
+    this.bg.on('pointerout', () => this.bg.setTexture(getThemed('tabBG')));
+    this.bg.on('pointerdown', () => this.onClick());
     
     // Update text color
     this.labelText.setColor(textColor);

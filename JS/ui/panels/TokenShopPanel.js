@@ -27,9 +27,11 @@ export class TokenShopPanel extends UIPanel {
   }
 
   createContent() {
-    this.tipShadow = this.scene.add.image(18, 6, 'tipBorder').setOrigin(0);
+    const getThemed = (name) => name + '_' + this.gameState.theme;
+    
+    this.tipShadow = this.scene.add.image(18, 6, getThemed('tipBorder')).setOrigin(0);
     this.tipShadow.fixedPosition = true;
-    this.tipBackground = this.scene.add.image(20, 8, 'tipBG').setOrigin(0);
+    this.tipBackground = this.scene.add.image(20, 8, getThemed('tipBG')).setOrigin(0);
     this.tipBackground.fixedPosition = true;
 
     this.add(this.tipShadow);
@@ -57,13 +59,13 @@ export class TokenShopPanel extends UIPanel {
     tipText.setOrigin(0, 0);
     this.add(tipText);
 
-    this.prestigeBtnBorder = this.scene.add.image(182, 416, 'zoneButtonBorder');
+    this.prestigeBtnBorder = this.scene.add.image(182, 416, getThemed('zoneButtonBorder'));
     this.prestigeBtnBorder.fixedPosition = true;
-    this.prestigeBtnBg = this.scene.add.image(182, 416, 'zoneButtonBG');
+    this.prestigeBtnBg = this.scene.add.image(182, 416, getThemed('zoneButtonBG'));
     this.prestigeBtnBg.fixedPosition = true;
     this.prestigeBtnBg.setInteractive({ cursor: 'pointer' });
-    this.prestigeBtnBg.on('pointerover', () => this.prestigeBtnBg.setTexture('zoneButtonBGOver'));
-    this.prestigeBtnBg.on('pointerout', () => this.prestigeBtnBg.setTexture('zoneButtonBG'));
+    this.prestigeBtnBg.on('pointerover', () => this.prestigeBtnBg.setTexture(getThemed('zoneButtonBGOver')));
+    this.prestigeBtnBg.on('pointerout', () => this.prestigeBtnBg.setTexture(getThemed('zoneButtonBG')));
     this.prestigeBtnBg.on('pointerdown', () => this.handlePrestige());
     this.add(this.prestigeBtnBorder);
     this.add(this.prestigeBtnBg);

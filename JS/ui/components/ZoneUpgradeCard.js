@@ -6,10 +6,12 @@ export class ZoneUpgradeCard extends Phaser.GameObjects.Container {
   constructor(scene, x, y, width, height, upgradeData, onClick) {
     super(scene, Math.floor(x), Math.floor(y));
 
-    this.shadow = this.scene.add.image(10, 0, 'zoneButtonBorder')
-    this.background = this.scene.add.image(10, 0, 'zoneButtonBG').setInteractive({ cursor: 'pointer' });
-    this.background.on('pointerover', () => this.background.setTexture('zoneButtonBGOver'));
-    this.background.on('pointerout', () => this.background.setTexture('zoneButtonBG'));
+    const getThemed = (name) => name + '_' + scene.gameState.theme;
+
+    this.shadow = this.scene.add.image(10, 0, getThemed('zoneButtonBorder'))
+    this.background = this.scene.add.image(10, 0, getThemed('zoneButtonBG')).setInteractive({ cursor: 'pointer' });
+    this.background.on('pointerover', () => this.background.setTexture(getThemed('zoneButtonBGOver')));
+    this.background.on('pointerout', () => this.background.setTexture(getThemed('zoneButtonBG')));
     this.background.on('pointerdown', () => onClick());
     this.add(this.shadow);
     this.add(this.background);
@@ -31,7 +33,7 @@ export class ZoneUpgradeCard extends Phaser.GameObjects.Container {
       color: '#ffffff',
       fontWeight: 'bold'
     }).setOrigin(1, .5);
-    this.costText.setColor(true ? '#ffb547' : '#f81515');
+    this.costText.setColor(true ? '#cf7c00' : '#f81515');
     this.add(this.costText);
 
     this.levelText = this.scene.add.text(180, -8, "Level: 1", {
@@ -62,6 +64,7 @@ export class ZoneUpgradeCard extends Phaser.GameObjects.Container {
     this.lockIcon.setScale(.1);
     this.lockIcon.setAlpha(0);
     this.add(this.lockIcon);
+    this.updateTheme();
   }
 
   /*
@@ -74,21 +77,22 @@ export class ZoneUpgradeCard extends Phaser.GameObjects.Container {
   updateInfo(lines) {
     const price = lines.pop();
     this.costText.setText(price);
-    this.costText.setColor(true ? '#ffb547' : '#f81515');
+    this.costText.setColor(true ? '#cf7c00' : '#f81515');
     this.levelText.setText(lines.pop());
     this.words.setText(lines.pop());
   }
 
   setLocked(locked) {
     this.locked = locked;
+    const getThemed = (name) => name + '_' + this.scene.gameState.theme;
     this.words.setAlpha(locked ? 0 : 1);
     this.levelText.setAlpha(locked ? 0 : 1);
     this.costText.setAlpha(locked ? 0 : 1);
     this.lockText.setAlpha(locked ? 1 : 0);
     this.lockSubtext.setAlpha(locked ? 1 : 0);
     this.lockIcon.setAlpha(locked ? 1 : 0);
-    this.shadow.setTexture(locked ? 'zoneButtonDisabledBorder' : 'zoneButtonBorder');
-    this.background.setTexture(locked ? 'zoneButtonDisabledBG' : 'zoneButtonBG');
+    this.shadow.setTexture(locked ? getThemed('zoneButtonDisabledBorder') : getThemed('zoneButtonBorder'));
+    this.background.setTexture(locked ? getThemed('zoneButtonDisabledBG') : getThemed('zoneButtonBG'));
 
 
     if (locked) {
@@ -98,7 +102,33 @@ export class ZoneUpgradeCard extends Phaser.GameObjects.Container {
     }
   }
 
+  updateTheme() {
+    const getThemed = (name) => name + '_' + this.scene.gameState.theme;
+    const textColor = this.scene.gameState.theme === 'dark' ? '#ffffff' : '#222222';
+    
+    // Update textures based on locked state
+    if (this.locked) {
+      this.shadow.setTexture(getThemed('zoneButtonDisabledBorder'));
+      this.background.setTexture(getThemed('zoneButtonDisabledBG'));
+    } else {
+      this.shadow.setTexture(getThemed('zoneButtonBorder'));
+      this.background.setTexture(getThemed('zoneButtonBG'));
+      
+      // Re-setup hover handlers with new theme
+      this.background.removeAllListeners('pointerover');
+      this.background.removeAllListeners('pointerout');
+      this.background.on('pointerover', () => this.background.setTexture(getThemed('zoneButtonBGOver')));
+      this.background.on('pointerout', () => this.background.setTexture(getThemed('zoneButtonBG')));
+    }
+    
+    // Update text colors
+    this.words.setColor(textColor);
+    this.levelText.setColor(textColor);
+    this.lockText.setColor(textColor);
+    this.lockSubtext.setColor(textColor);
+  }
+
   setCostColor(canAfford) {
-    this.costText.setColor(canAfford ? '#ffb547' : '#f81515');
+    this.costText.setColor(canAfford ? '#cf7c00' : '#f81515');
   }
 }

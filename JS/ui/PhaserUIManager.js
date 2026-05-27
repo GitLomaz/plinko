@@ -30,6 +30,10 @@ export class PhaserUIManager {
     return this.gameState.theme === 'dark' ? '#ffffff' : '#222222';
   }
 
+  getThemedTexture(baseName) {
+    return baseName + '_' + this.gameState.theme;
+  }
+
   createUI() {
 
     // Main menu panel background
@@ -48,10 +52,10 @@ export class PhaserUIManager {
     this.menuBackground.setOrigin(0, 0);
     this.menuBackground.setScrollFactor(0);
 
-    this.menuShadow = this.scene.add.image(696, 18, 'menuBorder').setOrigin(0);
+    this.menuShadow = this.scene.add.image(696, 18, this.getThemedTexture('menuBorder')).setOrigin(0);
     this.menuShadow.setOrigin(0, 0);
     this.menuShadow.setScrollFactor(0);    
-    this.menuBackground = this.scene.add.image(696 + 3, 18 + 3, 'menuBG').setOrigin(0);
+    this.menuBackground = this.scene.add.image(696 + 3, 18 + 3, this.getThemedTexture('menuBG')).setOrigin(0);
     this.menuBackground.setOrigin(0, 0);
     this.menuBackground.setScrollFactor(0);
     
@@ -168,10 +172,11 @@ export class PhaserUIManager {
   }
 
   createScrollButtons(x, menuHeight) {
-    this.scrollShadow1 = this.scene.add.image(625, 12, 'scrollBorder').setOrigin(0).setScrollFactor(0).setDepth(1000);
-    this.scrollBg1 = this.scene.add.image(627, 14, 'scrollBG').setOrigin(0).setScrollFactor(0).setInteractive({ cursor: 'pointer' }).setDepth(1001);
-    this.scrollBg1.on('pointerover', () => this.scrollBg1.setTexture('scrollBGOver'));
-    this.scrollBg1.on('pointerout', () => this.scrollBg1.setTexture('scrollBG'));
+    const getThemed = (name) => name + '_' + this.gameState.theme;
+    this.scrollShadow1 = this.scene.add.image(625, 12, getThemed('scrollBorder')).setOrigin(0).setScrollFactor(0).setDepth(1000);
+    this.scrollBg1 = this.scene.add.image(627, 14, getThemed('scrollBG')).setOrigin(0).setScrollFactor(0).setInteractive({ cursor: 'pointer' }).setDepth(1001);
+    this.scrollBg1.on('pointerover', () => this.scrollBg1.setTexture(getThemed('scrollBGOver')));
+    this.scrollBg1.on('pointerout', () => this.scrollBg1.setTexture(getThemed('scrollBG')));
     this.scrollBg1.on('pointerdown', () => { this.scrollUp = true; });
     this.scrollIcon1 = this.scene.add.text(645, 32, '▲', {
       fontFamily: 'Arial',
@@ -179,10 +184,10 @@ export class PhaserUIManager {
       color: '#c3c3c1'
     }).setOrigin(0.5).setScrollFactor(0).setScale(1, .75).setDepth(1002);
 
-    this.scrollShadow2 = this.scene.add.image(625, 595 - 12 - 40, 'scrollBorder').setOrigin(0).setScrollFactor(0).setDepth(1000);
-    this.scrollBg2 = this.scene.add.image(627, 595 - 12 - 38, 'scrollBG').setOrigin(0).setScrollFactor(0).setInteractive({ cursor: 'pointer' }).setDepth(1001);
-    this.scrollBg2.on('pointerover', () => this.scrollBg2.setTexture('scrollBGOver'));
-    this.scrollBg2.on('pointerout', () => this.scrollBg2.setTexture('scrollBG'));
+    this.scrollShadow2 = this.scene.add.image(625, 595 - 12 - 40, getThemed('scrollBorder')).setOrigin(0).setScrollFactor(0).setDepth(1000);
+    this.scrollBg2 = this.scene.add.image(627, 595 - 12 - 38, getThemed('scrollBG')).setOrigin(0).setScrollFactor(0).setInteractive({ cursor: 'pointer' }).setDepth(1001);
+    this.scrollBg2.on('pointerover', () => this.scrollBg2.setTexture(getThemed('scrollBGOver')));
+    this.scrollBg2.on('pointerout', () => this.scrollBg2.setTexture(getThemed('scrollBG')));
     this.scrollBg2.on('pointerdown', () => { this.scrollDown = true; });
     this.scrollIcon2 = this.scene.add.text(645, 595 - 12 - 20, '▼', {
       fontFamily: 'Arial',
@@ -205,10 +210,10 @@ export class PhaserUIManager {
     this.offlinePanel.setDepth(300);
     this.offlinePanel.setVisible(false);
 
-    const shadow = this.scene.add.image(0, 0, 'idleBorder').setOrigin(0.5);
+    const shadow = this.scene.add.image(0, 0, this.getThemedTexture('idleBorder')).setOrigin(0.5);
     this.offlinePanel.add(shadow);
 
-    const bg = this.scene.add.image(0, 0, 'idleBG').setOrigin(0.5);
+    const bg = this.scene.add.image(0, 0, this.getThemedTexture('idleBG')).setOrigin(0.5);
     this.offlinePanel.add(bg);
 
     this.offlineText = this.scene.add.text(0, -20, '', {
@@ -335,6 +340,7 @@ export class PhaserUIManager {
       `Total Earned:\n${this.formatter.format(earned)}`
     );
     this.offlinePanel.setVisible(true);
+    this.updateTheme();
   }
 
   update(deltaMultiplier = 1) {
@@ -358,32 +364,58 @@ export class PhaserUIManager {
   }
 
   updateTheme() {
+    const getThemed = (name) => name + '_' + this.gameState.theme;
+    const textColor = this.scene.gameState.theme === 'dark' ? '#ffffff' : '#222222';
     // Update menu textures
     if (this.menuShadow) {
-      this.menuShadow.setTexture('menuBorder');
+      this.menuShadow.setTexture(this.getThemedTexture('menuBorder'));
     }
     if (this.menuBackground) {
-      this.menuBackground.setTexture('menuBG');
+      this.menuBackground.setTexture(this.getThemedTexture('menuBG'));
     }
 
-    // Update scroll buttons
+    // Update scroll buttons and re-setup hover handlers
     if (this.scrollShadow1) {
-      this.scrollShadow1.setTexture('scrollBorder');
+      this.scrollShadow1.setTexture(getThemed('scrollBorder'));
     }
     if (this.scrollBg1) {
-      this.scrollBg1.setTexture('scrollBG');
+      this.scrollBg1.setTexture(getThemed('scrollBG'));
+      // Re-setup hover handlers with new theme
+      this.scrollBg1.removeAllListeners('pointerover');
+      this.scrollBg1.removeAllListeners('pointerout');
+      this.scrollBg1.on('pointerover', () => this.scrollBg1.setTexture(getThemed('scrollBGOver')));
+      this.scrollBg1.on('pointerout', () => this.scrollBg1.setTexture(getThemed('scrollBG')));
     }
     if (this.scrollShadow2) {
-      this.scrollShadow2.setTexture('scrollBorder');
+      this.scrollShadow2.setTexture(getThemed('scrollBorder'));
     }
     if (this.scrollBg2) {
-      this.scrollBg2.setTexture('scrollBG');
+      this.scrollBg2.setTexture(getThemed('scrollBG'));
+      // Re-setup hover handlers with new theme
+      this.scrollBg2.removeAllListeners('pointerover');
+      this.scrollBg2.removeAllListeners('pointerout');
+      this.scrollBg2.on('pointerover', () => this.scrollBg2.setTexture(getThemed('scrollBGOver')));
+      this.scrollBg2.on('pointerout', () => this.scrollBg2.setTexture(getThemed('scrollBG')));
+      
+
+
+      this.scrollIcon1.setColor(textColor);
+      this.scrollIcon2.setColor(textColor);
     }
 
-    // Update all panels
+    this.offlineText.setColor(textColor);
+
+    // Update all panels (also call any button-specific refresh helpers)
     Object.values(this.panels).forEach(panel => {
       if (panel.updateTheme) {
         panel.updateTheme();
+      }
+      // Some panels expose helpers to refresh their button selections
+      if (panel.updateThemeButtons) {
+        panel.updateThemeButtons();
+      }
+      if (panel.updateFormatButtons) {
+        panel.updateFormatButtons();
       }
     });
 

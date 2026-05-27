@@ -35,16 +35,19 @@ export class BonusManager extends Phaser.GameObjects.Container {
   }
 
   createUI() {
+    console.log('Creating BonusManager UI');
+    const getThemed = (name) => name + '_' + this.scene.gameState.theme;
+    const textColor = this.scene.gameState.theme === 'dark' ? '#c3c3c1' : '#222222';
 
-    this.shadow = this.scene.add.image(0, 0, 'adBorder')
-    this.background = this.scene.add.image(0, 0, 'adBG').setScrollFactor(0).setInteractive({ useHandCursor: true });
+    this.shadow = this.scene.add.image(0, 0, getThemed('adBorder')).setScrollFactor(0);
+    this.background = this.scene.add.image(0, 0, getThemed('adBG')).setScrollFactor(0).setInteractive({ useHandCursor: true });
     this.background.on('pointerover', () => {
       if (!this.bonusActive && !this.transition) {
-        this.background.setTexture('adBGOver');
+        this.background.setTexture(getThemed('adBGOver'));
       }
     });
     this.background.on('pointerout', () => {
-      this.background.setTexture('adBG');
+      this.background.setTexture(getThemed('adBG'));
     });
     this.background.on('pointerdown', () => {
       if (!this.bonusActive && !this.transition) {
@@ -59,15 +62,15 @@ export class BonusManager extends Phaser.GameObjects.Container {
     
     this.topText = this.scene.add.text(0, -10, 'Top Text', {
       fontFamily: 'Arial',
-      color: '#c3c3c1',
+      color: textColor,
       fontSize: '14px'
-    }).setOrigin(0.5);
+    }).setOrigin(0.5).setScrollFactor(0);
 
     this.bottomText = this.scene.add.text(0, 10, 'bottom Text', {
       fontFamily: 'Arial',
-      color: '#c3c3c1',
+      color: textColor,
       fontSize: '14px'
-    }).setOrigin(0.5);
+    }).setOrigin(0.5).setScrollFactor(0);
     
     this.add(this.topText);
     this.add(this.bottomText);
@@ -103,6 +106,7 @@ export class BonusManager extends Phaser.GameObjects.Container {
   }
 
   prompt() {
+    this.updateTheme();
     this.bonus = Phaser.Math.Between(0, 2);
     this.transition = true;
     this.topText.setText(this.bonuses[this.bonus]);
@@ -179,5 +183,41 @@ export class BonusManager extends Phaser.GameObjects.Container {
     this.cooldownType = 'noad';
     this.cooldownRemaining = GAME_CONFIG.ad.adCooldown;
     this.hide();
+  }
+
+  updateTheme() {
+    const getThemed = (name) => name + '_' + this.scene.gameState.theme;
+    const textColor = this.scene.gameState.theme === 'dark' ? '#c3c3c1' : '#222222';
+
+    if (this.shadow) {
+      this.shadow.setTexture(getThemed('adBorder'));
+      this.shadow.setScrollFactor(0);
+    }
+
+    if (this.background) {
+      this.background.setTexture(getThemed('adBG'));
+      this.background.setScrollFactor(0);
+      // Rebind hover handlers to use themed textures
+      this.background.removeAllListeners('pointerover');
+      this.background.removeAllListeners('pointerout');
+      this.background.on('pointerover', () => {
+        if (!this.bonusActive && !this.transition) {
+          this.background.setTexture(getThemed('adBGOver'));
+        }
+      });
+      this.background.on('pointerout', () => {
+        this.background.setTexture(getThemed('adBG'));
+      });
+    }
+
+    if (this.topText) {
+      this.topText.setColor(textColor);
+      this.topText.setScrollFactor(0);
+    }
+
+    if (this.bottomText) {
+      this.bottomText.setColor(textColor);
+      this.bottomText.setScrollFactor(0);
+    }
   }
 }

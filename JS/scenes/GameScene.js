@@ -54,108 +54,101 @@ export class GameScene extends Phaser.Scene {
   }
 
   create() {
-    this.generateTextures();
+    // Dark mode textures
+    this.generateGradientTexture(168, 32, 8, '#ce9c4f', '#6d6038', 'currencyBorder_dark');
+    this.generateGradientTexture(168, 32, 8, '#238d9a', '#0f4b56', 'prestigeBorder_dark');
+    this.generateGradientTexture(398, 559, 12, '#37424e', '#222c34', 'menuBorder_dark');
+    this.generateGradientTexture(398 - 6, 559 - 6, 12, '#232c34', '#1f262c', 'menuBG_dark');
+
+    this.generateGradientTexture(40, 40, 8, '#97a3b4', '#121316', 'scrollBorder_dark');
+    this.generateGradientTexture(40 - 4, 40 - 4, 8, '#2d3742', '#27323a', 'scrollBG_dark');
+    this.generateGradientTexture(40 - 4, 40 - 4, 8, '#3c4a58', '#35444f', 'scrollBGOver_dark');
+
+    this.generateGradientTexture(64, 48, 8, '#37424e', '#36444f', 'tabBorder_dark');
+    this.generateGradientTexture(64, 48, 8, '#e8b16f', '#e8b16f', 'tabBorderSelected_dark');
+    this.generateGradientTexture(64 - 2, 48 - 2, 8, '#2d3742', '#27323a', 'tabBG_dark');
+    this.generateGradientTexture(64 - 2, 48 - 2, 8, '#3c4a58', '#35444f', 'tabBGOver_dark');
+
+    this.generateGradientTexture(330, 40, 8, '#37424e', '#36444f', 'tipBorder_dark');
+    this.generateGradientTexture(330 - 4, 40 - 4, 8,'#2d3742', '#27323a', 'tipBG_dark');
+
+    this.generateGradientTexture(128, 48, 8, '#97a3b4', '#121316', 'adBorder_dark');
+    this.generateGradientTexture(128 - 4, 48 - 4, 8, '#2d3742', '#27323a', 'adBG_dark');
+    this.generateGradientTexture(128 - 4, 48 - 4, 8, '#3c4a58', '#35444f', 'adBGOver_dark');
+
+    this.generateGradientTexture(172, 70, 8, '#37424e', '#36444f', 'ballButtonDisabledBorder_dark');
+    this.generateGradientTexture(172 - 4, 70 - 4, 8,'#2d3742', '#27323a', 'ballButtonDisabledBG_dark');
+    this.generateGradientTexture(172, 70, 8, '#496249', '#3a4e3a', 'ballButtonBorder_dark');
+    this.generateGradientTexture(172 - 4, 70 - 4, 8, '#36463a', '#36463a', 'ballButtonBG_dark');
+    this.generateGradientTexture(172 - 4, 70 - 4, 8, '#3c5041', '#3c5041', 'ballButtonBGOver_dark');
+
+    this.generateGradientTexture(350, 36, 8, '#37424e', '#36444f', 'zoneButtonDisabledBorder_dark');
+    this.generateGradientTexture(350 - 4, 36 - 4, 8,'#2d3742', '#27323a', 'zoneButtonDisabledBG_dark');
+    this.generateGradientTexture(350, 36, 8, '#496249', '#3a4e3a', 'zoneButtonBorder_dark');
+    this.generateGradientTexture(350 - 4, 36 - 4, 8, '#36463a', '#36463a', 'zoneButtonBG_dark');
+    this.generateGradientTexture(350 - 4, 36 - 4, 8, '#3c5041', '#3c5041', 'zoneButtonBGOver_dark');
+
+    this.generateGradientTexture(112, 40, 8, '#97a3b4', '#121316', 'buttonBorder_dark');
+    this.generateGradientTexture(112 - 4, 40 - 4, 8, '#2d3742', '#27323a', 'buttonBG_dark');
+    this.generateGradientTexture(112 - 4, 40 - 4, 8, '#3c4a58', '#35444f', 'buttonBGOver_dark');
+    this.generateGradientTexture(112 - 4, 40 - 4, 8, '#41586f', '#3e5b6f', 'buttonBGSelected_dark');
+
+    this.generateGradientTexture(112, 40, 8, '#b49797', '#161212', 'buttonDangerBorder_dark');
+    this.generateGradientTexture(112 - 4, 40 - 4, 8, '#422d2d', '#3a2727', 'buttonDangerBG_dark');
+    this.generateGradientTexture(112 - 4, 40 - 4, 8, '#583c3c', '#4f3535', 'buttonDangerBGOver_dark');
+
+    this.generateGradientTexture(200, 125, 8, '#97a3b4', '#121316', 'idleBorder_dark');
+    this.generateGradientTexture(200 - 4, 125 - 4, 8, '#2d3742', '#27323a', 'idleBG_dark');
+    this.generateGradientTexture(200 - 4, 125 - 4, 8, '#3c4a58', '#35444f', 'idleBGOver_dark');
+
+    // Light mode textures
+    this.generateGradientTexture(168, 32, 8, '#e7dccb', '#ddccb0', 'currencyBorder_light');
+    this.generateGradientTexture(168, 32, 8, '#cedfe2', '#b9cfd4', 'prestigeBorder_light');
+    this.generateGradientTexture(398, 559, 12, '#707070', '#808080', 'menuBorder_light');
+    this.generateGradientTexture(398 - 6, 559 - 6, 12, '#f0f0f0', '#e8e8e8', 'menuBG_light');
+
+    this.generateGradientTexture(40, 40, 8, '#505050', '#606060', 'scrollBorder_light');
+    this.generateGradientTexture(40 - 4, 40 - 4, 8, '#d8d8d8', '#d0d0d0', 'scrollBG_light');
+    this.generateGradientTexture(40 - 4, 40 - 4, 8, '#c0c0c0', '#b8b8b8', 'scrollBGOver_light');
+
+    this.generateGradientTexture(64, 48, 8, '#707070', '#808080', 'tabBorder_light');
+    this.generateGradientTexture(64, 48, 8, '#b8862f', '#b8862f', 'tabBorderSelected_light');
+    this.generateGradientTexture(64 - 2, 48 - 2, 8, '#d8d8d8', '#d0d0d0', 'tabBG_light');
+    this.generateGradientTexture(64 - 2, 48 - 2, 8, '#c0c0c0', '#b8b8b8', 'tabBGOver_light');
+
+    this.generateGradientTexture(330, 40, 8, '#707070', '#808080', 'tipBorder_light');
+    this.generateGradientTexture(330 - 4, 40 - 4, 8, '#e0e8f0', '#d8e0e8', 'tipBG_light');
+
+    this.generateGradientTexture(128, 48, 8, '#505050', '#606060', 'adBorder_light');
+    this.generateGradientTexture(128 - 4, 48 - 4, 8, '#d8d8d8', '#d0d0d0', 'adBG_light');
+    this.generateGradientTexture(128 - 4, 48 - 4, 8, '#c0c0c0', '#b8b8b8', 'adBGOver_light');
+
+    this.generateGradientTexture(172, 70, 8, '#707070', '#808080', 'ballButtonDisabledBorder_light');
+    this.generateGradientTexture(172 - 4, 70 - 4, 8, '#d8d8d8', '#d0d0d0', 'ballButtonDisabledBG_light');
+    this.generateGradientTexture(172, 70, 8, '#2d8659', '#1f5d3d', 'ballButtonBorder_light');
+    this.generateGradientTexture(172 - 4, 70 - 4, 8, '#c7d0cb', '#bad1c5', 'ballButtonBG_light');
+    this.generateGradientTexture(172 - 4, 70 - 4, 8, '#ccdcd4', '#b7d4c3', 'ballButtonBGOver_light');
+
+    this.generateGradientTexture(350, 36, 8, '#707070', '#808080', 'zoneButtonDisabledBorder_light');
+    this.generateGradientTexture(350 - 4, 36 - 4, 8, '#d8d8d8', '#d0d0d0', 'zoneButtonDisabledBG_light');
+    this.generateGradientTexture(350, 36, 8, '#2d8659', '#1f5d3d', 'zoneButtonBorder_light');
+    this.generateGradientTexture(350 - 4, 36 - 4, 8, '#c7d0cb', '#bad1c5', 'zoneButtonBG_light');
+    this.generateGradientTexture(350 - 4, 36 - 4, 8, '#ccdcd4', '#b7d4c3', 'zoneButtonBGOver_light');
+
+    this.generateGradientTexture(112, 40, 8, '#505050', '#606060', 'buttonBorder_light');
+    this.generateGradientTexture(112 - 4, 40 - 4, 8, '#d8d8d8', '#d0d0d0', 'buttonBG_light');
+    this.generateGradientTexture(112 - 4, 40 - 4, 8, '#c0c0c0', '#b8b8b8', 'buttonBGOver_light');
+    this.generateGradientTexture(112 - 4, 40 - 4, 8, '#4a90e2', '#357abd', 'buttonBGSelected_light');
+
+    this.generateGradientTexture(112, 40, 8, '#8a3030', '#6a2020', 'buttonDangerBorder_light');
+    this.generateGradientTexture(112 - 4, 40 - 4, 8, '#e85555', '#d84444', 'buttonDangerBG_light');
+    this.generateGradientTexture(112 - 4, 40 - 4, 8, '#d04444', '#c03333', 'buttonDangerBGOver_light');
+
+    this.generateGradientTexture(200, 125, 8, '#505050', '#606060', 'idleBorder_light');
+    this.generateGradientTexture(200 - 4, 125 - 4, 8, '#d8d8d8', '#d0d0d0', 'idleBG_light');
+    this.generateGradientTexture(200 - 4, 125 - 4, 8, '#c0c0c0', '#b8b8b8', 'idleBGOver_light');
+
     this.setupScene();
-  }
-
-  generateTextures() {
-    const isDark = !this.gameState || this.gameState.theme === 'dark';
-    
-    if (isDark) {
-      // Dark mode (current theme)
-      this.generateGradientTexture(168, 32, 8, '#ce9c4f', '#6d6038', 'currencyBorder');
-    this.generateGradientTexture(168, 32, 8, '#238d9a', '#0f4b56', 'prestigeBorder');
-    this.generateGradientTexture(398, 559, 12, '#37424e', '#222c34', 'menuBorder');
-    this.generateGradientTexture(398 - 6, 559 - 6, 12, '#232c34', '#1f262c', 'menuBG');
-
-    this.generateGradientTexture(40, 40, 8, '#97a3b4', '#121316', 'scrollBorder');
-    this.generateGradientTexture(40 - 4, 40 - 4, 8, '#2d3742', '#27323a', 'scrollBG');
-    this.generateGradientTexture(40 - 4, 40 - 4, 8, '#3c4a58', '#35444f', 'scrollBGOver');
-
-    this.generateGradientTexture(64, 48, 8, '#37424e', '#36444f', 'tabBorder');
-    this.generateGradientTexture(64, 48, 8, '#e8b16f', '#e8b16f', 'tabBorderSelected');
-    this.generateGradientTexture(64 - 2, 48 - 2, 8, '#2d3742', '#27323a', 'tabBG');
-    this.generateGradientTexture(64 - 2, 48 - 2, 8, '#3c4a58', '#35444f', 'tabBGOver');
-
-    this.generateGradientTexture(330, 40, 8, '#37424e', '#36444f', 'tipBorder');
-    this.generateGradientTexture(330 - 4, 40 - 4, 8,'#2d3742', '#27323a', 'tipBG');
-
-    this.generateGradientTexture(128, 48, 8, '#97a3b4', '#121316', 'adBorder');
-    this.generateGradientTexture(128 - 4, 48 - 4, 8, '#2d3742', '#27323a', 'adBG');
-    this.generateGradientTexture(128 - 4, 48 - 4, 8, '#3c4a58', '#35444f', 'adBGOver');
-
-    this.generateGradientTexture(172, 70, 8, '#37424e', '#36444f', 'ballButtonDisabledBorder');
-    this.generateGradientTexture(172 - 4, 70 - 4, 8,'#2d3742', '#27323a', 'ballButtonDisabledBG');
-    this.generateGradientTexture(172, 70, 8, '#496249', '#3a4e3a', 'ballButtonBorder');
-    this.generateGradientTexture(172 - 4, 70 - 4, 8, '#36463a', '#36463a', 'ballButtonBG');
-    this.generateGradientTexture(172 - 4, 70 - 4, 8, '#3c5041', '#3c5041', 'ballButtonBGOver');
-
-    this.generateGradientTexture(350, 36, 8, '#37424e', '#36444f', 'zoneButtonDisabledBorder');
-    this.generateGradientTexture(350 - 4, 36 - 4, 8,'#2d3742', '#27323a', 'zoneButtonDisabledBG');
-    this.generateGradientTexture(350, 36, 8, '#496249', '#3a4e3a', 'zoneButtonBorder');
-    this.generateGradientTexture(350 - 4, 36 - 4, 8, '#36463a', '#36463a', 'zoneButtonBG');
-    this.generateGradientTexture(350 - 4, 36 - 4, 8, '#3c5041', '#3c5041', 'zoneButtonBGOver');
-
-    this.generateGradientTexture(112, 40, 8, '#97a3b4', '#121316', 'buttonBorder');
-    this.generateGradientTexture(112 - 4, 40 - 4, 8, '#2d3742', '#27323a', 'buttonBG');
-    this.generateGradientTexture(112 - 4, 40 - 4, 8, '#3c4a58', '#35444f', 'buttonBGOver');
-    this.generateGradientTexture(112 - 4, 40 - 4, 8, '#41586f', '#3e5b6f', 'buttonBGSelected');
-
-    this.generateGradientTexture(112, 40, 8, '#b49797', '#161212', 'buttonDangerBorder');
-    this.generateGradientTexture(112 - 4, 40 - 4, 8, '#422d2d', '#3a2727', 'buttonDangerBG');
-    this.generateGradientTexture(112 - 4, 40 - 4, 8, '#583c3c', '#4f3535', 'buttonDangerBGOver');
-
-    this.generateGradientTexture(200, 125, 8, '#97a3b4', '#121316', 'idleBorder');
-      this.generateGradientTexture(200 - 4, 125 - 4, 8, '#2d3742', '#27323a', 'idleBG');
-      this.generateGradientTexture(200 - 4, 125 - 4, 8, '#3c4a58', '#35444f', 'idleBGOver');
-    } else {
-      // Light mode (high contrast, colorblind-friendly)
-      this.generateGradientTexture(168, 32, 8, '#b8862f', '#8a6528', 'currencyBorder');
-      this.generateGradientTexture(168, 32, 8, '#1a6d7a', '#0d4752', 'prestigeBorder');
-      this.generateGradientTexture(398, 559, 12, '#707070', '#808080', 'menuBorder');
-      this.generateGradientTexture(398 - 6, 559 - 6, 12, '#f0f0f0', '#e8e8e8', 'menuBG');
-
-      this.generateGradientTexture(40, 40, 8, '#505050', '#606060', 'scrollBorder');
-      this.generateGradientTexture(40 - 4, 40 - 4, 8, '#d8d8d8', '#d0d0d0', 'scrollBG');
-      this.generateGradientTexture(40 - 4, 40 - 4, 8, '#c0c0c0', '#b8b8b8', 'scrollBGOver');
-
-      this.generateGradientTexture(64, 48, 8, '#707070', '#808080', 'tabBorder');
-      this.generateGradientTexture(64, 48, 8, '#b8862f', '#b8862f', 'tabBorderSelected');
-      this.generateGradientTexture(64 - 2, 48 - 2, 8, '#d8d8d8', '#d0d0d0', 'tabBG');
-      this.generateGradientTexture(64 - 2, 48 - 2, 8, '#c0c0c0', '#b8b8b8', 'tabBGOver');
-
-      this.generateGradientTexture(330, 40, 8, '#707070', '#808080', 'tipBorder');
-      this.generateGradientTexture(330 - 4, 40 - 4, 8, '#e0e8f0', '#d8e0e8', 'tipBG');
-
-      this.generateGradientTexture(128, 48, 8, '#505050', '#606060', 'adBorder');
-      this.generateGradientTexture(128 - 4, 48 - 4, 8, '#d8d8d8', '#d0d0d0', 'adBG');
-      this.generateGradientTexture(128 - 4, 48 - 4, 8, '#c0c0c0', '#b8b8b8', 'adBGOver');
-
-      this.generateGradientTexture(172, 70, 8, '#707070', '#808080', 'ballButtonDisabledBorder');
-      this.generateGradientTexture(172 - 4, 70 - 4, 8, '#d8d8d8', '#d0d0d0', 'ballButtonDisabledBG');
-      this.generateGradientTexture(172, 70, 8, '#2d8659', '#1f5d3d', 'ballButtonBorder');
-      this.generateGradientTexture(172 - 4, 70 - 4, 8, '#3fa570', '#3fa570', 'ballButtonBG');
-      this.generateGradientTexture(172 - 4, 70 - 4, 8, '#35925f', '#35925f', 'ballButtonBGOver');
-
-      this.generateGradientTexture(350, 36, 8, '#707070', '#808080', 'zoneButtonDisabledBorder');
-      this.generateGradientTexture(350 - 4, 36 - 4, 8, '#d8d8d8', '#d0d0d0', 'zoneButtonDisabledBG');
-      this.generateGradientTexture(350, 36, 8, '#2d8659', '#1f5d3d', 'zoneButtonBorder');
-      this.generateGradientTexture(350 - 4, 36 - 4, 8, '#3fa570', '#3fa570', 'zoneButtonBG');
-      this.generateGradientTexture(350 - 4, 36 - 4, 8, '#35925f', '#35925f', 'zoneButtonBGOver');
-
-      this.generateGradientTexture(112, 40, 8, '#505050', '#606060', 'buttonBorder');
-      this.generateGradientTexture(112 - 4, 40 - 4, 8, '#d8d8d8', '#d0d0d0', 'buttonBG');
-      this.generateGradientTexture(112 - 4, 40 - 4, 8, '#c0c0c0', '#b8b8b8', 'buttonBGOver');
-      this.generateGradientTexture(112 - 4, 40 - 4, 8, '#4a90e2', '#357abd', 'buttonBGSelected');
-
-      this.generateGradientTexture(112, 40, 8, '#8a3030', '#6a2020', 'buttonDangerBorder');
-      this.generateGradientTexture(112 - 4, 40 - 4, 8, '#e85555', '#d84444', 'buttonDangerBG');
-      this.generateGradientTexture(112 - 4, 40 - 4, 8, '#d04444', '#c03333', 'buttonDangerBGOver');
-
-      this.generateGradientTexture(200, 125, 8, '#505050', '#606060', 'idleBorder');
-      this.generateGradientTexture(200 - 4, 125 - 4, 8, '#d8d8d8', '#d0d0d0', 'idleBG');
-      this.generateGradientTexture(200 - 4, 125 - 4, 8, '#c0c0c0', '#b8b8b8', 'idleBGOver');
-    }
   }
 
   setupScene() {
@@ -183,6 +176,9 @@ export class GameScene extends Phaser.Scene {
 
     // Initialize Phaser UI (must be after loadGame)
     this.uiManager = new PhaserUIManager(this, this.gameState);
+    
+    // Apply the loaded theme's text colors and textures on startup
+    this.uiManager.updateTheme();
 
     // Show offline progress if there was any
     if (this.pendingOfflineProgress) {
@@ -564,7 +560,6 @@ export class GameScene extends Phaser.Scene {
       totalTokenUpgrades: Math.floor(totalTokenUpgrades),
       totalZoneUpgrades: Math.floor(totalZoneUpgrades),
       currentTokens: this.gameState.tokens.toString(),
-      currentGold: this.gameState.currentScore.toString()
     };
 
     // Use fetch API for submission
@@ -583,39 +578,15 @@ export class GameScene extends Phaser.Scene {
     });
   }
 
+  /**
+   * Get texture key with theme suffix
+   */
+  getThemedTexture(baseName) {
+    return baseName + '_' + this.gameState.theme;
+  }
+
   changeTheme(theme) {
     this.gameState.theme = theme;
-    
-    // Don't destroy textures - regenerate them in-place
-    const textureKeys = [
-      'currencyBorder', 'prestigeBorder', 'menuBorder', 'menuBG',
-      'scrollBorder', 'scrollBG', 'scrollBGOver',
-      'tabBorder', 'tabBorderSelected', 'tabBG', 'tabBGOver',
-      'tipBorder', 'tipBG',
-      'adBorder', 'adBG', 'adBGOver',
-      'ballButtonDisabledBorder', 'ballButtonDisabledBG', 'ballButtonBorder', 'ballButtonBG', 'ballButtonBGOver',
-      'zoneButtonDisabledBorder', 'zoneButtonDisabledBG', 'zoneButtonBorder', 'zoneButtonBG', 'zoneButtonBGOver',
-      'buttonBorder', 'buttonBG', 'buttonBGOver', 'buttonBGSelected',
-      'buttonDangerBorder', 'buttonDangerBG', 'buttonDangerBGOver',
-      'idleBorder', 'idleBG', 'idleBGOver'
-    ];
-    
-    // Clear existing texture canvases
-    textureKeys.forEach(key => {
-      if (this.textures.exists(key)) {
-        const texture = this.textures.get(key);
-        if (texture.source && texture.source[0]) {
-          const canvas = texture.source[0].image;
-          if (canvas && canvas.getContext) {
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-          }
-        }
-      }
-    });
-    
-    // Regenerate texture content
-    this.generateTextures();
     
     // Update background color
     const bgColor = theme === 'dark' 
@@ -623,7 +594,7 @@ export class GameScene extends Phaser.Scene {
       : 'rgba(240, 240, 255, 0.9)';
     this.cameras.main.setBackgroundColor(bgColor);
     
-    // Update existing UI with refreshed textures
+    // Update UI with new theme textures
     if (this.uiManager) {
       this.uiManager.updateTheme();
     }

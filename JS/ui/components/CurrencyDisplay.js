@@ -8,7 +8,11 @@ export class CurrencyDisplay extends Phaser.GameObjects.Container {
     super(scene, x, y);
     this.type = type;
     this.iconTexture = type === 'currency' ? 'coin' : 'token';
-    this.backgroundColor = type === 'currency' ? 0x433d2c : 0x0f454f;
+    if (type === 'currency') {
+      this.backgroundColor = this.scene.gameState.theme === 'dark' ? 0x433d2c : 0xecd9c6;
+    } else {
+      this.backgroundColor = this.scene.gameState.theme === 'dark' ? 0x0f454f : 0xb7d4c3;
+    }
     this.createBackground();
     this.createIcon();
     this.createValue('0');
@@ -19,8 +23,9 @@ export class CurrencyDisplay extends Phaser.GameObjects.Container {
   }
 
   createBackground() {
+    const getThemed = (name) => name + '_' + this.scene.gameState.theme;
     const graphics = this.scene.add.graphics();
-    const shadow = this.scene.add.image(0, 0, this.type === 'currency' ? 'currencyBorder' : 'prestigeBorder').setOrigin(0);
+    const shadow = this.scene.add.image(0, 0, getThemed(this.type === 'currency' ? 'currencyBorder' : 'prestigeBorder')).setOrigin(0);
     this.add(shadow);
     graphics.fillStyle(this.backgroundColor, 1);
     graphics.fillRoundedRect(2, 2, 164, 28, 8);
@@ -50,11 +55,24 @@ export class CurrencyDisplay extends Phaser.GameObjects.Container {
 
   updateTheme() {
     const textColor = this.scene.gameState.theme === 'dark' ? '#ffffff' : '#222222';
+    const getThemed = (name) => name + '_' + this.scene.gameState.theme;
     
     // Update border texture
-    const borderTexture = this.type === 'currency' ? 'currencyBorder' : 'prestigeBorder';
+    const borderTexture = getThemed(this.type === 'currency' ? 'currencyBorder' : 'prestigeBorder');
     if (this.list[0] && this.list[0].setTexture) {
       this.list[0].setTexture(borderTexture);
+    }
+
+    if (this.type === 'currency') {
+      this.backgroundColor = this.scene.gameState.theme === 'dark' ? 0x433d2c : 0xecd9c6;
+    } else {
+      this.backgroundColor = this.scene.gameState.theme === 'dark' ? 0x0f454f : 0xb7d4c3;
+    }
+
+    if (this.bg) {
+      this.bg.clear();
+      this.bg.fillStyle(this.backgroundColor, 1);
+      this.bg.fillRoundedRect(2, 2, 164, 28, 8);
     }
     
     // Update text color
