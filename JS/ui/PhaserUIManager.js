@@ -141,9 +141,11 @@ export class PhaserUIManager {
       panelWidth,
       panelHeight,
       this.formatter,
+      this.gameState,
       () => this.handleSave(),
       () => this.handleReset(),
-      (format) => this.handleFormatChange(format)
+      (format) => this.handleFormatChange(format),
+      (theme) => this.handleThemeChange(theme)
     );
 
     // Hide all panels except first
@@ -317,6 +319,10 @@ export class PhaserUIManager {
   handleFormatChange(format) {
     this.gameState.numberFormat = format;
     this.updateShopPanel();
+  }
+
+  handleThemeChange(theme) {
+    this.scene.events.emit('theme-change', theme);
   }
 
   showOfflineProgress(seconds, earned) {

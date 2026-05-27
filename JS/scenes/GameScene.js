@@ -54,7 +54,16 @@ export class GameScene extends Phaser.Scene {
   }
 
   create() {
-    this.generateGradientTexture(168, 32, 8, '#ce9c4f', '#6d6038', 'currencyBorder');
+    this.generateTextures();
+    this.setupScene();
+  }
+
+  generateTextures() {
+    const isDark = !this.gameState || this.gameState.theme === 'dark';
+    
+    if (isDark) {
+      // Dark mode (current theme)
+      this.generateGradientTexture(168, 32, 8, '#ce9c4f', '#6d6038', 'currencyBorder');
     this.generateGradientTexture(168, 32, 8, '#238d9a', '#0f4b56', 'prestigeBorder');
     this.generateGradientTexture(398, 559, 12, '#37424e', '#222c34', 'menuBorder');
     this.generateGradientTexture(398 - 6, 559 - 6, 12, '#232c34', '#1f262c', 'menuBG');
@@ -97,12 +106,64 @@ export class GameScene extends Phaser.Scene {
     this.generateGradientTexture(112 - 4, 40 - 4, 8, '#583c3c', '#4f3535', 'buttonDangerBGOver');
 
     this.generateGradientTexture(200, 125, 8, '#97a3b4', '#121316', 'idleBorder');
-    this.generateGradientTexture(200 - 4, 125 - 4, 8, '#2d3742', '#27323a', 'idleBG');
-    this.generateGradientTexture(200 - 4, 125 - 4, 8, '#3c4a58', '#35444f', 'idleBGOver');
+      this.generateGradientTexture(200 - 4, 125 - 4, 8, '#2d3742', '#27323a', 'idleBG');
+      this.generateGradientTexture(200 - 4, 125 - 4, 8, '#3c4a58', '#35444f', 'idleBGOver');
+    } else {
+      // Light mode (high contrast, colorblind-friendly)
+      this.generateGradientTexture(168, 32, 8, '#b8862f', '#8a6528', 'currencyBorder');
+      this.generateGradientTexture(168, 32, 8, '#1a6d7a', '#0d4752', 'prestigeBorder');
+      this.generateGradientTexture(398, 559, 12, '#707070', '#808080', 'menuBorder');
+      this.generateGradientTexture(398 - 6, 559 - 6, 12, '#f0f0f0', '#e8e8e8', 'menuBG');
 
+      this.generateGradientTexture(40, 40, 8, '#505050', '#606060', 'scrollBorder');
+      this.generateGradientTexture(40 - 4, 40 - 4, 8, '#d8d8d8', '#d0d0d0', 'scrollBG');
+      this.generateGradientTexture(40 - 4, 40 - 4, 8, '#c0c0c0', '#b8b8b8', 'scrollBGOver');
 
+      this.generateGradientTexture(64, 48, 8, '#707070', '#808080', 'tabBorder');
+      this.generateGradientTexture(64, 48, 8, '#b8862f', '#b8862f', 'tabBorderSelected');
+      this.generateGradientTexture(64 - 2, 48 - 2, 8, '#d8d8d8', '#d0d0d0', 'tabBG');
+      this.generateGradientTexture(64 - 2, 48 - 2, 8, '#c0c0c0', '#b8b8b8', 'tabBGOver');
+
+      this.generateGradientTexture(330, 40, 8, '#707070', '#808080', 'tipBorder');
+      this.generateGradientTexture(330 - 4, 40 - 4, 8, '#e0e8f0', '#d8e0e8', 'tipBG');
+
+      this.generateGradientTexture(128, 48, 8, '#505050', '#606060', 'adBorder');
+      this.generateGradientTexture(128 - 4, 48 - 4, 8, '#d8d8d8', '#d0d0d0', 'adBG');
+      this.generateGradientTexture(128 - 4, 48 - 4, 8, '#c0c0c0', '#b8b8b8', 'adBGOver');
+
+      this.generateGradientTexture(172, 70, 8, '#707070', '#808080', 'ballButtonDisabledBorder');
+      this.generateGradientTexture(172 - 4, 70 - 4, 8, '#d8d8d8', '#d0d0d0', 'ballButtonDisabledBG');
+      this.generateGradientTexture(172, 70, 8, '#2d8659', '#1f5d3d', 'ballButtonBorder');
+      this.generateGradientTexture(172 - 4, 70 - 4, 8, '#3fa570', '#3fa570', 'ballButtonBG');
+      this.generateGradientTexture(172 - 4, 70 - 4, 8, '#35925f', '#35925f', 'ballButtonBGOver');
+
+      this.generateGradientTexture(350, 36, 8, '#707070', '#808080', 'zoneButtonDisabledBorder');
+      this.generateGradientTexture(350 - 4, 36 - 4, 8, '#d8d8d8', '#d0d0d0', 'zoneButtonDisabledBG');
+      this.generateGradientTexture(350, 36, 8, '#2d8659', '#1f5d3d', 'zoneButtonBorder');
+      this.generateGradientTexture(350 - 4, 36 - 4, 8, '#3fa570', '#3fa570', 'zoneButtonBG');
+      this.generateGradientTexture(350 - 4, 36 - 4, 8, '#35925f', '#35925f', 'zoneButtonBGOver');
+
+      this.generateGradientTexture(112, 40, 8, '#505050', '#606060', 'buttonBorder');
+      this.generateGradientTexture(112 - 4, 40 - 4, 8, '#d8d8d8', '#d0d0d0', 'buttonBG');
+      this.generateGradientTexture(112 - 4, 40 - 4, 8, '#c0c0c0', '#b8b8b8', 'buttonBGOver');
+      this.generateGradientTexture(112 - 4, 40 - 4, 8, '#4a90e2', '#357abd', 'buttonBGSelected');
+
+      this.generateGradientTexture(112, 40, 8, '#8a3030', '#6a2020', 'buttonDangerBorder');
+      this.generateGradientTexture(112 - 4, 40 - 4, 8, '#e85555', '#d84444', 'buttonDangerBG');
+      this.generateGradientTexture(112 - 4, 40 - 4, 8, '#d04444', '#c03333', 'buttonDangerBGOver');
+
+      this.generateGradientTexture(200, 125, 8, '#505050', '#606060', 'idleBorder');
+      this.generateGradientTexture(200 - 4, 125 - 4, 8, '#d8d8d8', '#d0d0d0', 'idleBG');
+      this.generateGradientTexture(200 - 4, 125 - 4, 8, '#c0c0c0', '#b8b8b8', 'idleBGOver');
+    }
+  }
+
+  setupScene() {
     // Initialize camera and physics
-    this.cameras.main.setBackgroundColor('rgba(255, 255, 225, 0.5)');
+    const bgColor = (!this.gameState || this.gameState.theme === 'dark') 
+      ? 'rgba(255, 255, 225, 0.5)' 
+      : 'rgba(240, 240, 255, 0.9)';
+    this.cameras.main.setBackgroundColor(bgColor);
     this.matter.world.setGravity(0, GAME_CONFIG.gravity.y, GAME_CONFIG.gravity.scale);
 
     // Create tiled background that scrolls with the game
@@ -168,6 +229,10 @@ export class GameScene extends Phaser.Scene {
 
     this.events.on('reset-requested', () => {
       this.hardReset();
+    });
+
+    this.events.on('theme-change', (theme) => {
+      this.changeTheme(theme);
     });
   }
 
@@ -370,6 +435,7 @@ export class GameScene extends Phaser.Scene {
       tokens: this.gameState.tokens,
       zones: this.gameState.zones,
       numberFormat: this.gameState.numberFormat,
+      theme: this.gameState.theme,
       stats: this.gameState.stats
     });
 
@@ -388,6 +454,7 @@ export class GameScene extends Phaser.Scene {
       this.gameState.totalScore = new Decimal(saveData.totalMoney || 0);
       this.gameState.tokens = new Decimal(saveData.tokens || 0);
       this.gameState.numberFormat = saveData.numberFormat || 'eng';
+      this.gameState.theme = saveData.theme || 'dark';
 
       // Load statistics
       if (saveData.stats) {
@@ -514,6 +581,48 @@ export class GameScene extends Phaser.Scene {
     }).catch(error => {
       console.error('Error submitting statistics:', error);
     });
+  }
+
+  changeTheme(theme) {
+    this.gameState.theme = theme;
+    
+    // Destroy existing textures
+    const textureKeys = [
+      'currencyBorder', 'prestigeBorder', 'menuBorder', 'menuBG',
+      'scrollBorder', 'scrollBG', 'scrollBGOver',
+      'tabBorder', 'tabBorderSelected', 'tabBG', 'tabBGOver',
+      'tipBorder', 'tipBG',
+      'adBorder', 'adBG', 'adBGOver',
+      'ballButtonDisabledBorder', 'ballButtonDisabledBG', 'ballButtonBorder', 'ballButtonBG', 'ballButtonBGOver',
+      'zoneButtonDisabledBorder', 'zoneButtonDisabledBG', 'zoneButtonBorder', 'zoneButtonBG', 'zoneButtonBGOver',
+      'buttonBorder', 'buttonBG', 'buttonBGOver', 'buttonBGSelected',
+      'buttonDangerBorder', 'buttonDangerBG', 'buttonDangerBGOver',
+      'idleBorder', 'idleBG', 'idleBGOver'
+    ];
+    
+    textureKeys.forEach(key => {
+      if (this.textures.exists(key)) {
+        this.textures.remove(key);
+      }
+    });
+    
+    // Regenerate textures with new theme
+    this.generateTextures();
+    
+    // Update background color
+    const bgColor = theme === 'dark' 
+      ? 'rgba(255, 255, 225, 0.5)' 
+      : 'rgba(240, 240, 255, 0.9)';
+    this.cameras.main.setBackgroundColor(bgColor);
+    
+    // Recreate UI
+    if (this.uiManager) {
+      this.uiManager.destroy();
+      this.uiManager = new PhaserUIManager(this, this.gameState);
+    }
+    
+    // Save the theme preference
+    this.saveGame();
   }
 
   generateGradientTexture(width, height, radius, colorTop, colorBottom, key) {

@@ -12,6 +12,7 @@ export class GameState {
     this.totalScore = new Decimal(0);
     this.tokens = new Decimal(0);
     this.numberFormat = 'eng';
+    this.theme = 'dark';
     
     // Statistics tracking
     this.stats = {

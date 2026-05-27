@@ -7,15 +7,17 @@ import { UIPanel } from '../components/UIPanel.js';
 import { Button } from '../components/Button.js';
 
 export class HelpPanel extends UIPanel {
-  constructor(scene, x, y, width, height, formatter, onSave, onReset, onFormatChange) {
+  constructor(scene, x, y, width, height, formatter, gameState, onSave, onReset, onFormatChange, onThemeChange) {
     super(scene, x, y, width, height, {
       backgroundColor: 0x3a3a3a
     });
     
     this.formatter = formatter;
+    this.gameState = gameState;
     this.onSave = onSave;
     this.onReset = onReset;
     this.onFormatChange = onFormatChange;
+    this.onThemeChange = onThemeChange;
     this.resetCounter = 0;
     
     this.createContent();
@@ -122,6 +124,61 @@ export class HelpPanel extends UIPanel {
 
     yPos += 40;
 
+    // Theme section
+    const themeTitle = this.scene.add.text(
+      this.panelWidth / 2,
+      yPos,
+      'Theme',
+      {
+        fontFamily: 'Arial',
+        fontSize: '14px',
+        color: '#ffffff'
+      }
+    );
+    themeTitle.setOrigin(0.5, 0);
+    this.add(themeTitle);
+
+    yPos += 40;
+
+    // Theme buttons
+    const themes = [
+      { label: 'Dark Mode', value: 'dark' },
+      { label: 'Light Mode', value: 'light' }
+    ];
+
+    const themeButtonWidth = 110;
+    const themeSpacing = 10;
+    const themeTotalWidth = themes.length * themeButtonWidth + (themes.length - 1) * themeSpacing;
+    const themeStartX = (this.panelWidth - themeTotalWidth) / 2;
+
+    this.themeButtons = [];
+    themes.forEach((theme, index) => {
+      const x = themeStartX + index * (themeButtonWidth + themeSpacing) + themeButtonWidth / 2;
+      const border = this.scene.add.image(x, yPos, 'buttonBorder').setOrigin(0.5);
+      const background = this.scene.add.image(x, yPos, 'buttonBG').setScrollFactor(0).setInteractive({ cursor: 'pointer' });
+      background.on('pointerover', () => background.setTexture('buttonBGOver'));
+      background.on('pointerout', () => {
+        if (background.isSelected) {
+          background.setTexture('buttonBGSelected');
+        } else {
+          background.setTexture('buttonBG');
+        }
+      });
+      background.on('pointerdown', () => this.selectTheme(theme.value));
+      const label = this.scene.add.text(x, yPos, theme.label, {
+        fontFamily: 'Arial',
+        fontSize: '12px',
+        color: '#ffffff'
+      });
+      label.setOrigin(0.5);
+      this.add(border);
+      this.add(background);
+      this.add(label);
+      this.themeButtons.push({ button: background, value: theme.value });
+    });
+
+    yPos += 40;
+
     // Save/Reset section
     const saveTitle = this.scene.add.text(
       this.panelWidth / 2,
@@ -179,9 +236,26 @@ export class HelpPanel extends UIPanel {
     this.updateFormatButtons();
   }
 
+  selectTheme(theme) {
+    this.onThemeChange(theme);
+    this.updateThemeButtons();
+  }
+
   updateFormatButtons() {
     this.formatButtons.forEach(({ button, value }) => {
       if (value === this.formatter.formatType) {
+        button.setTexture('buttonBGSelected');
+        button.isSelected = true;
+      } else {
+        button.setTexture('buttonBG');
+        button.isSelected = false;
+      }
+    });
+  }
+
+  updateThemeButtons() {
+    this.themeButtons.forEach(({ button, value }) => {
+      if (value === this.gameState.theme) {
         button.setTexture('buttonBGSelected');
         button.isSelected = true;
       } else {
@@ -224,5 +298,6 @@ export class HelpPanel extends UIPanel {
   show() {
     super.show();
     this.updateFormatButtons();
+    this.updateThemeButtons();
   }
 }
