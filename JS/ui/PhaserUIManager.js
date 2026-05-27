@@ -168,23 +168,23 @@ export class PhaserUIManager {
   }
 
   createScrollButtons(x, menuHeight) {
-    const shadow1 = this.scene.add.image(625, 12, 'scrollBorder').setOrigin(0).setScrollFactor(0).setDepth(1000);
-    const bg1 = this.scene.add.image(627, 14, 'scrollBG').setOrigin(0).setScrollFactor(0).setInteractive({ cursor: 'pointer' }).setDepth(1001);
-    bg1.on('pointerover', () => bg1.setTexture('scrollBGOver'));
-    bg1.on('pointerout', () => bg1.setTexture('scrollBG'));
-    bg1.on('pointerdown', () => { this.scrollUp = true; });
-    const icon1 = this.scene.add.text(645, 32, '▲', {
+    this.scrollShadow1 = this.scene.add.image(625, 12, 'scrollBorder').setOrigin(0).setScrollFactor(0).setDepth(1000);
+    this.scrollBg1 = this.scene.add.image(627, 14, 'scrollBG').setOrigin(0).setScrollFactor(0).setInteractive({ cursor: 'pointer' }).setDepth(1001);
+    this.scrollBg1.on('pointerover', () => this.scrollBg1.setTexture('scrollBGOver'));
+    this.scrollBg1.on('pointerout', () => this.scrollBg1.setTexture('scrollBG'));
+    this.scrollBg1.on('pointerdown', () => { this.scrollUp = true; });
+    this.scrollIcon1 = this.scene.add.text(645, 32, '▲', {
       fontFamily: 'Arial',
       fontSize: '16px',
       color: '#c3c3c1'
     }).setOrigin(0.5).setScrollFactor(0).setScale(1, .75).setDepth(1002);
 
-    const shadow2 = this.scene.add.image(625, 595 - 12 - 40, 'scrollBorder').setOrigin(0).setScrollFactor(0).setDepth(1000);
-    const bg2 = this.scene.add.image(627, 595 - 12 - 38, 'scrollBG').setOrigin(0).setScrollFactor(0).setInteractive({ cursor: 'pointer' }).setDepth(1001);
-    bg2.on('pointerover', () => bg2.setTexture('scrollBGOver'));
-    bg2.on('pointerout', () => bg2.setTexture('scrollBG'));
-    bg2.on('pointerdown', () => { this.scrollDown = true; });
-    const icon2 = this.scene.add.text(645, 595 - 12 - 20, '▼', {
+    this.scrollShadow2 = this.scene.add.image(625, 595 - 12 - 40, 'scrollBorder').setOrigin(0).setScrollFactor(0).setDepth(1000);
+    this.scrollBg2 = this.scene.add.image(627, 595 - 12 - 38, 'scrollBG').setOrigin(0).setScrollFactor(0).setInteractive({ cursor: 'pointer' }).setDepth(1001);
+    this.scrollBg2.on('pointerover', () => this.scrollBg2.setTexture('scrollBGOver'));
+    this.scrollBg2.on('pointerout', () => this.scrollBg2.setTexture('scrollBG'));
+    this.scrollBg2.on('pointerdown', () => { this.scrollDown = true; });
+    this.scrollIcon2 = this.scene.add.text(645, 595 - 12 - 20, '▼', {
       fontFamily: 'Arial',
       fontSize: '16px',
       color: '#c3c3c1'
@@ -366,6 +366,20 @@ export class PhaserUIManager {
       this.menuBackground.setTexture('menuBG');
     }
 
+    // Update scroll buttons
+    if (this.scrollShadow1) {
+      this.scrollShadow1.setTexture('scrollBorder');
+    }
+    if (this.scrollBg1) {
+      this.scrollBg1.setTexture('scrollBG');
+    }
+    if (this.scrollShadow2) {
+      this.scrollShadow2.setTexture('scrollBorder');
+    }
+    if (this.scrollBg2) {
+      this.scrollBg2.setTexture('scrollBG');
+    }
+
     // Update all panels
     Object.values(this.panels).forEach(panel => {
       if (panel.updateTheme) {
@@ -396,8 +410,13 @@ export class PhaserUIManager {
     this.goldDisplay.destroy();
     this.tokenDisplay.destroy();
     this.menuBackground.destroy();
+    this.menuShadow.destroy();
     this.offlinePanel.destroy();
-    if (this.scrollUpButton) this.scrollUpButton.destroy();
-    if (this.scrollDownButton) this.scrollDownButton.destroy();
+    if (this.scrollShadow1) this.scrollShadow1.destroy();
+    if (this.scrollBg1) this.scrollBg1.destroy();
+    if (this.scrollIcon1) this.scrollIcon1.destroy();
+    if (this.scrollShadow2) this.scrollShadow2.destroy();
+    if (this.scrollBg2) this.scrollBg2.destroy();
+    if (this.scrollIcon2) this.scrollIcon2.destroy();
   }
 }
