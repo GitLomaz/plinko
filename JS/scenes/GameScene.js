@@ -586,7 +586,7 @@ export class GameScene extends Phaser.Scene {
   changeTheme(theme) {
     this.gameState.theme = theme;
     
-    // Destroy existing textures
+    // Don't destroy textures - regenerate them in-place
     const textureKeys = [
       'currencyBorder', 'prestigeBorder', 'menuBorder', 'menuBG',
       'scrollBorder', 'scrollBG', 'scrollBGOver',
@@ -600,13 +600,21 @@ export class GameScene extends Phaser.Scene {
       'idleBorder', 'idleBG', 'idleBGOver'
     ];
     
+    // Clear existing texture canvases
     textureKeys.forEach(key => {
       if (this.textures.exists(key)) {
-        this.textures.remove(key);
+        const texture = this.textures.get(key);
+        if (texture.source && texture.source[0]) {
+          const canvas = texture.source[0].image;
+          if (canvas && canvas.getContext) {
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+          }
+        }
       }
     });
     
-    // Regenerate textures with new theme
+    // Regenerate texture content
     this.generateTextures();
     
     // Update background color
@@ -615,7 +623,7 @@ export class GameScene extends Phaser.Scene {
       : 'rgba(240, 240, 255, 0.9)';
     this.cameras.main.setBackgroundColor(bgColor);
     
-    // Update existing UI with new textures
+    // Update existing UI with refreshed textures
     if (this.uiManager) {
       this.uiManager.updateTheme();
     }
@@ -625,11 +633,16 @@ export class GameScene extends Phaser.Scene {
   }
 
   generateGradientTexture(width, height, radius, colorTop, colorBottom, key) {
+    let rt;
+    
     if (this.textures.exists(key)) {
-      return this.textures.get(key);
+      // Reuse existing texture canvas
+      rt = this.textures.get(key);
+    } else {
+      // Create new texture canvas
+      rt = this.textures.createCanvas(key, width, height);
     }
     
-    const rt = this.textures.createCanvas(key, width, height);
     const ctx = rt.getContext();
 
     // gradient
