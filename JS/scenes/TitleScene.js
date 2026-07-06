@@ -167,10 +167,8 @@ export class TitleScene extends Phaser.Scene {
       onComplete: () => {
         ball.setStatic(false);
         ball.setCircle();
-        ball.setFriction(0.001, 0.01, 0.001);
-        ball.setFrictionAir(0.01);
-        ball.setBounce(0.35);
-        ball.setDensity(0.001);
+        ball.setFriction(0.01);
+        ball.setBounce(0.5);
         this.balls.push(ball);
       }
     });

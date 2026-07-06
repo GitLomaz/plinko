@@ -49,10 +49,8 @@ export class Ball extends Phaser.Physics.Matter.Sprite {
   activatePhysics() {
     this.setStatic(false);
     this.setCircle();
-    this.setFriction(0.001, 0.01, 0.001);
-    this.setFrictionAir(0.01);
-    this.setBounce(0.35);
-    this.setDensity(0.001);
+    this.setFriction(0.01);
+    this.setBounce(0.5);
   }
 
   /**

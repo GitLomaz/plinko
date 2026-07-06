@@ -21,10 +21,8 @@ export const GAME_CONFIG = {
     }
   },
   ball: {
-    friction: 0.001,
-    frictionAir: 0.01,
-    bounce: 0.35,
-    density: 0.001,
+    friction: 0.01,
+    bounce: 0.5,
     maxBalls: 700
   },
   obstacle: {
